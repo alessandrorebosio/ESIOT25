@@ -1,5 +1,8 @@
 #include "score.h"
 
+#define START_VALUE 0
+#define INCREMENT 1
+
 /**
  * @file score.c
  * @brief Implementation of a small score counter.
@@ -22,9 +25,9 @@ int getScore(void) { return score; }
 /**
  * @brief Increment the score by one.
  */
-void increase(void) { score++; }
+void increase(void) { score += INCREMENT; }
 
 /**
  * @brief Reset the score counter to zero.
  */
-void reset(void) { score = 0; }
+void reset(void) { score = START_VALUE; }

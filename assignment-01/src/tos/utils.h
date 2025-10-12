@@ -23,6 +23,6 @@
  * @param b Second integer.
  * @return The lesser of @p a and @p b.
  */
-int min(int a, int b);
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 #endif

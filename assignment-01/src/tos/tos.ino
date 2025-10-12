@@ -1,24 +1,82 @@
+#include "logic.h"
+#include "output.h"
+#include "score.h"
 #include "state.h"
+#include "timer.h"
 #include "utils.h"
+
+const long int SECOND_10 = 10000U;
+const long int SECOND_2 = 2000U;
 
 const int BUTTON[] = {5, 4, 3, 2};
 const int LED[] = {9, 8, 7, 6};
+const int LSLED = 10;
 
-int len = min(LEN(BUTTON), LEN(LED));
+const int POT = 0;
+
+int len = MIN(LEN(BUTTON), LEN(LED));
+
+Timer t;
 
 void setup() {
-    // put your setup code here, to run once:
+    // attachInterrupt(digitalPinToInterrupt(BUTTON[0]), wakeUp, FALLING); //
+    // attachInterrupt on B1 reset time and awake on MENU state
+
+    // for (int i = 0; i < len; i++) {
+    // pinMode(LED[i], OUTPUT);
+    // pinMode(BUTTON[i], INPUT);
+    // }
+
+    // pinMode(LSLED, OUTPUT);
+    // pinMode(POT, INPUT);
+
+    outputInit();
 }
 
 void loop() {
     switch (getState()) {
+        case INIT:
+            print("Welcome to TOS!");
+            print("Press B1 to Start");
+            timerInit(&t, SECOND_10);
+            changeState(MENU);
+            break;
         case MENU:
+            ledFade(LSLED);
+            difficulty(POT);
+
+            if (wasPressed(0)) {
+                changeState(PLAYING);
+                // digitalRead(LSLED, LOW);
+                print("GO!");
+                // delay(300);
+                return;
+            }
+
+            if (timer_expired(&t)) {
+                // print("Sleep");
+            }
             break;
         case PLAYING:
+            print("Not implemented skip to Game Over");
+            if (true) { // wrong sequence gameover
+                changeState(GAMEOVER);
+                return;
+            }
+
             break;
         case GAMEOVER:
+            // digitalRead(LSLED, HIGH);
+            // delay(SECOND_2);
+            // digitalRead(LSLED, LOW);
+            print("Game Over");
+            print("Final Score XXX");
+            // delay(SECOND_10);
+            changeState(INIT);
             break;
         default:
             break;
     }
 }
+
+void wakeUp() { timerInit(&t, SECOND_10); }

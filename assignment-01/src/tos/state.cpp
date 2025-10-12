@@ -11,7 +11,7 @@
  */
 
 /* Internal state variable - not visible outside this file. */
-static GameState state = MENU;
+static GameState state = INIT;
 
 /**
  * @brief Get the current game state.
@@ -35,9 +35,5 @@ GameState getState(void) { return state; }
  *         to @p newState.
  */
 bool changeState(GameState newState) {
-    if (state == newState)
-        return false;
-
-    state = newState;
-    return true;
+    return (state != newState) ? (state = newState, true) : false;
 }
