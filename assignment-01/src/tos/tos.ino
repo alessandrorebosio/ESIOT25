@@ -3,6 +3,7 @@
 
 const int BUTTON[] = {5, 4, 3, 2};
 const int LED[] = {9, 8, 7, 6};
+const int LSLED = 10;
 
 int len = MIN(LEN(BUTTON), LEN(LED));
 

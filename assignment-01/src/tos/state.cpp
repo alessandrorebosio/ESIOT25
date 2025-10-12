@@ -35,9 +35,5 @@ GameState getState(void) { return state; }
  *         to @p newState.
  */
 bool changeState(GameState newState) {
-    if (state == newState)
-        return false;
-
-    state = newState;
-    return true;
+    return (state != newState) ? (state = newState, true) : false;
 }
