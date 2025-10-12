@@ -19,8 +19,16 @@ int len = MIN(LEN(BUTTON), LEN(LED));
 Timer t;
 
 void setup() {
+    // attachInterrupt(digitalPinToInterrupt(BUTTON[0]), wakeUp, FALLING); //
     // attachInterrupt on B1 reset time and awake on MENU state
-    // attachInterrupt(digitalPinToInterrupt(BUTTON[0]), wakeUp, FALLING);
+
+    // for (int i = 0; i < len; i++) {
+    // pinMode(LED[i], OUTPUT);
+    // pinMode(BUTTON[i], INPUT);
+    // }
+
+    // pinMode(LSLED, OUTPUT);
+    // pinMode(POT, INPUT);
 
     outputInit();
 }
@@ -28,8 +36,8 @@ void setup() {
 void loop() {
     switch (getState()) {
         case INIT:
-            // print("Welcome to TOS!");
-            // print("Press B1 to Start");
+            print("Welcome to TOS!");
+            print("Press B1 to Start");
             timerInit(&t, SECOND_10);
             changeState(MENU);
             break;
@@ -40,7 +48,7 @@ void loop() {
             if (wasPressed(0)) {
                 changeState(PLAYING);
                 // digitalRead(LSLED, LOW);
-                //print("GO!");
+                print("GO!");
                 // delay(300);
                 return;
             }
@@ -50,7 +58,8 @@ void loop() {
             }
             break;
         case PLAYING:
-            if (false) { // wrong sequence gameover
+            print("Not implemented skip to Game Over");
+            if (true) { // wrong sequence gameover
                 changeState(GAMEOVER);
                 return;
             }
@@ -60,8 +69,8 @@ void loop() {
             // digitalRead(LSLED, HIGH);
             // delay(SECOND_2);
             // digitalRead(LSLED, LOW);
-            // print("Game Over");
-            // print("Final Score XXX");
+            print("Game Over");
+            print("Final Score XXX");
             // delay(SECOND_10);
             changeState(INIT);
             break;
