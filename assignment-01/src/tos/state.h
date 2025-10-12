@@ -22,6 +22,10 @@
  */
 typedef enum {
     /**
+     *  Initialization: perform startup tasks.
+     */
+    INIT,
+    /**
      * The menu is shown and the game is waiting for user input.
      */
     MENU,

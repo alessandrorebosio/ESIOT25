@@ -11,7 +11,7 @@
  */
 
 /* Internal state variable - not visible outside this file. */
-static GameState state = MENU;
+static GameState state = INIT;
 
 /**
  * @brief Get the current game state.
