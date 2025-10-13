@@ -25,4 +25,9 @@
  */
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
+struct LedButton {
+    int led;
+    int button;
+};
+
 #endif

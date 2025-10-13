@@ -10,22 +10,23 @@
 const long int SECOND_10 = 10000U;
 const long int SECOND_2 = 2000U;
 
-const int BUTTON[] = {5, 4, 3, 2};
-const int LED[] = {9, 8, 7, 6};
+const LedButton devices[] = {
+    {9, 5}, // led on pin 9 and realtive button on pin 5
+    {8, 4},
+    {7, 3},
+    {6, 2},
+};
 const int LSLED = 10;
-
 const int POT = A0;
-
-int len = MIN(LEN(BUTTON), LEN(LED));
 
 Timer t;
 
 void setup() {
     attachInterrupt(digitalPinToInterrupt(BUTTON[0]), wakeUp, FALLING);
 
-    for (int i = 0; i < len; i++) {
-        pinMode(LED[i], OUTPUT);
-        pinMode(BUTTON[i], INPUT);
+    for (int i = 0; i < LEN(devices); i++) {
+        pinMode(devices[i].led, OUTPUT);
+        pinMode(devices[i].button, INPUT);
     }
 
     pinMode(LSLED, OUTPUT);
