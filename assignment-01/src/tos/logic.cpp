@@ -41,7 +41,7 @@ static int fadeAmount = 7;
  */
 int *sequence(int size) {
     //TODO
-    return 1;
+    return NULL;
 }
 
 /**

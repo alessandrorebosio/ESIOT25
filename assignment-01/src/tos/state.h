@@ -37,6 +37,10 @@ typedef enum {
      * The game is over (end screen).
      */
     GAMEOVER,
+    /**
+     * Arduino enter in sleep state.
+     */
+    SLEEP,
 } GameState;
 
 /**

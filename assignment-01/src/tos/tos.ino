@@ -4,6 +4,8 @@
 #include "state.h"
 #include "timer.h"
 #include "utils.h"
+#include <Arduino.h>
+#include <avr/sleep.h>
 
 const long int SECOND_10 = 10000U;
 const long int SECOND_2 = 2000U;
@@ -19,7 +21,7 @@ int len = MIN(LEN(BUTTON), LEN(LED));
 Timer t;
 
 void setup() {
-    attachInterrupt(digitalPinToInterrupt(BUTTON[0]), wakeUp, FALLING); 
+    attachInterrupt(digitalPinToInterrupt(BUTTON[0]), wakeUp, FALLING);
 
     for (int i = 0; i < len; i++) {
         pinMode(LED[i], OUTPUT);
@@ -53,7 +55,7 @@ void loop() {
             }
 
             if (timer_expired(&t)) {
-                print("Sleep");
+                changeState(SLEEP);
             }
             break;
         case PLAYING:
@@ -71,6 +73,13 @@ void loop() {
             print("Game Over");
             print("Final Score XXX");
             delay(SECOND_10);
+            changeState(INIT);
+            break;
+        case SLEEP:
+            set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+            sleep_enable();
+            sleep_mode();
+            sleep_disable();
             changeState(INIT);
             break;
         default:
