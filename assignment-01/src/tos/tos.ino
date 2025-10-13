@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <avr/sleep.h>
+#include <EnableInterrupt.h>
 
 #include "logic.h"
 #include "output.h"
@@ -18,13 +19,14 @@ const int POT = A0;
 
 const int len = MIN(LEN(LED), LEN(BUTTON));
 Timer t;
+bool timerStartedInMenu = false;
 
 void setup() {
-    attachInterrupt(digitalPinToInterrupt(BUTTON[0]), wakeUp, FALLING);
+    Serial.begin(9600);
 
     for (int i = 0; i < len; i++) {
         pinMode(LED[i], OUTPUT);
-        pinMode(BUTTON[i], INPUT);
+        pinMode(BUTTON[i], INPUT_PULLUP);
     }
 
     pinMode(LSLED, OUTPUT);
@@ -38,16 +40,23 @@ void loop() {
         case INIT:
             print("Welcome to TOS!");
             print("Press B1 to Start");
-            timerInit(&t, SECOND_10);
+            timerStartedInMenu = false;
+            delay(500);
             changeState(MENU);
             break;
         case MENU:
             ledFade(LSLED);
             difficulty(POT);
-
+            if (!timerStartedInMenu) {
+                timerInit(&t, SECOND_10);
+                timerStartedInMenu = true;
+            }
             if (wasPressed(0)) {
                 changeState(PLAYING);
                 digitalWrite(LSLED, LOW);
+                digitalWrite(LED[0], HIGH);
+                delay(300);
+                digitalWrite(LED[0], LOW);
                 print("GO!");
                 delay(300);
                 return;
@@ -58,12 +67,8 @@ void loop() {
             }
             break;
         case PLAYING:
-            print("Not implemented skip to Game Over");
-            if (true) { // wrong sequence gameover
-                changeState(GAMEOVER);
-                return;
-            }
-
+            print("Not implemented, skipping to Game Over...");
+            changeState(GAMEOVER);
             break;
         case GAMEOVER:
             digitalWrite(LSLED, HIGH);
@@ -75,10 +80,16 @@ void loop() {
             changeState(INIT);
             break;
         case SLEEP:
+            print("SLEEP MODE");
+            enableInterrupt(BUTTON[0], wakeUp, FALLING);
             set_sleep_mode(SLEEP_MODE_PWR_DOWN);
             sleep_enable();
             sleep_mode();
             sleep_disable();
+            disableInterrupt(BUTTON[0]);
+            while (digitalRead(BUTTON[0]) == LOW) {
+                delay(10);
+            }
             changeState(INIT);
             break;
         default:
