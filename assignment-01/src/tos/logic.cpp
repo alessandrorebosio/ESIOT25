@@ -1,14 +1,16 @@
 #include <Arduino.h>
+
 #include "logic.h"
 #include "utils.h"
 
 /**
  * @file logic.cpp
- * @brief Core game logic for TOS: utilities for button handling, difficulty and LED effects.
+ * @brief Core game logic for TOS: utilities for button handling, difficulty and
+ * LED effects.
  *
- * This file contains timing constants, static variables that keep the state of the
- * LED fade effect and the functions used by the main sketch loop (e.g. press checks,
- * difficulty calculation, LED animation).
+ * This file contains timing constants, static variables that keep the state of
+ * the LED fade effect and the functions used by the main sketch loop (e.g.
+ * press checks, difficulty calculation, LED animation).
  */
 
 /** Debounce delay in milliseconds used to filter button bounce */
@@ -31,24 +33,25 @@ static int fadeAmount = 7;
 
 /**
  * @brief Generates a random sequence of button indices
- * 
+ *
  * Creates an array of random integers representing the sequence
  * of buttons that the player must press. Each value corresponds
  * to an index in the BUTTON array.
- * 
+ *
  * @param size The length of the sequence to generate
  * @return Pointer to dynamically allocated array containing the sequence
  */
 int *sequence(int size) {
-    //TODO
+    // TODO
     return NULL;
 }
 
 /**
- * @brief Maps the analog value read from the input pin to a difficulty level (1..4).
+ * @brief Maps the analog value read from the input pin to a difficulty level
+ * (1..4).
  *
- * The function reads the analog value from the specified pin and uses Arduino's `map`
- * function to convert the range 0..1023 into 1..4.
+ * The function reads the analog value from the specified pin and uses Arduino's
+ * `map` function to convert the range 0..1023 into 1..4.
  *
  * @param pin Analog pin to read the difficulty knob from.
  * @return Integer between 1 and 4 representing the selected difficulty.
@@ -67,8 +70,7 @@ int difficulty(int pin) { return map(analogRead(pin), 0, 1023, 1, 4); }
  */
 void ledFade(int pin) {
     unsigned long currentMillis = millis();
-    if (currentMillis - lastFadeUpdate >= FADE_INTERVAL)
-    {
+    if (currentMillis - lastFadeUpdate >= FADE_INTERVAL) {
         lastFadeUpdate = currentMillis;
         fadeValue += fadeAmount;
 
@@ -86,7 +88,8 @@ void ledFade(int pin) {
  * waits for a short debounce period and checks again. If the button is still
  * pressed it blocks until release and returns true.
  *
- * @param index Index in the `BUTTON` array corresponding to the button to check.
+ * @param index Index in the `BUTTON` array corresponding to the button to
+ * check.
  * @return true if the button was pressed and released, false otherwise.
  */
 bool wasPressed(int index) {
@@ -95,7 +98,8 @@ bool wasPressed(int index) {
     if (digitalRead(pin) == HIGH) {
         delay(DEBOUNCE_DELAY);
         if (digitalRead(pin) == HIGH) {
-            while (digitalRead(pin) == HIGH);
+            while (digitalRead(pin) == HIGH)
+                ;
             return true;
         }
     }

@@ -1,11 +1,12 @@
+#include <Arduino.h>
+#include <avr/sleep.h>
+
 #include "logic.h"
 #include "output.h"
 #include "score.h"
 #include "state.h"
 #include "timer.h"
 #include "utils.h"
-#include <Arduino.h>
-#include <avr/sleep.h>
 
 const long int SECOND_10 = 10000U;
 const long int SECOND_2 = 2000U;

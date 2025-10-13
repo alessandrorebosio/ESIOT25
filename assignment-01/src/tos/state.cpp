@@ -1,5 +1,6 @@
-#include "state.h"
 #include <stdbool.h>
+
+#include "state.h"
 
 /**
  * @file state.c
