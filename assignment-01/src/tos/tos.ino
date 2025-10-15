@@ -43,7 +43,7 @@ void loop() {
             break;
         case MENU:
             ledFade(LSLED);
-            print(difficulty(POT));
+            Serial.println(difficulty(POT));
 
             if (wasPressed(0)) {
                 digitalWrite(LSLED, LOW);
