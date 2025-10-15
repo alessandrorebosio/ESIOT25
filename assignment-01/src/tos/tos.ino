@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include <avr/sleep.h>
 #include <EnableInterrupt.h>
+#include <avr/sleep.h>
 
 #include "logic.h"
 #include "output.h"
@@ -19,11 +19,8 @@ const int POT = A0;
 
 const int len = MIN(LEN(LED), LEN(BUTTON));
 Timer t;
-bool timerStartedInMenu = false;
 
 void setup() {
-    Serial.begin(9600);
-
     for (int i = 0; i < len; i++) {
         pinMode(LED[i], OUTPUT);
         pinMode(BUTTON[i], INPUT_PULLUP);
@@ -40,23 +37,17 @@ void loop() {
         case INIT:
             print("Welcome to TOS!");
             print("Press B1 to Start");
-            timerStartedInMenu = false;
-            delay(500);
             changeState(MENU);
+            timerInit(&t, SECOND_10);
+            delay(300);
             break;
         case MENU:
             ledFade(LSLED);
-            difficulty(POT);
-            if (!timerStartedInMenu) {
-                timerInit(&t, SECOND_10);
-                timerStartedInMenu = true;
-            }
+            print(difficulty(POT));
+
             if (wasPressed(0)) {
-                changeState(PLAYING);
                 digitalWrite(LSLED, LOW);
-                digitalWrite(LED[0], HIGH);
-                delay(300);
-                digitalWrite(LED[0], LOW);
+                changeState(PLAYING);
                 print("GO!");
                 delay(300);
                 return;
@@ -81,20 +72,15 @@ void loop() {
             break;
         case SLEEP:
             print("SLEEP MODE");
-            enableInterrupt(BUTTON[0], wakeUp, FALLING);
+            enableInterrupt(BUTTON[0], timerInit(&t, SECOND_10), FALLING);
             set_sleep_mode(SLEEP_MODE_PWR_DOWN);
             sleep_enable();
             sleep_mode();
             sleep_disable();
             disableInterrupt(BUTTON[0]);
-            while (digitalRead(BUTTON[0]) == LOW) {
-                delay(10);
-            }
             changeState(INIT);
             break;
         default:
             break;
     }
 }
-
-void wakeUp() { timerInit(&t, SECOND_10); }
