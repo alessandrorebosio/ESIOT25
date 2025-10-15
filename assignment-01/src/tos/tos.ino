@@ -64,7 +64,8 @@ void loop() {
             delay(SECOND_2);
             digitalWrite(LSLED, LOW);
 
-            Serial.println("Game Over \nFinal Score %d", getScore());
+            Serial.print("Game Over\nFinal Score: ");
+            Serial.println(getScore());
 
             delay(SECOND_10);
             changeState(INIT);

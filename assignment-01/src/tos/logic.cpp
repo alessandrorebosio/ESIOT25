@@ -69,13 +69,17 @@ int difficulty(int pin) { return map(analogRead(pin), 0, 1023, 1, 4); }
  * @param pin PWM pin (e.g. LED) to write the analog value to.
  */
 void ledFade(int pin) {
-    analogWrite(pin, brightness);
+    unsigned long now = millis();
+    if (now - lastFadeUpdate < FADE_INTERVAL) return;
+    lastFadeUpdate = now;
 
-    brightness = brightness + fadeAmount;
-
+    brightness += fadeAmount;
     if (brightness <= 0 || brightness >= 255) {
         fadeAmount = -fadeAmount;
+        brightness = constrain(brightness, 0, 255);
     }
+
+    analogWrite(pin, brightness);
 }
 
 /**
