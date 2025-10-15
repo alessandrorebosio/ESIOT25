@@ -1,9 +1,7 @@
 #include <Arduino.h>
-#include <EnableInterrupt.h>
 #include <avr/sleep.h>
 
 #include "logic.h"
-#include "output.h"
 #include "score.h"
 #include "state.h"
 #include "timer.h"
@@ -23,62 +21,59 @@ Timer t;
 void setup() {
     for (int i = 0; i < len; i++) {
         pinMode(LED[i], OUTPUT);
-        pinMode(BUTTON[i], INPUT_PULLUP);
+        pinMode(BUTTON[i], INPUT);
     }
 
     pinMode(LSLED, OUTPUT);
     pinMode(POT, INPUT);
 
-    outputInit();
+    Serial.begin(9600);
 }
 
 void loop() {
     switch (getState()) {
         case INIT:
-            print("Welcome to TOS!");
-            print("Press B1 to Start");
+            Serial.println("Welcome to TOS! \nPress B1 to Start");
+
             changeState(MENU);
             timerInit(&t, SECOND_10);
-            delay(300);
             break;
         case MENU:
             ledFade(LSLED);
-            Serial.println(difficulty(POT));
+            int diff = difficulty(POT);
 
-            if (wasPressed(0)) {
+            if (digitalRead(BUTTON[0])) {
                 digitalWrite(LSLED, LOW);
                 changeState(PLAYING);
-                print("GO!");
-                delay(300);
+                Serial.println("GO!");
                 return;
             }
 
             if (timer_expired(&t)) {
+                digitalWrite(LSLED, LOW);
                 changeState(SLEEP);
             }
             break;
         case PLAYING:
-            print("Not implemented, skipping to Game Over...");
+            Serial.println("Not implemented, skipping to Game Over...");
+
             changeState(GAMEOVER);
             break;
         case GAMEOVER:
             digitalWrite(LSLED, HIGH);
             delay(SECOND_2);
             digitalWrite(LSLED, LOW);
-            print("Game Over");
-            print("Final Score XXX");
+
+            Serial.println("Game Over \nFinal Score %d", getScore());
+
             delay(SECOND_10);
             changeState(INIT);
             break;
         case SLEEP:
-            print("SLEEP MODE");
-            enableInterrupt(BUTTON[0], timerInit(&t, SECOND_10), FALLING);
-            set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-            sleep_enable();
-            sleep_mode();
-            sleep_disable();
-            disableInterrupt(BUTTON[0]);
-            changeState(INIT);
+            Serial.println("SLEEP MODE");
+
+            if (digitalRead(BUTTON[0]))
+                changeState(INIT);
             break;
         default:
             break;
