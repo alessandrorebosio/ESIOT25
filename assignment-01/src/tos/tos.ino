@@ -72,7 +72,7 @@ void loop() {
             break;
         case SLEEP:
             print("SLEEP MODE");
-            enableInterrupt(BUTTON[0], timerInit(&t, SECOND_10), FALLING);
+            enableInterrupt(BUTTON[0], wakeUp, FALLING);
             set_sleep_mode(SLEEP_MODE_PWR_DOWN);
             sleep_enable();
             sleep_mode();
@@ -84,3 +84,5 @@ void loop() {
             break;
     }
 }
+
+void wakeUp() { timerInit(&t, SECOND_10); };
