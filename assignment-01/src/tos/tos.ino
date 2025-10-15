@@ -36,10 +36,12 @@ void setup() {
 void loop() {
     switch (getState()) {
         case INIT:
-            print("Welcome to TOS! \nPress B1 to Start");
+            print("Welcome to TOS!");
+            print("Press B1 to Start");
 
-            changeState(MENU);
             timerInit(&t, SECOND_10);
+            changeState(MENU);
+            reset();
             break;
         case MENU:
             ledFade(LSLED);
@@ -67,16 +69,19 @@ void loop() {
             delay(SECOND_2);
             digitalWrite(LSLED, LOW);
 
-            print("Game Over\nFinal Score: " + getScore());
+            print("Game Over");
+            print("Final Score: " + String(getScore()));
 
             delay(SECOND_10);
             changeState(INIT);
             break;
         case SLEEP:
-            print("SLEEP MODE");
+            print("SLEEP");
 
-            if (digitalRead(BUTTON[0]))
+            if (digitalRead(BUTTON[0])) {
                 changeState(INIT);
+                delay(300);
+            }
             break;
         default:
             break;
