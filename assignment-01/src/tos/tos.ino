@@ -2,6 +2,7 @@
 #include <avr/sleep.h>
 
 #include "logic.h"
+#include "output.h"
 #include "score.h"
 #include "state.h"
 #include "timer.h"
@@ -16,7 +17,9 @@ const int LSLED = 10;
 const int POT = A0;
 
 const int len = MIN(LEN(LED), LEN(BUTTON));
+
 Timer t;
+int diff = 0;
 
 void setup() {
     for (int i = 0; i < len; i++) {
@@ -27,25 +30,25 @@ void setup() {
     pinMode(LSLED, OUTPUT);
     pinMode(POT, INPUT);
 
-    Serial.begin(9600);
+    outputInit();
 }
 
 void loop() {
     switch (getState()) {
         case INIT:
-            Serial.println("Welcome to TOS! \nPress B1 to Start");
+            print("Welcome to TOS! \nPress B1 to Start");
 
             changeState(MENU);
             timerInit(&t, SECOND_10);
             break;
         case MENU:
             ledFade(LSLED);
-            int diff = difficulty(POT);
+            diff = difficulty(POT);
 
             if (digitalRead(BUTTON[0])) {
                 digitalWrite(LSLED, LOW);
                 changeState(PLAYING);
-                Serial.println("GO!");
+                print("GO!");
                 return;
             }
 
@@ -55,7 +58,7 @@ void loop() {
             }
             break;
         case PLAYING:
-            Serial.println("Not implemented, skipping to Game Over...");
+            print("Not implemented, skipping to Game Over...");
 
             changeState(GAMEOVER);
             break;
@@ -64,14 +67,13 @@ void loop() {
             delay(SECOND_2);
             digitalWrite(LSLED, LOW);
 
-            Serial.print("Game Over\nFinal Score: ");
-            Serial.println(getScore());
+            print("Game Over\nFinal Score: " + getScore());
 
             delay(SECOND_10);
             changeState(INIT);
             break;
         case SLEEP:
-            Serial.println("SLEEP MODE");
+            print("SLEEP MODE");
 
             if (digitalRead(BUTTON[0]))
                 changeState(INIT);
