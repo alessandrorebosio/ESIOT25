@@ -3,6 +3,17 @@
 #include "timer.h"
 
 /**
+ * @brief Determine whether a Timer is currently running.
+ *
+ * Returns true if the Timer pointed to by t is active (i.e., counting),
+ * false if the Timer is stopped or has expired.
+ *
+ * @param t Pointer to the Timer to check. Must be a valid pointer.
+ * @return true if the timer is running, false otherwise.
+ */
+bool is_running(const Timer *t) { return t->running; }
+
+/**
  * Start or restart a timer.
  *
  * This sets the timer start timestamp from `millis()` and sets the timeout
@@ -35,6 +46,5 @@ bool timer_expired(const Timer *t) {
         return true;
     if (!t->running)
         return false;
-    unsigned long now = millis();
-    return (now - t->start) >= t->timeout;
+    return (millis() - t->start) >= t->timeout;
 }

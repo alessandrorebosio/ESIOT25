@@ -4,19 +4,10 @@
 /**
  * @file logic.h
  * @brief Header file for game logic management
- * 
+ *
  * This file contains declarations for sequence generation,
  * difficulty management, and LED/button control.
  */
-/**
- * @brief Array of button pins
- * 
- * Constant array containing the pin numbers to which the
- * game buttons are connected. The array size determines
- * the number of available buttons.
- */
-extern const int BUTTON[];
-const int SEQUENCE_LENGTH = 4;
 
 /**
  * @brief Game sequence data structure
@@ -26,23 +17,56 @@ const int SEQUENCE_LENGTH = 4;
  * display state.
  */
 typedef struct {
-    int sequence[SEQUENCE_LENGTH];    /**< Array storing the sequence of button indices */
-    int length;                       /**< Current length of the active sequence */
-    int currentStep;                  /**< Current position in the sequence (0-based) */
-    bool isShowing;                   /**< Flag indicating if sequence is being displayed */
-} GameSequence;
+    /**
+     * Array storing the sequence of button indices
+     */
+    int *sequence;
+    /**
+     * Current length of the active sequence
+     */
+    int length;
+    /**
+     * Current sequence index
+     */
+    int step;
+    /**
+     * Current player score
+     */
+    int score;
+} Game;
 
 /**
- * @brief Generates a new random sequence
+ * @brief Initialize the game subsystem and prepare runtime state.
  *
- * Creates a shuffled sequence of button indices.
- * The sequence contains all numbers
- * from 0 to seqLength-1 in random order.
+ * Performs all one-time startup tasks required before using any other game
+ * functionality. Typical responsibilities include initializing global game
+ * state, allocating or resetting game-related resources, configuring hardware
+ * peripherals (timers, display, input), registering callbacks/interrupts, and
+ * putting the game into a well-defined initial state (menus, level 0, score 0,
+ * etc.).
  *
- * @param seq Pointer to GameSequence struct to populate
- * @param seqLength The length of the sequence to generate
+ * This function must be called once at application startup (for example from
+ * main()) before any other game APIs are used.
+ *
+ * @return void
  */
-void initSequence(GameSequence *seq, int seqLength);
+void gameInit(void);
+
+/**
+ * @brief Get the current score value.
+ *
+ * @return The current score as an integer.
+ */
+int getScore(void);
+
+/**
+ * @brief Increase the score by one.
+ *
+ * This increments the internal score counter. If callers require
+ * atomic updates in a concurrent environment, they must provide the
+ * necessary synchronization.
+ */
+void increase(void);
 
 /**
  * @brief Shuffles the existing sequence
@@ -52,48 +76,54 @@ void initSequence(GameSequence *seq, int seqLength);
  *
  * @param seq Pointer to GameSequence struct to shuffle
  */
-void shuffleSequence(GameSequence *seq);
+void shuffleSequence();
 
 /**
- * @brief Prints sequence to serial monitor
+ * @brief Retrieve the integer sequence used by the logic module.
  *
- * Displays the current sequence in a human-readable format
- * on the serial monitor for debugging and player reference.
+ * This function returns a pointer to the first element of a contiguous sequence
+ * of int values produced/managed by the logic layer. The number of elements in
+ * the sequence is not encoded in the pointer itself; callers must obtain the
+ * sequence length via the corresponding API function (if available) or by
+ * other means defined by the module.
  *
- * @param seq Pointer to GameSequence struct to display
+ * @return Pointer to the first element of the int sequence, or nullptr on
+ * error.
  */
-void printSequence(const GameSequence *seq);
+int *getSequence(void);
 
 /**
- * @brief Checks player's input against the sequence
+ * @brief Check a player's button input against the game's expected input.
  *
- * Compares the button index pressed by the player with
- * the expected value in the sequence. Advances the
- * current step if correct.
+ * Compares the supplied buttonIndex (the index of the button pressed by the
+ * player) with the currently expected input according to the game's logic.
+ * If the input is correct, the function advances or updates the internal game
+ * progress/state accordingly; if incorrect, it updates state to reflect the
+ * failure condition (for example decrementing lives, resetting progress, or
+ * setting an error flag).
  *
- * @param seq Pointer to GameSequence struct containing current game state
- * @param buttonIndex The index of the button that was pressed (0-based)
- * @return true if button matches current sequence step, false otherwise
+ * @param buttonIndex Index of the button pressed by the player (zero-based).
+ *                    Must refer to a valid button in the current game context.
+ * @return true if the provided buttonIndex matches the expected input and the
+ *         player's progress was advanced; false if the input was incorrect.
  */
-bool checkPlayerInput(GameSequence *seq, int buttonIndex);
+bool checkButton(int buttonIndex);
 
 /**
- * @brief Resets sequence progress
+ * @brief Reset the current game's score.
  *
- * Sets currentStep back to 0, allowing the same sequence
- * to be re-attempted or marking the sequence as no longer being displayed.
- *
- * @param seq Pointer to GameSequence struct to reset
+ * Sets the global game's score to zero, effectively restarting the
+ * player's score while leaving other game state fields unchanged.
  */
-void resetSequence(GameSequence *seq);
+void reset(void);
 
 /**
  * @brief Determines game difficulty based on input
- * 
+ *
  * Reads an analog input (e.g., potentiometer) to determine
  * the current difficulty level of the game. The input value
  * is mapped to predefined difficulty settings.
- * 
+ *
  * @param pin The analog pin number to read from
  * @return Integer representing difficulty level (1=easy, 2=medium, 3=hard)
  */
@@ -101,24 +131,25 @@ int difficulty(int pin);
 
 /**
  * @brief Controls LED fade animation
- * 
+ *
  * Creates a smooth fading effect on an LED using PWM.
  * Useful for visual feedback and game animations.
- * 
+ *
  * @param pin The PWM-capable pin controlling the LED
  */
 void ledFade(int pin);
 
 /**
- * @brief Checks if a button was pressed
- * 
- * Detects whether a specific button has been pressed
- * since the last check. Includes debouncing logic to
- * prevent false triggers.
- * 
- * @param index The index of the button in the BUTTON array
- * @return true if the button was pressed, false otherwise
+ * @brief Check if a digital input pin is being pressed, with a simple debounce
+ * delay.
+ *
+ * Reads the specified digital pin using digitalRead(). If the pin reads HIGH,
+ * the function performs a blocking delay of DEBOUNCE_DELAY milliseconds and
+ * returns true. If the pin reads LOW, the function returns false immediately.
+ *
+ * @param pin The Arduino digital pin number to read.
+ * @return true if the pin was read HIGH (press detected); false otherwise.
  */
-bool wasPressed(int index);
+bool wasPressed(int pin);
 
 #endif

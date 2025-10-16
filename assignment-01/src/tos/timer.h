@@ -47,6 +47,17 @@ typedef struct {
 } Timer;
 
 /**
+ * @brief Determine whether a Timer is currently running.
+ *
+ * Returns true if the Timer pointed to by t is active (i.e., counting),
+ * false if the Timer is stopped or has expired.
+ *
+ * @param t Pointer to the Timer to check. Must be a valid pointer.
+ * @return true if the timer is running, false otherwise.
+ */
+bool is_running(const Timer *t);
+
+/**
  * Initialize and start a timer.
  *
  * This sets the timer start to the current value returned by `millis()` and
@@ -68,5 +79,6 @@ void timerInit(Timer *t, unsigned long timeout_ms);
  * @return true if the timer has expired, false otherwise.
  */
 bool timer_expired(const Timer *t);
+
 
 #endif

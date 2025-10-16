@@ -25,4 +25,14 @@
  */
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
+/**
+ * @brief Retrieve the first element of an integer array.
+ *
+ * @param array Pointer to the first element of an integer array. Must not be nullptr.
+ * @return The value of the first element pointed to by array.
+ *
+ * @note Behavior is undefined if array is nullptr or does not point to at least one valid int.
+ */
+int getFirst(const int *array);
+
 #endif

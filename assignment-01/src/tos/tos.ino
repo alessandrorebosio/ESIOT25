@@ -3,7 +3,6 @@
 
 #include "logic.h"
 #include "output.h"
-#include "score.h"
 #include "state.h"
 #include "timer.h"
 #include "utils.h"
@@ -11,27 +10,27 @@
 const long int SECOND_10 = 10000U;
 const long int SECOND_2 = 2000U;
 
-const int LED[] = {9, 8, 7, 6};
-const int BUTTON[] = {5, 4, 3, 2};
+const int LED[] = {6, 7, 8, 9};
+const int BUTTON[] = {2, 3, 4, 5};
 const int LSLED = 10;
 const int POT = A0;
 
-const int len = MIN(LEN(LED), LEN(BUTTON));
+const int LEN = MIN(LEN(LED), LEN(BUTTON));
 int diff = 0;
 
-Timer t;
-GameSequence seq;
+Timer t0;
 
 void setup() {
-    for (int i = 0; i < len; i++) {
-        pinMode(LED[i], OUTPUT);
+    for (int i = 0; i < LEN; i++) {
         pinMode(BUTTON[i], INPUT);
+        pinMode(LED[i], OUTPUT);
     }
 
     pinMode(LSLED, OUTPUT);
     pinMode(POT, INPUT);
 
     outputInit();
+    gameInit();
 }
 
 void loop() {
@@ -39,40 +38,35 @@ void loop() {
         case INIT:
             print("Welcome to TOS!");
             print("Press B1 to Start");
+
             changeState(MENU);
-            reset();
             break;
 
         case MENU:
-            ledFade(LSLED);
             diff = difficulty(POT);
+            ledFade(LSLED);
 
-            if (digitalRead(BUTTON[0])) {
+            if (digitalRead(getFirst(BUTTON))) {
                 digitalWrite(LSLED, LOW);
+                changeState(PLAYING);
                 print("GO!");
                 delay(300);
                 return;
             }
-            if (timer_expired(&t)) {
+            if (timer_expired(&t0)) {
                 digitalWrite(LSLED, LOW);
                 changeState(SLEEP);
             }
             break;
 
         case PLAYING:
-            for (int i = 0; i < len; i++) {
-                if (wasPressed(i)) {
-                    if (checkPlayerInput(&seq, i)) {
-                        digitalWrite(LED[i], HIGH);
-                        delay(200);
-                        digitalWrite(LED[i], LOW);
-                        if (seq.currentStep >= seq.length) {
-                            delay(1000);
-                            print("GOOD! Score: XXX");
-                            changeState(INIT);
-                        }
-                    } else {
+            for (int i = 0; i < LEN; i++) {
+                if (wasPressed(BUTTON[i])) {
+                    if (!checkButton(i) || timer_expired(&t0)) {
                         changeState(GAMEOVER);
+                        break;
+                    } else {
+                        digitalWrite(LED[i], HIGH);
                     }
                 }
             }
@@ -94,10 +88,10 @@ void loop() {
             print("SLEEP");
             set_sleep_mode(SLEEP_MODE_PWR_DOWN);
             sleep_enable();
-            attachInterrupt(BUTTON[0], wakeUp, LOW);
+            attachInterrupt(getFirst(BUTTON), wakeUp, LOW);
             sleep_mode();
             sleep_disable();
-            detachInterrupt(BUTTON[0]);
+            detachInterrupt(getFirst(BUTTON));
             break;
         default:
             break;
