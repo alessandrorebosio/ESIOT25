@@ -8,7 +8,6 @@
  * This file contains declarations for sequence generation,
  * difficulty management, and LED/button control.
  */
-
 /**
  * @brief Array of button pins
  * 
@@ -17,19 +16,76 @@
  * the number of available buttons.
  */
 extern const int BUTTON[];
+const int SEQUENCE_LENGTH = 4;
 
 /**
- * @brief Generates a random number sequence
- * 
- * Creates an array of random integers within the range of
- * available buttons. The sequence represents the pattern
- * that the player must replicate.
- * 
- * @param size The length of the sequence to generate
- * @return Pointer to dynamically allocated array containing the sequence
- * @note The caller is responsible for freeing the memory
+ * @brief Game sequence data structure
+ *
+ * Contains all data related to the current game sequence,
+ * including the sequence values, current progress, and
+ * display state.
  */
-int *sequence(int size);
+typedef struct {
+    int sequence[SEQUENCE_LENGTH];    /**< Array storing the sequence of button indices */
+    int length;                       /**< Current length of the active sequence */
+    int currentStep;                  /**< Current position in the sequence (0-based) */
+    bool isShowing;                   /**< Flag indicating if sequence is being displayed */
+} GameSequence;
+
+/**
+ * @brief Generates a new random sequence
+ *
+ * Creates a shuffled sequence of button indices.
+ * The sequence contains all numbers
+ * from 0 to seqLength-1 in random order.
+ *
+ * @param seq Pointer to GameSequence struct to populate
+ * @param seqLength The length of the sequence to generate
+ */
+void initSequence(GameSequence *seq, int seqLength);
+
+/**
+ * @brief Shuffles the existing sequence
+ *
+ * Randomly rearranges the elements of the current sequence
+ * to create a new order without changing its length.
+ *
+ * @param seq Pointer to GameSequence struct to shuffle
+ */
+void shuffleSequence(GameSequence *seq);
+
+/**
+ * @brief Prints sequence to serial monitor
+ *
+ * Displays the current sequence in a human-readable format
+ * on the serial monitor for debugging and player reference.
+ *
+ * @param seq Pointer to GameSequence struct to display
+ */
+void printSequence(const GameSequence *seq);
+
+/**
+ * @brief Checks player's input against the sequence
+ *
+ * Compares the button index pressed by the player with
+ * the expected value in the sequence. Advances the
+ * current step if correct.
+ *
+ * @param seq Pointer to GameSequence struct containing current game state
+ * @param buttonIndex The index of the button that was pressed (0-based)
+ * @return true if button matches current sequence step, false otherwise
+ */
+bool checkPlayerInput(GameSequence *seq, int buttonIndex);
+
+/**
+ * @brief Resets sequence progress
+ *
+ * Sets currentStep back to 0, allowing the same sequence
+ * to be re-attempted or marking the sequence as no longer being displayed.
+ *
+ * @param seq Pointer to GameSequence struct to reset
+ */
+void resetSequence(GameSequence *seq);
 
 /**
  * @brief Determines game difficulty based on input

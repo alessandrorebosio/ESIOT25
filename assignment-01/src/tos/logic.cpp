@@ -32,18 +32,87 @@ static int fadeValue = 0;
 static int fadeAmount = 7;
 
 /**
- * @brief Generates a random sequence of button indices
+ * @brief Generates a random sequence of button indices.
  *
- * Creates an array of random integers representing the sequence
- * of buttons that the player must press. Each value corresponds
- * to an index in the BUTTON array.
+ * Creates an array of integers representing the sequence of buttons that 
+ * the player must press. Each value corresponds to an index in the BUTTON array.
+ * The sequence contains all numbers from 0 to seqLength-1 in random order.
  *
- * @param size The length of the sequence to generate
- * @return Pointer to dynamically allocated array containing the sequence
+ * @param seq Pointer to GameSequence struct to populate
+ * @param seqLength The length of the sequence to generate
  */
-int *sequence(int size) {
-    // TODO
-    return NULL;
+void initSequence(GameSequence *seq, int seqLength) {
+    seq->length = seqLength;
+    resetSequence(seq);
+    for (int i = 0; i < seqLength; i++) {
+        seq->sequence[i] = i;
+    }
+}
+
+/**
+ * @brief Randomly shuffles the existing sequence in place.
+ *
+ * Uses the Fisher-Yates shuffle algorithm to randomly rearrange
+ * the elements of the current sequence to create a new order
+ * without changing its length.
+ *
+ * @param seq Pointer to GameSequence struct to shuffle
+ */
+void shuffleSequence(GameSequence *seq) {
+    for (int i = seq->length - 1; i > 0; i--) {
+        int j = random(0, i + 1);
+        int temp = seq->sequence[i];
+        seq->sequence[i] = seq->sequence[j];
+        seq->sequence[j] = temp;
+    }
+}
+
+/**
+ * @brief Prints the current sequence to Serial monitor
+ *
+ * Displays the sequence in format "Sequence: 1234" where each number
+ * represents a button index + 1 (so 1 = B1, 2 = B2, etc.)
+ *
+ * @param seq Pointer to GameSequence struct to print
+ */
+void printSequence(const GameSequence *seq) {
+    Serial.print("Sequence: ");
+    for (int i = 0; i < seq->length; i++) {
+        Serial.print(seq->sequence[i] + 1);
+    }
+    Serial.println();
+}
+
+/**
+ * @brief Checks if player's button press matches the expected sequence element
+ *
+ * Compares the pressed button index with the current step in the sequence.
+ * Advances the current step if correct. Does not advance sequence if wrong.
+ *
+ * @param seq Pointer to GameSequence struct containing current game state
+ * @param buttonIndex The index of the button that was pressed (0-based)
+ * @return true if button matches current sequence step, false otherwise
+ */
+bool checkPlayerInput(GameSequence *seq, int buttonIndex) {
+    if (seq->currentStep >= seq->length) {
+        return false;
+    }
+    bool correct = (buttonIndex == seq->sequence[seq->currentStep]);
+    seq->currentStep++;
+    return correct;
+}
+
+/**
+ * @brief Resets sequence progress without changing the sequence itself
+ *
+ * Sets currentStep back to 0, allowing the same sequence to be re-attempted
+ * or marking the sequence as no longer being displayed.
+ *
+ * @param seq Pointer to GameSequence struct to reset
+ */
+void resetSequence(GameSequence *seq) {
+    seq->currentStep = 0;
+    seq->isShowing = false;
 }
 
 /**

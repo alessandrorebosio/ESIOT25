@@ -20,9 +20,11 @@ const int POT = A0;
 const int len = MIN(LEN(LED), LEN(BUTTON));
 Timer t;
 bool timerStartedInMenu = false;
+GameSequence seq;
 
 void setup() {
     Serial.begin(9600);
+    randomSeed(analogRead(A1));
 
     for (int i = 0; i < len; i++) {
         pinMode(LED[i], OUTPUT);
@@ -33,6 +35,7 @@ void setup() {
     pinMode(POT, INPUT);
 
     outputInit();
+    initSequence(&seq, len);
 }
 
 void loop() {
@@ -41,9 +44,11 @@ void loop() {
             print("Welcome to TOS!");
             print("Press B1 to Start");
             timerStartedInMenu = false;
+            resetSequence(&seq);
             delay(500);
             changeState(MENU);
             break;
+
         case MENU:
             ledFade(LSLED);
             difficulty(POT);
@@ -57,19 +62,36 @@ void loop() {
                 digitalWrite(LED[0], HIGH);
                 delay(300);
                 digitalWrite(LED[0], LOW);
+                shuffleSequence(&seq);
                 print("GO!");
+                printSequence(&seq);
                 delay(300);
                 return;
             }
-
             if (timer_expired(&t)) {
                 changeState(SLEEP);
             }
             break;
+
         case PLAYING:
-            print("Not implemented, skipping to Game Over...");
-            changeState(GAMEOVER);
+            for (int i = 0; i < len; i++) {
+                if (wasPressed(i)) {
+                    if (checkPlayerInput(&seq, i)) {
+                        digitalWrite(LED[i], HIGH);
+                        delay(200);
+                        digitalWrite(LED[i], LOW);
+                        if (seq.currentStep >= seq.length) {
+                            delay(1000);
+                            Serial.println("GOOD! Score: XXX");
+                            changeState(INIT);
+                        }
+                    } else {
+                        changeState(GAMEOVER);
+                    }
+                }
+            }
             break;
+
         case GAMEOVER:
             digitalWrite(LSLED, HIGH);
             delay(SECOND_2);
@@ -79,6 +101,7 @@ void loop() {
             delay(SECOND_10);
             changeState(INIT);
             break;
+
         case SLEEP:
             print("SLEEP MODE");
             enableInterrupt(BUTTON[0], wakeUp, FALLING);
