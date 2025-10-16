@@ -17,15 +17,12 @@ const int LSLED = 10;
 const int POT = A0;
 
 const int len = MIN(LEN(LED), LEN(BUTTON));
+int diff = 0;
 
 Timer t;
-bool timerStartedInMenu = false;
 GameSequence seq;
 
 void setup() {
-    Serial.begin(9600);
-    randomSeed(analogRead(A1));
-
     for (int i = 0; i < len; i++) {
         pinMode(LED[i], OUTPUT);
         pinMode(BUTTON[i], INPUT);
@@ -35,7 +32,6 @@ void setup() {
     pinMode(POT, INPUT);
 
     outputInit();
-    initSequence(&seq, len);
 }
 
 void loop() {
@@ -43,9 +39,6 @@ void loop() {
         case INIT:
             print("Welcome to TOS!");
             print("Press B1 to Start");
-            timerStartedInMenu = false;
-            resetSequence(&seq);
-            delay(500);
             changeState(MENU);
             reset();
             break;
@@ -56,12 +49,7 @@ void loop() {
 
             if (digitalRead(BUTTON[0])) {
                 digitalWrite(LSLED, LOW);
-                digitalWrite(LED[0], HIGH);
-                delay(300);
-                digitalWrite(LED[0], LOW);
-                shuffleSequence(&seq);
                 print("GO!");
-                printSequence(&seq);
                 delay(300);
                 return;
             }
@@ -80,7 +68,7 @@ void loop() {
                         digitalWrite(LED[i], LOW);
                         if (seq.currentStep >= seq.length) {
                             delay(1000);
-                            Serial.println("GOOD! Score: XXX");
+                            print("GOOD! Score: XXX");
                             changeState(INIT);
                         }
                     } else {
@@ -104,15 +92,16 @@ void loop() {
 
         case SLEEP:
             print("SLEEP");
-
-            if (digitalRead(BUTTON[0])) {
-                changeState(INIT);
-                delay(50);
-            }
+            set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+            sleep_enable();
+            attachInterrupt(BUTTON[0], wakeUp, LOW);
+            sleep_mode();
+            sleep_disable();
+            detachInterrupt(BUTTON[0]);
             break;
         default:
             break;
     }
 }
 
-void wakeUp() { timerInit(&t, SECOND_10); };
+void wakeUp() { changeState(INIT); };
