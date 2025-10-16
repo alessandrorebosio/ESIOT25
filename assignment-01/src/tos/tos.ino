@@ -38,7 +38,7 @@ void loop() {
         case INIT:
             print("Welcome to TOS!");
             print("Press B1 to Start");
-
+            reset();
             changeState(MENU);
             break;
 
@@ -60,6 +60,11 @@ void loop() {
             break;
 
         case PLAYING:
+            if (needsNewSequence()) {
+                shuffleSequence();
+                // TODO: turn off leds
+            }
+
             for (int i = 0; i < LEN; i++) {
                 if (wasPressed(BUTTON[i])) {
                     if (!checkButton(i) || timer_expired(&t0)) {
@@ -67,6 +72,7 @@ void loop() {
                         break;
                     } else {
                         digitalWrite(LED[i], HIGH);
+                        increaseScore();
                     }
                 }
             }

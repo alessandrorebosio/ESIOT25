@@ -105,7 +105,7 @@ int getScore(void) { return score; }
 /**
  * @brief Increment the score by one.
  */
-void increase(void) { score += INCREMENT; }
+void increaseScore(void) { score += INCREMENT; }
 
 /**
  * @brief Randomly shuffles the existing sequence in place.
@@ -124,6 +124,19 @@ void shuffleSequence(void) {
 
     game.step = START_VALUE;
 }
+
+/**
+ * @brief Determine whether a new sequence should be started.
+ *
+ * Evaluates the current internal state and decides if the caller must
+ * begin a new sequence (for example because the current sequence has
+ * completed, a delimiter was encountered, or timing/size thresholds
+ * have been exceeded).
+ *
+ * @return true if a new sequence is required; false otherwise.
+ */
+bool needsNewSequence(void) { return game.step >= game.length; }
+
 /**
  * @brief Retrieve the integer sequence used by the logic module.
  *

@@ -60,7 +60,7 @@ int getScore(void);
  * atomic updates in a concurrent environment, they must provide the
  * necessary synchronization.
  */
-void increase(void);
+void increaseScore(void);
 
 /**
  * @brief Shuffles the existing sequence
@@ -70,7 +70,19 @@ void increase(void);
  *
  * @param seq Pointer to GameSequence struct to shuffle
  */
-void shuffleSequence();
+void shuffleSequence(void);
+
+/**
+ * @brief Determine whether a new sequence should be started.
+ *
+ * Evaluates the current internal state and decides if the caller must
+ * begin a new sequence (for example because the current sequence has
+ * completed, a delimiter was encountered, or timing/size thresholds
+ * have been exceeded).
+ *
+ * @return true if a new sequence is required; false otherwise.
+ */
+bool needsNewSequence(void);
 
 /**
  * @brief Retrieve the integer sequence used by the logic module.
