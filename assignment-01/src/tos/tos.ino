@@ -30,7 +30,7 @@ void setup() {
     pinMode(POT, INPUT);
 
     outputInit();
-    gameInit();
+    gameInit(LEN);
 }
 
 void loop() {

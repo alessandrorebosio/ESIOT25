@@ -43,14 +43,6 @@ static int brightness = 0;
 static int fadeAmount = 5;
 
 /**
- * @brief External constant specifying a length (number of elements).
- *
- * This constant is defined in another translation unit and represents the size
- * used for fixed-size buffers, arrays, or other length-limited data structures.
- */
-extern const int LEN;
-
-/**
  * @brief File-local GameSequence instance representing the current game
  * sequence/state.
  *
@@ -89,14 +81,14 @@ static int score = 0;
  *
  * @throws std::bad_alloc If memory allocation for the new sequence fails.
  */
-void gameInit() {
+void gameInit(int len) {
     if (game.sequence) {
         delete[] game.sequence;
         game.sequence = nullptr;
     }
 
-    game.sequence = new int[LEN];
-    game.length = LEN;
+    game.sequence = new int[len];
+    game.length = len;
 
     for (int i = 0; i < game.length; ++i) {
         game.sequence[i] = i;

@@ -36,21 +36,15 @@ typedef struct {
 } Game;
 
 /**
- * @brief Initialize the game subsystem and prepare runtime state.
+ * @brief Initialize the game state and sequence.
  *
- * Performs all one-time startup tasks required before using any other game
- * functionality. Typical responsibilities include initializing global game
- * state, allocating or resetting game-related resources, configuring hardware
- * peripherals (timers, display, input), registering callbacks/interrupts, and
- * putting the game into a well-defined initial state (menus, level 0, score 0,
- * etc.).
+ * Allocates memory for the game sequence based on the provided length
+ * and initializes all relevant fields in the Game struct to their
+ * starting values.
  *
- * This function must be called once at application startup (for example from
- * main()) before any other game APIs are used.
- *
- * @return void
+ * @param len The desired length of the game sequence.
  */
-void gameInit(void);
+void gameInit(int len);
 
 /**
  * @brief Get the current score value.
