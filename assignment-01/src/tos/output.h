@@ -25,7 +25,7 @@ void outputInit(void);
  * @param message A NUL-terminated C string to send to the output.
  *                The function does not take ownership of the pointer.
  */
-void print(char *message);
+void print(const String message);
 
 /**
  * Clear the output, if supported by the platform.

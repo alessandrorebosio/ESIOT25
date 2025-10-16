@@ -35,7 +35,7 @@ void outputInit() { Serial.begin(BAUD_RATE); }
  * This function does not append a newline; use `print("...\n")` if a
  * newline is desired.
  */
-void print(char *message) { Serial.println(message); }
+void print(const String message) { Serial.println(message); }
 
 /**
  * Clear the output device if possible.

@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <avr/sleep.h>
-#include <EnableInterrupt.h>
 
 #include "logic.h"
 #include "output.h"
@@ -18,6 +17,7 @@ const int LSLED = 10;
 const int POT = A0;
 
 const int len = MIN(LEN(LED), LEN(BUTTON));
+
 Timer t;
 bool timerStartedInMenu = false;
 GameSequence seq;
@@ -28,7 +28,7 @@ void setup() {
 
     for (int i = 0; i < len; i++) {
         pinMode(LED[i], OUTPUT);
-        pinMode(BUTTON[i], INPUT_PULLUP);
+        pinMode(BUTTON[i], INPUT);
     }
 
     pinMode(LSLED, OUTPUT);
@@ -47,17 +47,14 @@ void loop() {
             resetSequence(&seq);
             delay(500);
             changeState(MENU);
+            reset();
             break;
 
         case MENU:
             ledFade(LSLED);
-            difficulty(POT);
-            if (!timerStartedInMenu) {
-                timerInit(&t, SECOND_10);
-                timerStartedInMenu = true;
-            }
-            if (wasPressed(0)) {
-                changeState(PLAYING);
+            diff = difficulty(POT);
+
+            if (digitalRead(BUTTON[0])) {
                 digitalWrite(LSLED, LOW);
                 digitalWrite(LED[0], HIGH);
                 delay(300);
@@ -69,6 +66,7 @@ void loop() {
                 return;
             }
             if (timer_expired(&t)) {
+                digitalWrite(LSLED, LOW);
                 changeState(SLEEP);
             }
             break;
@@ -96,28 +94,25 @@ void loop() {
             digitalWrite(LSLED, HIGH);
             delay(SECOND_2);
             digitalWrite(LSLED, LOW);
+
             print("Game Over");
-            print("Final Score XXX");
+            print("Final Score: " + String(getScore()));
+
             delay(SECOND_10);
             changeState(INIT);
             break;
 
         case SLEEP:
-            print("SLEEP MODE");
-            enableInterrupt(BUTTON[0], wakeUp, FALLING);
-            set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-            sleep_enable();
-            sleep_mode();
-            sleep_disable();
-            disableInterrupt(BUTTON[0]);
-            while (digitalRead(BUTTON[0]) == LOW) {
-                delay(10);
+            print("SLEEP");
+
+            if (digitalRead(BUTTON[0])) {
+                changeState(INIT);
+                delay(50);
             }
-            changeState(INIT);
             break;
         default:
             break;
     }
 }
 
-void wakeUp() { timerInit(&t, SECOND_10); }
+void wakeUp() { timerInit(&t, SECOND_10); };

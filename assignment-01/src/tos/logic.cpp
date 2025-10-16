@@ -26,10 +26,10 @@ const unsigned long FADE_INTERVAL = 15;
 static unsigned long lastFadeUpdate = 0;
 
 /** Current PWM value for the fade effect (0..255) */
-static int fadeValue = 0;
+static int brightness = 0;
 
 /** Amount to add/subtract on each fade step. Can be positive or negative. */
-static int fadeAmount = 7;
+static int fadeAmount = 5;
 
 /**
  * @brief Generates a random sequence of button indices.
@@ -138,16 +138,17 @@ int difficulty(int pin) { return map(analogRead(pin), 0, 1023, 1, 4); }
  * @param pin PWM pin (e.g. LED) to write the analog value to.
  */
 void ledFade(int pin) {
-    unsigned long currentMillis = millis();
-    if (currentMillis - lastFadeUpdate >= FADE_INTERVAL) {
-        lastFadeUpdate = currentMillis;
-        fadeValue += fadeAmount;
+    unsigned long now = millis();
+    if (now - lastFadeUpdate < FADE_INTERVAL) return;
+    lastFadeUpdate = now;
 
-        if (fadeValue <= 0 || fadeValue >= 255)
-            fadeAmount = -fadeAmount;
-
-        analogWrite(pin, fadeValue);
+    brightness += fadeAmount;
+    if (brightness <= 0 || brightness >= 255) {
+        fadeAmount = -fadeAmount;
+        brightness = constrain(brightness, 0, 255);
     }
+
+    analogWrite(pin, brightness);
 }
 
 /**
