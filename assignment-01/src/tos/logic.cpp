@@ -159,7 +159,7 @@ bool checkButton(int buttonIndex) {
  */
 void reset(void) {
     game.score = START_VALUE;
-    game.step = 0;
+    game.step = START_VALUE;
 }
 
 /**
