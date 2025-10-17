@@ -24,7 +24,7 @@ static const int BAUD_RATE = 9600;
 /**
  * Initialize the output subsystem.
  *
- * For Arduino this calls `Serial.begin(115200)` and waits for the serial
+ * For Arduino this calls `Serial.begin(9600)` and waits for the serial
  * port where appropriate. On non-embedded builds this is a no-op.
  */
 void outputInit() { Serial.begin(BAUD_RATE); }

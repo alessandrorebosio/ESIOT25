@@ -30,6 +30,7 @@ void setup() {
     pinMode(POT, INPUT);
 
     outputInit();
+    //delay(1500);
     gameInit(LEN);
 }
 
