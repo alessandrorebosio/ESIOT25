@@ -62,16 +62,20 @@ void loop() {
         case PLAYING:
             if (needsNewSequence()) {
                 shuffleSequence();
-                // TODO: turn off leds
             }
 
             for (int i = 0; i < LEN; i++) {
+                if(isSequenceCompleted()) {
+                        reset();
+                        turnOffAllLEDs();
+                }
                 if (wasPressed(BUTTON[i])) {
                     if (!checkButton(i) || timer_expired(&t0)) {
                         changeState(GAMEOVER);
                         break;
                     } else {
                         digitalWrite(LED[i], HIGH);
+                        delay(300);
                         increaseScore();
                     }
                 }
@@ -79,6 +83,7 @@ void loop() {
             break;
 
         case GAMEOVER:
+            turnOffAllLEDs();
             digitalWrite(LSLED, HIGH);
             delay(SECOND_2);
             digitalWrite(LSLED, LOW);
@@ -105,3 +110,9 @@ void loop() {
 }
 
 void wakeUp() { changeState(INIT); };
+
+void turnOffAllLEDs() {
+    for (int i = 0; i < LEN; i++) {
+        digitalWrite(LED[i], LOW);
+    }
+}

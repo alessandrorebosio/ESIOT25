@@ -89,6 +89,7 @@ void gameInit(int len) {
 
     game.sequence = new int[len];
     game.length = len;
+    game.isShowing = false;
 
     for (int i = 0; i < game.length; ++i) {
         game.sequence[i] = i;
@@ -123,6 +124,14 @@ void shuffleSequence(void) {
     }
 
     game.step = START_VALUE;
+    game.isShowing = true;
+
+    Serial.print("Sequence: ");
+    for (int i = 0; i < game.length; ++i) {
+        Serial.print(game.sequence[i]);
+        Serial.print(" ");
+    }
+    Serial.println();
 }
 
 /**
@@ -135,7 +144,9 @@ void shuffleSequence(void) {
  *
  * @return true if a new sequence is required; false otherwise.
  */
-bool needsNewSequence(void) { return game.step >= game.length; }
+bool needsNewSequence(void) { 
+    return  !game.isShowing; 
+}
 
 /**
  * @brief Retrieve the integer sequence used by the logic module.
@@ -161,7 +172,20 @@ int *getSequence(void) { return game.sequence; }
  * @return true if button matches current sequence step, false otherwise
  */
 bool checkButton(int buttonIndex) {
-    return game.step == buttonIndex ? (game.step++, true) : false;
+    return (game.step < game.length && game.sequence[game.step] == buttonIndex) 
+        ? (game.step++, true) 
+        : false;
+}
+
+/**
+ * @brief Check if the current sequence has been completed.
+ *
+ * Evaluates whether the player has successfully completed the current
+ * sequence based on internal game state.
+ *
+ */
+bool isSequenceCompleted(void) {
+    return game.step >= game.length;
 }
 
 /**
@@ -173,6 +197,7 @@ bool checkButton(int buttonIndex) {
 void reset(void) {
     game.score = START_VALUE;
     game.step = START_VALUE;
+    game.isShowing = false;
 }
 
 /**

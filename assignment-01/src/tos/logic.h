@@ -33,6 +33,10 @@ typedef struct {
      * Current player score
      */
     int score;
+    /**
+     * Whether the sequence is currently being shown
+     */
+    bool isShowing;
 } Game;
 
 /**
@@ -114,6 +118,16 @@ int *getSequence(void);
  *         player's progress was advanced; false if the input was incorrect.
  */
 bool checkButton(int buttonIndex);
+
+/**
+ * @brief Check if the current sequence has been completed.
+ *
+ * Evaluates whether the player has successfully completed the current
+ * sequence based on internal game state.
+ *
+ * @return true if the sequence is completed; false otherwise.
+ */
+bool isSequenceCompleted(void);
 
 /**
  * @brief Reset the current game's score.
