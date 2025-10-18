@@ -1,51 +1,74 @@
 #include <Arduino.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
 
 #include "output.h"
 
-/**
- * @brief Serial transmission speed (baud rate).
- *
- * Constant representing the serial communication speed set to 9600 bits per
- * second (bps). Used to configure the UART/serial interface and ensure the
- * local device and host or external devices communicate at the same rate.
- */
-static const int BAUD_RATE = 9600;
+static LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);
 
 /**
- * @file output.cpp
- * @brief Arduino Serial implementation for the `output` API declared in
- *        `output.h`.
- *
- * Functions here use the global `Serial` object when compiled for Arduino.
- * When built for the host (non-ARDUINO) a minimal stdout fallback is used so
- * the module can be exercised during unit tests or local builds.
+ * Print text to a specific LCD line with optional centering
+ * 
+ * @param line The line number (0-based)
+ * @param message The text to display
+ * 
+ * @note The line will be cleared before printing
+ * @note Text will be padded with spaces to ensure clean display
+ * @private
  */
+static void printLine(uint8_t line, const String message) {
+    if (line >= LCD_ROWS) return;
+    
+    lcd.setCursor(0, line);
+    String output = message;
+
+    if (output.length() > LCD_COLS) {
+        output = output.substring(0, LCD_COLS);
+    }
+
+    while (output.length() < LCD_COLS) {
+        output += " ";
+    }
+
+    lcd.print(output);
+}
 
 /**
- * Initialize the output subsystem.
- *
- * For Arduino this calls `Serial.begin(9600)` and waits for the serial
- * port where appropriate. On non-embedded builds this is a no-op.
+ * Initialize the output subsystem
+ * 
+ * Sets up the LCD display, enables backlight, and clears the screen.
+ * This function must be called before any output operations.
  */
-void outputInit() { Serial.begin(BAUD_RATE); }
+void outputInit() { 
+    lcd.init();
+    lcd.backlight();
+    lcd.clear();
+}
 
 /**
- * Print a null-terminated string to the output device.
- *
- * This function does not append a newline; use `print("...\n")` if a
- * newline is desired.
+ * Print a message to the LCD display
+ * 
+ * Supports multi-line messages using newline characters and optional
+ * text centering for better visual presentation.
+ * 
+ * @param message The string to display
  */
-void print(const String message) { Serial.println(message); }
+void print(const String message) {
+    int newlinePos = message.indexOf('\n');
+    
+    if (newlinePos != -1) {
+        printLine(0, message.substring(0, newlinePos));
+        printLine(1, message.substring(newlinePos + 1));
+    } else {
+        printLine(0, message);
+        printLine(1, "");
+    }
+}
 
 /**
- * Clear the output device if possible.
- *
- * There is no portable API to clear the IDE Serial Monitor. This function
- * emits an ANSI clear-screen escape sequence which is interpreted by many
- * terminal programs (minicom, screen, some serial terminal emulators). If
- * ANSI sequences are not interpreted (for example Arduino IDE Serial
- * Monitor) the call will effectively move the cursor or print invisible
- * characters; some terminals may not clear at all. On host builds we print
- * several newlines as a fallback.
+ * Clear the entire LCD display
+ * 
+ * Resets both lines to blank and returns cursor to position (0,0).
+ * Uses the LiquidCrystal_I2C library's clear function.
  */
-void clear(void) {}
+void clear(void) { lcd.clear(); }

@@ -30,15 +30,13 @@ void setup() {
     pinMode(POT, INPUT);
 
     outputInit();
-    //delay(1500);
     gameInit(LEN);
 }
 
 void loop() {
     switch (getState()) {
         case INIT:
-            print("Welcome to TOS!");
-            print("Press B1 to Start");
+            print("Welcome to TOS!\nPress B1 to Start");
             reset();
             changeState(MENU);
             break;
@@ -63,12 +61,21 @@ void loop() {
         case PLAYING:
             if (needsNewSequence()) {
                 shuffleSequence();
+
+                int *seq = getSequence();
+                String seqStr = "";
+                for (int i = 0; i < LEN; i++) {
+                    seqStr += String(seq[i]) + "";
+                }
+                print("Sequence:"+seqStr);
             }
 
             for (int i = 0; i < LEN; i++) {
                 if(isSequenceCompleted()) {
                         reset();
                         turnOffAllLEDs();
+                        print("GOOD!\nScore: " + String(getScore()));
+                        delay(800);
                 }
                 if (wasPressed(BUTTON[i])) {
                     if (!checkButton(i) || timer_expired(&t0)) {
@@ -89,8 +96,7 @@ void loop() {
             delay(SECOND_2);
             digitalWrite(LSLED, LOW);
 
-            print("Game Over");
-            print("Final Score: " + String(getScore()));
+            print("Game Over\nFinal Score: " + String(getScore()));
 
             delay(SECOND_10);
             changeState(INIT);
