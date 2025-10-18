@@ -37,6 +37,7 @@ void loop() {
     switch (getState()) {
         case INIT:
             print("Welcome to TOS!\nPress B1 to Start");
+            timerInit(&t0, SECOND_10);
             reset();
             changeState(MENU);
             break;
@@ -105,10 +106,10 @@ void loop() {
             print("SLEEP");
             set_sleep_mode(SLEEP_MODE_PWR_DOWN);
             sleep_enable();
-            attachInterrupt(getFirst(BUTTON), wakeUp, LOW);
+            attachInterrupt(digitalPinToInterrupt(getFirst(BUTTON)), wakeUp, FALLING);
             sleep_mode();
             sleep_disable();
-            detachInterrupt(getFirst(BUTTON));
+            detachInterrupt(digitalPinToInterrupt(getFirst(BUTTON)));
             break;
         default:
             break;
