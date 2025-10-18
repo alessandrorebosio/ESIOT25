@@ -67,13 +67,14 @@ void loop() {
                 for (int i = 0; i < LEN; i++) {
                     seqStr += String(seq[i]+1) + "";
                 }
-                print("Sequence:"+seqStr);
+                print("Sequence: "+seqStr);
             }
 
             for (int i = 0; i < LEN; i++) {
                 if(isSequenceCompleted()) {
                         reset();
                         turnOffAllLEDs();
+                        increaseScore();
                         print("GOOD!\nScore: " + String(getScore()));
                         delay(800);
                 }
@@ -84,7 +85,6 @@ void loop() {
                     } else {
                         digitalWrite(LED[i], HIGH);
                         delay(300);
-                        increaseScore();
                     }
                 }
             }
