@@ -65,7 +65,7 @@ void loop() {
                 int *seq = getSequence();
                 String seqStr = "";
                 for (int i = 0; i < LEN; i++) {
-                    seqStr += String(seq[i]) + "";
+                    seqStr += String(seq[i]+1) + "";
                 }
                 print("Sequence:"+seqStr);
             }

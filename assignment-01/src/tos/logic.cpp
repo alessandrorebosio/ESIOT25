@@ -125,13 +125,6 @@ void shuffleSequence(void) {
 
     game.step = START_VALUE;
     game.isShowing = true;
-
-    // Serial.print("Sequence: ");
-    // for (int i = 0; i < game.length; ++i) {
-    //     Serial.print(game.sequence[i]);
-    //     Serial.print(" ");
-    // }
-    // Serial.println();
 }
 
 /**
