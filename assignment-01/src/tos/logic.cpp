@@ -60,11 +60,6 @@ static int fadeAmount = 5;
 static Game game;
 
 /**
- * Internal score counter - not visible outside this file.
- */
-static int score = 0;
-
-/**
  * @brief Initialize the global game sequence and related state.
  *
  * This function releases any previously allocated sequence buffer,
@@ -101,12 +96,12 @@ void gameInit(int len) {
  *
  * @return Current score.
  */
-int getScore(void) { return score; }
+int getScore(void) { return game.score; }
 
 /**
  * @brief Increment the score by one.
  */
-void increaseScore(void) { score += INCREMENT; }
+void increaseScore(void) { game.score += INCREMENT; }
 
 /**
  * @brief Randomly shuffles the existing sequence in place.
@@ -188,7 +183,9 @@ bool isSequenceCompleted(void) {
  * player's score while leaving other game state fields unchanged.
  */
 void reset(void) {
-    game.score = START_VALUE;
+    if(!isSequenceCompleted()) {
+        game.score = START_VALUE;
+    }
     game.step = START_VALUE;
     game.isShowing = false;
 }

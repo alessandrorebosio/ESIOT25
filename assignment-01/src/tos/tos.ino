@@ -71,13 +71,6 @@ void loop() {
             }
 
             for (int i = 0; i < LEN; i++) {
-                if(isSequenceCompleted()) {
-                        reset();
-                        turnOffAllLEDs();
-                        increaseScore();
-                        print("GOOD!\nScore: " + String(getScore()));
-                        delay(800);
-                }
                 if (wasPressed(BUTTON[i])) {
                     if (!checkButton(i) || timer_expired(&t0)) {
                         changeState(GAMEOVER);
@@ -88,6 +81,13 @@ void loop() {
                     }
                 }
             }
+            if(isSequenceCompleted()) {
+                increaseScore();
+                turnOffAllLEDs();
+                reset();
+                print("GOOD!\nScore: " + String(getScore()));
+                delay(800);
+            }
             break;
 
         case GAMEOVER:
@@ -95,9 +95,8 @@ void loop() {
             digitalWrite(LSLED, HIGH);
             delay(SECOND_2);
             digitalWrite(LSLED, LOW);
-
             print("Game Over\nFinal Score: " + String(getScore()));
-
+            reset();
             delay(SECOND_10);
             changeState(INIT);
             break;
