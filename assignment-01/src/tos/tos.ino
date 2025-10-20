@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+#include "timer.h"
 #include "utils.h"
 
 const int BUTTONS[] = {2, 3, 4, 5};
@@ -9,6 +10,7 @@ const int LSLED = 10;
 
 const int SEQ_LEN = MIN(LEN(BUTTONS), LEN(LEDS));
 
+static Timer t0;
 int state = 0;
 
 void setup() {
