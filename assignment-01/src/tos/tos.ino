@@ -2,6 +2,7 @@
 
 #include "timer.h"
 #include "utils.h"
+#include "output.h"
 
 const int BUTTONS[] = {2, 3, 4, 5};
 const int LEDS[] = {6, 7, 8, 9};
@@ -20,6 +21,7 @@ void setup() {
     }
     pinMode(POTENTIOMENTER, INPUT);
     pinMode(LSLED, OUTPUT);
+    outputInit();
 }
 
 void loop() {
