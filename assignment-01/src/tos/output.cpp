@@ -56,9 +56,6 @@ void outputInit() {
  * @param message The string to display
  */
 void print(const String &message) {
-    if (!lcd.isEnabled()) {
-        return;
-    }
 
     int newlinePos = message.indexOf('\n');
     if (newlinePos != -1) {
