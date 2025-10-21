@@ -2,9 +2,9 @@
 #include <avr/sleep.h>
 
 #include "logic.h"
+#include "output.h"
 #include "timer.h"
 #include "utils.h"
-#include "output.h"
 
 const long int SECOND_10 = 10000U;
 const long int SECOND_2 = 2000U;
@@ -27,7 +27,7 @@ void setup() {
     }
     pinMode(POTENTIOMENTER, INPUT);
     pinMode(LSLED, OUTPUT);
-    
+
     gameInit(&game, SEQ_LEN);
     outputInit();
 }
@@ -51,8 +51,9 @@ void loop() {
             }
 
             if (wasPressed(getFirst(BUTTONS))) {
-                print("GO! Difficulty:" + String(game.difficulty)
-                    + "\nSequence: " + intArrayToString(game.sequence, game.len, ""));
+                print("GO! Difficulty:" + String(game.difficulty) +
+                      "\nSequence: " +
+                      intArrayToString(game.sequence, game.len, ""));
                 changeState(&game, PLAYING);
                 timerInit(&t0, SECOND_10);
                 turnOffAllLEDs();
@@ -62,9 +63,9 @@ void loop() {
         case PLAYING:
             if (win(&game)) {
                 shuffle(&game);
-                print("GOOD! Score: " + String(game.score) + "\nSequence: "
-                    + intArrayToString(game.sequence, game.len, ""));
-                timerInit(&t0, SECOND_10 - F * game.difficulty * game.score);
+                print("GOOD! Score: " + String(game.score) + "\nSequence: " +
+                      intArrayToString(game.sequence, game.len, ""));
+                timerInit(&t0, SECOND_10 - F * game.difficulty * game.round);
                 turnOffAllLEDs();
             }
 
@@ -72,7 +73,7 @@ void loop() {
                 if (wasPressed(BUTTONS[i])) {
                     if (!checkButton(&game, i)) {
                         changeState(&game, GAMEOVER);
-                    } else {   
+                    } else {
                         digitalWrite(LEDS[i], HIGH);
                     }
                 }
@@ -100,8 +101,9 @@ void loop() {
 
             set_sleep_mode(SLEEP_MODE_PWR_DOWN);
             sleep_enable();
-            attachInterrupt(digitalPinToInterrupt(getFirst(BUTTONS)), wakeUp,FALLING); 
-            sleep_mode(); 
+            attachInterrupt(digitalPinToInterrupt(getFirst(BUTTONS)), wakeUp,
+                            FALLING);
+            sleep_mode();
             sleep_disable();
             detachInterrupt(digitalPinToInterrupt(getFirst(BUTTONS)));
             break;
