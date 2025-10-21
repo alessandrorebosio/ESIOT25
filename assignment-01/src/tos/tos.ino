@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <avr/sleep.h>
 
 #include "logic.h"
 #include "timer.h"
@@ -33,7 +34,7 @@ void setup() {
 void loop() {
     switch (game.state) {
         case INIT:
-            print("Welcome to TOS!\nPress B1 to Start");
+            print("Welcome to TOS!P\nress B1 to Start");
             changeState(&game, MENU);
             timerInit(&t0, SECOND_10);
             reset(&game);
@@ -49,26 +50,28 @@ void loop() {
             }
 
             if (wasPressed(getFirst(BUTTONS))) {
+                print("GO! Difficulty:" + String(game.difficulty)
+                    + "\nSequence: " + intArrayToString(game.sequence, game.len, ""));
                 changeState(&game, PLAYING);
+                timerInit(&t0, SECOND_10);
                 turnOffAllLEDs();
-                print("GO!");
             }
             break;
 
         case PLAYING:
-            print("Sequence:" + intArrayToString(game->sequence));
             if (win(&game)) {
-                print("GOOD!\nScore: " + getScore(&game));
-                // TODO: timer--
-                turnOffAllLEDs();
                 shuffle(&game);
+                print("GOOD! Score: " + String(game.score) + "\nSequence: "
+                    + intArrayToString(game.sequence, game.len, ""));
+                timerInit(&t0, SECOND_10);
+                turnOffAllLEDs();
             }
 
             for (int i = 0; i < SEQ_LEN; i++) {
                 if (wasPressed(BUTTONS[i])) {
                     if (!checkButton(&game, i)) {
                         changeState(&game, GAMEOVER);
-                    } else {
+                    } else {   
                         digitalWrite(LEDS[i], HIGH);
                     }
                 }
@@ -86,7 +89,7 @@ void loop() {
             delay(SECOND_2);
             digitalWrite(LSLED, LOW);
 
-            print("Game Over\nFinal Score: XXX");
+            print("Game Over\nFinal Score: " + String(game.score));
             changeState(&game, INIT);
             delay(SECOND_10);
             break;
@@ -94,11 +97,12 @@ void loop() {
         case SLEEP:
             print("SLEEP");
 
-            // set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-            // sleep_enable();
-            // attachInterrupt(digitalPinToInterrupt(getFirst(BUTTON)), wakeUp,
-            // FALLING); sleep_mode(); sleep_disable();
-            // detachInterrupt(digitalPinToInterrupt(getFirst(BUTTON)));
+            set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+            sleep_enable();
+            attachInterrupt(digitalPinToInterrupt(getFirst(BUTTONS)), wakeUp,FALLING); 
+            sleep_mode(); 
+            sleep_disable();
+            detachInterrupt(digitalPinToInterrupt(getFirst(BUTTONS)));
             break;
 
         default:

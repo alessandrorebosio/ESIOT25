@@ -15,15 +15,15 @@ typedef enum {
 typedef struct {
     uint8_t difficulty;
     int *sequence;
+    int len;
     State state;
     int step;
+    int score;
 } Game;
 
 void gameInit(Game *game, int len);
 
-int getScore(Game *game);
-
-bool changeState(Game *game, State newState);
+bool changeState(Game *game, const State newState);
 
 bool win(Game *game);
 
