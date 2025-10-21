@@ -33,7 +33,7 @@ void setup() {
 void loop() {
     switch (game.state) {
         case INIT:
-            // TODO: add print "Welcome to TOS!\nPress B1 to Start"
+            print("Welcome to TOS!\nPress B1 to Start");
             changeState(&game, MENU);
             timerInit(&t0, SECOND_10);
             reset(&game);
@@ -51,14 +51,14 @@ void loop() {
             if (wasPressed(getFirst(BUTTONS))) {
                 changeState(&game, PLAYING);
                 turnOffAllLEDs();
-                // TODO: print "GO!"
+                print("GO!");
             }
             break;
 
         case PLAYING:
-            // TODO: print intArrayToString(game->sequence)
+            print("Sequence:" + intArrayToString(game->sequence));
             if (win(&game)) {
-                // TODO: "GOOD!\nScore: " + getScore(&game)
+                print("GOOD!\nScore: " + getScore(&game));
                 // TODO: timer--
                 turnOffAllLEDs();
                 shuffle(&game);
@@ -86,13 +86,13 @@ void loop() {
             delay(SECOND_2);
             digitalWrite(LSLED, LOW);
 
-            // TODO: print "Game Over\nFinal Score: XXX"
+            print("Game Over\nFinal Score: XXX");
             changeState(&game, INIT);
             delay(SECOND_10);
             break;
 
         case SLEEP:
-            // TODO: print "SLEEP"
+            print("SLEEP");
 
             // set_sleep_mode(SLEEP_MODE_PWR_DOWN);
             // sleep_enable();
@@ -102,7 +102,7 @@ void loop() {
             break;
 
         default:
-            // TODO: print "There is a bug"
+            print("There is a bug");
             break;
     }
 }
