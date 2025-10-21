@@ -8,6 +8,7 @@
 
 const long int SECOND_10 = 10000U;
 const long int SECOND_2 = 2000U;
+const int F = 100;
 
 const int BUTTONS[] = {2, 3, 4, 5};
 const int LEDS[] = {6, 7, 8, 9};
@@ -63,7 +64,7 @@ void loop() {
                 shuffle(&game);
                 print("GOOD! Score: " + String(game.score) + "\nSequence: "
                     + intArrayToString(game.sequence, game.len, ""));
-                timerInit(&t0, SECOND_10);
+                timerInit(&t0, SECOND_10 - F * game.difficulty * game.score);
                 turnOffAllLEDs();
             }
 
