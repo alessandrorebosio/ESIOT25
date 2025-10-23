@@ -1,15 +1,6 @@
 #include "logic.h"
 
-#define ANALOG_MAX_VALUE 1023
-#define LIMIT 5
-#define ONE 1
 #define ZERO 0
-
-const unsigned long debounceDelay = 50;
-const unsigned long FADE_INTERVAL = 15;
-static unsigned long lastFadeUpdate = 0;
-static int brightness = 0;
-static int fadeAmount = 5;
 
 /**
  * Initialize a Game structure.
@@ -39,22 +30,6 @@ void gameInit(Game *game, int len) {
     game->step = ZERO;
     game->score = ZERO;
     game->round = ZERO;
-}
-
-/**
- * Change the current state of the game if different from `newState`.
- *
- * @param game Pointer to the Game structure (nullable).
- * @param newState Target state to set.
- * @return true if the state was changed, false otherwise.
- */
-bool changeState(Game *game, const State newState) {
-    if (!game)
-        return false;
-    if (game->state == newState)
-        return false;
-    game->state = newState;
-    return true;
 }
 
 /**
@@ -117,22 +92,6 @@ bool checkButton(Game *game, const int buttonIndex) {
 }
 
 /**
- * Read an analog pin and map it to a difficulty level.
- *
- * The analog range [0..ANALOG_MAX_VALUE] is mapped to [1..LIMIT] and stored
- * in `game->difficulty`.
- *
- * @param game Pointer to the Game structure.
- * @param pin Analog pin number to read.
- */
-void setDifficulty(Game *game, const uint8_t pin) {
-    if (!game)
-        return;
-    int v = analogRead(pin);
-    game->difficulty = (uint8_t)map(v, 0, ANALOG_MAX_VALUE, ONE, LIMIT);
-}
-
-/**
  * Reset numeric fields of the game to their default values.
  *
  * This does not deallocate the sequence buffer; it only resets counters
@@ -147,67 +106,4 @@ void reset(Game *game) {
     game->step = ZERO;
     game->score = ZERO;
     game->round = ZERO;
-}
-
-/**
- * Perform a non-blocking fade animation on the specified PWM pin.
- *
- * Call this frequently from the main loop; timing is handled internally
- * and the function returns immediately if it is not yet time to update
- * the brightness.
- *
- * @param pin PWM-capable digital pin.
- */
-void ledFade(int pin) {
-    unsigned long now = millis();
-    if (now - lastFadeUpdate < FADE_INTERVAL)
-        return;
-    lastFadeUpdate = now;
-
-    brightness += fadeAmount;
-    if (brightness <= 0 || brightness >= 255) {
-        fadeAmount = -fadeAmount;
-        brightness = constrain(brightness, 0, 255);
-    }
-
-    analogWrite(pin, brightness);
-}
-
-/**
- * Debounced falling-edge detection for a digital input pin.
- *
- * Returns true only once when a stable LOW reading is detected after the
- * debounce interval. Static arrays maintain per-pin state. Pins outside
- * 0..19 return false.
- *
- * @param pin Digital pin number to read.
- * @return true if a debounced press was detected, false otherwise.
- */
-bool wasPressed(const uint8_t pin) {
-    if (pin >= 20)
-        return false;
-
-    static int lastButtonState[20] = {HIGH};
-    static int buttonState[20] = {HIGH};
-    static unsigned long lastDebounceTime[20] = {0};
-
-    int reading = digitalRead(pin);
-    unsigned long now = millis();
-
-    if (reading != lastButtonState[pin]) {
-        lastDebounceTime[pin] = now;
-    }
-
-    if ((now - lastDebounceTime[pin]) > debounceDelay) {
-        if (reading != buttonState[pin]) {
-            buttonState[pin] = reading;
-            if (buttonState[pin] == LOW) {
-                lastButtonState[pin] = reading;
-                return true;
-            }
-        }
-    }
-
-    lastButtonState[pin] = reading;
-    return false;
 }
