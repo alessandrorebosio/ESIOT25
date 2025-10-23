@@ -57,14 +57,6 @@ typedef struct {
 void gameInit(Game *game, int len);
 
 /**
- * Change the current game state if different from the requested state.
- *
- * Returns true when the state was changed, false if it was already equal or
- * when `game` is NULL.
- */
-bool changeState(Game *game, const State newState);
-
-/**
  * Check whether the player completed a sequence step that results in a win.
  *
  * If the player's step counter has reached a multiple of the sequence length
@@ -83,33 +75,7 @@ void shuffle(Game *game);
  */
 bool checkButton(Game *game, const int buttonIndex);
 
-/**
- * Read an analog pin and map it to a difficulty value.
- *
- * The analog input [0..1023] is mapped to [1..5] and stored in the game
- * structure. If `game` is NULL the function does nothing.
- */
-void setDifficulty(Game *game, const uint8_t pin);
-
 /** Reset numeric game fields to their defaults. */
 void reset(Game *game);
-
-/**
- * Non-blocking LED fade animation.
- *
- * This function should be called frequently from the main loop; it updates
- * the brightness using a small step and performs timing internally so the
- * call is non-blocking.
- */
-void ledFade(int pin);
-
-/**
- * Debounced button press detection.
- *
- * Returns true only once when a clean falling edge (press) is detected.
- * The implementation keeps small per-pin state internally. If `pin` is
- * outside the supported range the function returns false.
- */
-bool wasPressed(const uint8_t pin);
 
 #endif

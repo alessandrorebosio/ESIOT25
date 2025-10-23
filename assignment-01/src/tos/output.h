@@ -35,4 +35,7 @@ void print(const String &message);
  */
 void clear(void);
 
+void ledFade(int pin);
+void turnOffAllLEDs();
+
 #endif
