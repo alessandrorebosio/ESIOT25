@@ -1,9 +1,13 @@
 #include "logic.h"
-
-#define ZERO 0
+#include "config.h"
 
 /**
- * Initialize a Game structure.
+ * @file logic.cpp
+ * @brief Implementation of core game logic for ToS.
+ */
+
+/**
+ * @brief Initialize a Game structure.
  *
  * Allocates a new sequence array of length `len` (replacing any previous
  * allocation), sets initial counters and places the game into the INIT state.
@@ -33,7 +37,32 @@ void gameInit(Game *game, int len) {
 }
 
 /**
- * Check whether the player completed a full sequence (a win).
+ * @brief Change the current state of the game.
+ *
+ * @param game Pointer to the Game object.
+ * @param newState State to change to.
+ * @return true if the state was changed, false otherwise.
+ */
+bool changeState(Game *game, const State newState) {
+    if (!game || game->state == newState)
+        return false;
+    game->state = newState;
+    return true;
+}
+
+/**
+ * @brief Set the global difficulty level used by the game logic.
+ *
+ * @param value Integer representing the difficulty level to apply.
+ */
+void setDifficulty(Game *game, int value) {
+    if (!game)
+        return;
+    game->difficulty = value;
+}
+
+/**
+ * @brief Check whether the player completed a full sequence (a win).
  *
  * When a full sequence is completed this increments `score` and `round`,
  * resets `step` to zero and returns true.
@@ -41,20 +70,20 @@ void gameInit(Game *game, int len) {
  * @param game Pointer to the Game structure.
  * @return true if a win was detected, false otherwise.
  */
-bool win(Game *game) {
+bool isWin(Game *game) {
     if (!game || !game->sequence || game->len <= 0)
         return false;
     if (game->step > 0 && (game->step % game->len) == 0) {
         ++game->score;
         ++game->round;
-        game->step = 0;
+        game->step = ZERO;
         return true;
     }
     return false;
 }
 
 /**
- * Shuffle the game's sequence array in-place using the Fisher-Yates
+ * @brief Shuffle the game's sequence array in-place using the Fisher-Yates
  * algorithm.
  *
  * Safe to call with a NULL game pointer; in that case the function does
@@ -75,7 +104,7 @@ void shuffle(Game *game) {
 }
 
 /**
- * Validate the pressed button against the expected value for the current
+ * @brief Validate the pressed button against the expected value for the current
  * step and advance the step counter by one.
  *
  * @param game Pointer to the Game structure.
@@ -85,14 +114,11 @@ void shuffle(Game *game) {
 bool checkButton(Game *game, const int buttonIndex) {
     if (!game || !game->sequence || game->len == 0)
         return false;
-
-    int expected = game->sequence[game->step % game->len];
-    game->step = (game->step + 1);
-    return expected == buttonIndex;
+    return game->sequence[game->step++ % game->len] == buttonIndex;
 }
 
 /**
- * Reset numeric fields of the game to their default values.
+ * @brief Reset numeric fields of the game to their default values.
  *
  * This does not deallocate the sequence buffer; it only resets counters
  * and difficulty.

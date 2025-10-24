@@ -5,7 +5,12 @@
 #include <stdbool.h>
 
 /**
- * Game states used by the ToS finite-state machine.
+ * @file logic.h
+ * @brief Core game logic types and function declarations for ToS.
+ */
+
+/**
+ * @brief Game states used by the ToS finite-state machine.
  *
  * - INIT:    Initial startup state where welcome is shown.
  * - MENU:    Main menu where difficulty can be selected.
@@ -22,8 +27,9 @@ typedef enum {
 } State;
 
 /**
- * Game structure holding runtime state for a single ToS session.
+ * @brief Game structure holding runtime state for a single ToS session.
  *
+ * @details
  * Fields:
  *  - difficulty: Selected difficulty level (1..5).
  *  - sequence: Pointer to a dynamically-allocated int array with the
@@ -46,7 +52,7 @@ typedef struct {
 } Game;
 
 /**
- * Initialize a Game structure.
+ * @brief Initialize a Game structure.
  *
  * Allocates a sequence array of length `len` (replacing any previous one),
  * initializes the numeric fields and sets the initial state to INIT.
@@ -57,25 +63,63 @@ typedef struct {
 void gameInit(Game *game, int len);
 
 /**
- * Check whether the player completed a sequence step that results in a win.
+ * @brief Change the current state of the game.
+ *
+ * Does nothing if the state is unchanged or if `game` is NULL.
+ *
+ * @param game Pointer to the Game object.
+ * @param newState The new state to set.
+ * @return true if the state was changed, false otherwise.
+ */
+bool changeState(Game *game, const State newState);
+
+/**
+ * @brief Set the global difficulty level used by the game logic.
+ *
+ * @param game Pointer to the Game object.
+ * @param value Integer representing the difficulty level to apply.
+ */
+void setDifficulty(Game *game, int value);
+
+/**
+ * @brief Check whether the player completed a sequence step that results in a
+ * win.
  *
  * If the player's step counter has reached a multiple of the sequence length
  * this increments the score, resets the step counter and returns true.
+ *
+ * @param game Pointer to the Game object.
+ * @return true if a win condition was detected, false otherwise.
  */
-bool win(Game *game);
+bool isWin(Game *game);
 
-/** Shuffle the sequence using Fisher-Yates in-place. */
+/**
+ * @brief Shuffle the sequence using Fisher-Yates in-place.
+ *
+ * @param game Pointer to the Game object.
+ */
 void shuffle(Game *game);
 
 /**
- * Validate the pressed button against the sequence.
+ * @brief Validate the pressed button against the sequence.
  *
  * Returns true if the pressed button matches the expected value for the
  * current step; the step counter is advanced by one in either case.
+ *
+ * @param game Pointer to the Game object.
+ * @param buttonIndex Index of the pressed button.
+ * @return true if the pressed button matches the expected value.
  */
 bool checkButton(Game *game, const int buttonIndex);
 
-/** Reset numeric game fields to their defaults. */
+/**
+ * @brief Reset numeric game fields to their defaults.
+ *
+ * Does not deallocate the sequence buffer; it only resets counters and
+ * difficulty.
+ *
+ * @param game Pointer to the Game object.
+ */
 void reset(Game *game);
 
 #endif
