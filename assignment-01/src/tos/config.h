@@ -52,6 +52,11 @@
 #define LCD_COLS 16
 #define LCD_ROWS 2
 
+/** 
+ * The total nomber of Arduino UNO pins.
+*/
+#define NUM_PINS 20
+
 /** Potentiometer analog input pin (difficulty / parameter knob) */
 #define POTENTIOMETER_PIN A0
 

@@ -35,7 +35,7 @@ void loop() {
                 return;
             }
 
-            if (wasPressed(BUTTONS[0])) {
+            if (wasPressed(getFirst(BUTTONS))) {
                 print("GO! Difficulty:" + String(game.difficulty) +
                       "\nSequence: " +
                       intArrayToString(game.sequence, game.len, ""));
@@ -63,8 +63,9 @@ void loop() {
                 }
             }
 
-            if (timer_expired(&t0))
+            if (timer_expired(&t0)) {
                 changeState(&game, GAMEOVER);
+            }
             break;
 
         case GAMEOVER:

@@ -39,7 +39,7 @@ void actuatorsInit() {
         pinMode(LEDS[i], OUTPUT);
     }
     pinMode(POTENTIOMETER_PIN, INPUT);
-    pinMode(LSLED, INPUT);
+    pinMode(LSLED, OUTPUT);
 }
 
 /**
@@ -56,12 +56,9 @@ void actuatorsInit() {
  * @note Returns false if the provided pin index is out of range.
  */
 bool wasPressed(const uint8_t pin) {
-    if (pin > SEQ_LEN)
-        return false;
-
-    static int lastButtonState[SEQ_LEN] = {HIGH};
-    static int buttonState[SEQ_LEN] = {HIGH};
-    static unsigned long lastDebounceTime[SEQ_LEN] = {0};
+    static int lastButtonState[NUM_PINS] = {HIGH};
+    static int buttonState[NUM_PINS] = {HIGH};
+    static unsigned long lastDebounceTime[NUM_PINS] = {0};
 
     int reading = digitalRead(pin);
     unsigned long now = millis();
@@ -78,7 +75,7 @@ bool wasPressed(const uint8_t pin) {
                 return true;
             }
         }
-    }
+    } 
 
     lastButtonState[pin] = reading;
     return false;
