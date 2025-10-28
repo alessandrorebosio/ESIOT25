@@ -22,8 +22,6 @@ This value ensures each LED receives enough current to be bright, but not so muc
 The 10kΩ resistors are used as pull-downs for the push buttons to ensure a stable LOW signal when the button is not pressed. This value is a common choice because it provides a strong enough pull-down without drawing unnecessary current from the circuit.
 
 ## Software Schemas
-![UML ToS](./docs/tos.drawio.png)
-
 The following diagram illustrates the dependencies among the various modules in the project.
 The relationship shown is a UML dependency, indicating that one file includes another via #include.
 
@@ -35,3 +33,5 @@ Each module is responsible for a specific functional part of the game:
 - **actuators.h:** control of actuators (LEDs and buttons)
 - **output.h:** user output and display messages
 - **timer.h:** timer management and timeouts
+
+![UML ToS](./docs/tos.drawio.png)
