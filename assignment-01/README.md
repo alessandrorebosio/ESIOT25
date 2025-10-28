@@ -34,4 +34,4 @@ Each module is responsible for a specific functional part of the game:
 - **output.h:** user output and display messages
 - **timer.h:** timer management and timeouts
 
-![UML ToS](./docs/tos.drawio.png)
+![UML ToS](./docs/tos.png)
