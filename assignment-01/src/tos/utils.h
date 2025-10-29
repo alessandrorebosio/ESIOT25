@@ -42,4 +42,6 @@
  */
 String intArrayToString(const int *array, int len, const char *sep);
 
+int *offeset(const int *array, int len, const int value);
+
 #endif

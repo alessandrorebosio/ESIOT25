@@ -23,3 +23,15 @@ String intArrayToString(const int *array, int len, const char *sep) {
 
     return out;
 }
+
+int *offeset(const int *array, int len, const int value) {
+    if (!array || len <= 0)
+        return nullptr;
+
+    int *out = new int[len];
+    for (int i = 0; i < len; ++i) {
+        out[i] = array[i] + value;
+    }
+
+    return out;
+}
