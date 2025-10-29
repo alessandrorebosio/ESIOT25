@@ -91,11 +91,6 @@
 #define FADE_INTERVAL 15
 
 /**
- * Initial brightness for the fade animation (0..255)
- */
-#define FADE_INITIAL_BRIGHTNESS 0
-
-/**
  * Initial fade step applied to brightness on each update
  */
 #define FADE_INITIAL_AMOUNT 5

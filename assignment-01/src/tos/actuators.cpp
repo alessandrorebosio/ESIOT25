@@ -19,7 +19,7 @@ extern int SEQ_LEN;
 static unsigned long lastFadeUpdate = 0;
 
 /** Current brightness used by ledFade(). */
-static int brightness = FADE_INITIAL_BRIGHTNESS;
+static int brightness = 0;
 
 /** Fade step applied to brightness on each fade update. */
 static int fadeAmount = FADE_INITIAL_AMOUNT;
