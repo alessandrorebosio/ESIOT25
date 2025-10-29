@@ -7,6 +7,12 @@
 #include "output.h"
 #include "timer.h"
 
+Button BUTTONS[] = {button(BUTTON0), button(BUTTON1), button(BUTTON2),
+                    button(BUTTON3)};
+int LEDS[] = {LED0, LED1, LED2, LED3};
+
+int SEQ_LEN = MIN(LEN(BUTTONS), LEN(LEDS));
+
 static Game game;
 static Timer t0;
 
@@ -35,7 +41,7 @@ void loop() {
                 return;
             }
 
-            if (wasPressed(getFirst(BUTTONS))) {
+            if (isPressed(BUTTONS[0])) {
                 print("GO! Difficulty:" + String(game.difficulty) +
                       "\nSequence: " +
                       intArrayToString(game.sequence, game.len, ""));
@@ -55,7 +61,7 @@ void loop() {
             }
 
             for (int i = 0; i < SEQ_LEN; i++) {
-                if (wasPressed(BUTTONS[i])) {
+                if (isPressed(BUTTONS[i])) {
                     if (!checkButton(&game, i))
                         changeState(&game, GAMEOVER);
                     else
@@ -83,11 +89,11 @@ void loop() {
             print("SLEEP");
             set_sleep_mode(SLEEP_MODE_PWR_DOWN);
             sleep_enable();
-            attachInterrupt(digitalPinToInterrupt(getFirst(BUTTONS)), wakeUp,
+            attachInterrupt(digitalPinToInterrupt(BUTTONS[0].pin), wakeUp,
                             FALLING);
             sleep_mode();
             sleep_disable();
-            detachInterrupt(digitalPinToInterrupt(getFirst(BUTTONS)));
+            detachInterrupt(digitalPinToInterrupt(BUTTONS[0].pin));
             break;
         default:
             print("There is a bug");
