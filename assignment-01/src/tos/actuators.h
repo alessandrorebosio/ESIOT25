@@ -18,6 +18,30 @@
  */
 
 /**
+ * @brief Data structure representing the runtime state of a button input.
+ *
+ * This struct stores information needed to read, debounce and track changes
+ */
+struct Button {
+    uint8_t pin;
+    int lastReading;
+    int rawReading;
+    unsigned long lastTime;
+};
+
+/**
+ * @brief Create a Button instance bound to a specific GPIO pin.
+ *
+ * Constructs and returns a Button object configured to read the digital input
+ * on the given pin. The returned object represents the button connected to that
+ * pin and can be used with the Button class' polling or event APIs.
+ *
+ * @param pin The microcontroller pin number where the button is connected.
+ * @return Button A Button instance associated with the specified pin.
+ */
+Button button(const uint8_t pin);
+
+/**
  * @brief Initialize the input and actuator subsystem.
  *
  * Configures sequence button pins and their corresponding LED pins.
@@ -27,19 +51,18 @@
 void actuatorsInit();
 
 /**
- * @brief Check whether a button was pressed since the last call.
+ * @brief Determine whether the specified Button is currently pressed.
  *
- * Performs edge detection and software debouncing. The function returns
- * true on the falling edge (button transition from HIGH to LOW) and
- * will suppress bounces for the configured debounce interval.
+ * Reads the state of the provided Button object and returns true when the
+ * button is considered to be in a pressed state. The call may update the Button
+ * instance (for example to perform debouncing or state bookkeeping), therefore
+ * a non-const reference is required.
  *
- * @param pin Digital pin number to check.
- * @return true if a valid press was detected since the last call.
- *
- * @note Assumes active-LOW button wiring (button connects the input to
- * ground when pressed).
+ * @param button Reference to the Button to query. The caller must ensure the
+ * object remains valid for the duration of the call.
+ * @return true if the button is currently pressed, false otherwise.
  */
-bool wasPressed(const uint8_t pin);
+bool isPressed(Button &button);
 
 /**
  * @brief Read and map the potentiometer value to a 1..LIMIT range.
@@ -60,7 +83,7 @@ uint8_t mapPotentiometer(const uint8_t pin);
  *
  * @param pin PWM-capable digital pin to animate.
  */
-void ledFade(int pin);
+void ledFade(const uint8_t pin);
 
 /**
  * @brief Turn off all LEDs used by the game (sequence LEDs + status LED).

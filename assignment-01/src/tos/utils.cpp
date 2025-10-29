@@ -4,15 +4,6 @@
 #include "utils.h"
 
 /**
- * @brief Retrieve the first element of an integer array.
- *
- * @param array Pointer to the first element of an integer array. Must not be
- * nullptr.
- * @return The value of the first element pointed to by array.
- */
-int getFirst(const int *array) { return array ? array[0] : -1; }
-
-/**
  * @brief Convert an integer array to an Arduino String.
  *
  * Joins the first len elements of array into a single String, inserting the

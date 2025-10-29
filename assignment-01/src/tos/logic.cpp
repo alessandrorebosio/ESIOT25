@@ -31,9 +31,9 @@ void gameInit(Game *game, int len) {
     }
 
     game->state = INIT;
-    game->step = ZERO;
-    game->score = ZERO;
-    game->round = ZERO;
+    game->score = 0;
+    game->round = 0;
+    game->step = 0;
 }
 
 /**
@@ -74,9 +74,10 @@ bool isWin(Game *game) {
     if (!game || !game->sequence || game->len <= 0)
         return false;
     if (game->step > 0 && (game->step % game->len) == 0) {
+        game->step = 0;
         ++game->score;
         ++game->round;
-        game->step = ZERO;
+
         return true;
     }
     return false;
@@ -128,8 +129,8 @@ bool checkButton(Game *game, const int buttonIndex) {
 void reset(Game *game) {
     if (!game)
         return;
-    game->difficulty = ZERO;
-    game->step = ZERO;
-    game->score = ZERO;
-    game->round = ZERO;
+    game->difficulty = 0;
+    game->score = 0;
+    game->round = 0;
+    game->step = 0;
 }

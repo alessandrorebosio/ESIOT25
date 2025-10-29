@@ -3,6 +3,10 @@
 #include "actuators.h"
 #include "config.h"
 
+extern Button BUTTONS[];
+extern int LEDS[];
+extern int SEQ_LEN;
+
 /**
  * @file actuators.cpp
  * @brief Implementation of input and actuator helpers for ToS.
@@ -35,7 +39,7 @@ static int fadeAmount = FADE_INITIAL_AMOUNT;
  */
 void actuatorsInit() {
     for (int i = 0; i < SEQ_LEN; i++) {
-        pinMode(BUTTONS[i], INPUT);
+        pinMode(BUTTONS[i].pin, INPUT);
         pinMode(LEDS[i], OUTPUT);
     }
     pinMode(POTENTIOMETER_PIN, INPUT);
@@ -43,41 +47,45 @@ void actuatorsInit() {
 }
 
 /**
- * @brief Check for button press with debouncing.
+ * @brief Create a Button instance bound to a specific GPIO pin.
  *
- * Implements a simple stateful debouncing algorithm. The function keeps
- * per-pin state in static arrays and returns true only when a stable
- * falling edge (HIGH -> LOW) is detected for the given pin.
+ * Constructs and returns a Button object configured to read the digital input
+ * on the given pin. The returned object represents the button connected to that
+ * pin and can be used with the Button class' polling or event APIs.
  *
- * @param pin Digital pin number to check.
- * @return true if a valid press is detected, false otherwise.
- *
- * @note Assumes active-LOW button wiring (pressed == LOW).
- * @note Returns false if the provided pin index is out of range.
+ * @param pin The microcontroller pin number where the button is connected.
+ * @return Button A Button instance associated with the specified pin.
  */
-bool wasPressed(const uint8_t pin) {
-    static int lastButtonState[NUM_PINS] = {HIGH};
-    static int buttonState[NUM_PINS] = {HIGH};
-    static unsigned long lastDebounceTime[NUM_PINS] = {0};
+Button button(const uint8_t pin) { return {pin, HIGH, HIGH, 0}; }
 
-    int reading = digitalRead(pin);
-    unsigned long now = millis();
+/**
+ * @brief Determine whether the specified Button is currently pressed.
+ *
+ * Reads the state of the provided Button object and returns true when the
+ * button is considered to be in a pressed state. The call may update the Button
+ * instance (for example to perform debouncing or state bookkeeping), therefore
+ * a non-const reference is required.
+ *
+ * @param button Reference to the Button to query. The caller must ensure the
+ * object remains valid for the duration of the call.
+ * @return true if the button is currently pressed, false otherwise.
+ */
+bool isPressed(Button &button) {
+    int reading = digitalRead(button.pin);
+    unsigned long currentTime = millis();
 
-    if (reading != lastButtonState[pin]) {
-        lastDebounceTime[pin] = now;
+    if (reading != button.rawReading) {
+        button.rawReading = reading;
+        button.lastTime = currentTime;
     }
 
-    if ((now - lastDebounceTime[pin]) > DEBOUNCE_DELAY) {
-        if (reading != buttonState[pin]) {
-            buttonState[pin] = reading;
-            if (buttonState[pin] == LOW) {
-                lastButtonState[pin] = reading;
-                return true;
-            }
+    if ((currentTime - button.lastTime) > DEBOUNCE_TIME) {
+        if (button.rawReading != button.lastReading) {
+            button.lastReading = button.rawReading;
+            return button.lastReading == LOW;
         }
-    } 
+    }
 
-    lastButtonState[pin] = reading;
     return false;
 }
 
@@ -91,7 +99,7 @@ bool wasPressed(const uint8_t pin) {
  * @return Mapped difficulty value in 1..LIMIT.
  */
 uint8_t mapPotentiometer(const uint8_t pin) {
-    return (uint8_t)map(analogRead(pin), 0, ANALOG_MAX_VALUE, ONE, LIMIT);
+    return (uint8_t)map(analogRead(pin), 0, ANALOG_MAX_VALUE, 1, LIMIT);
 }
 
 /**
@@ -103,7 +111,7 @@ uint8_t mapPotentiometer(const uint8_t pin) {
  *
  * @param pin PWM-capable digital pin.
  */
-void ledFade(int pin) {
+void ledFade(const uint8_t pin) {
     unsigned long now = millis();
     if (now - lastFadeUpdate < FADE_INTERVAL)
         return;
