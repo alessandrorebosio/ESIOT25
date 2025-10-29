@@ -7,8 +7,7 @@
 #include "output.h"
 #include "timer.h"
 
-Button BUTTONS[] = {button(BUTTON0), button(BUTTON1), button(BUTTON2),
-                    button(BUTTON3)};
+Button BUTTONS[] = {Button(BUTTON0), Button(BUTTON1), Button(BUTTON2), Button(BUTTON3)};
 int LEDS[] = {LED0, LED1, LED2, LED3};
 
 int SEQ_LEN = MIN(LEN(BUTTONS), LEN(LEDS));
