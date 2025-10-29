@@ -8,7 +8,7 @@
 #include "timer.h"
 
 Button BUTTONS[] = {Button(BUTTON0), Button(BUTTON1), Button(BUTTON2), Button(BUTTON3)};
-int LEDS[] = {LED0, LED1, LED2, LED3};
+uint8_t LEDS[] = {LED0, LED1, LED2, LED3};
 
 int SEQ_LEN = MIN(LEN(BUTTONS), LEN(LEDS));
 
@@ -43,7 +43,7 @@ void loop() {
             if (isPressed(BUTTONS[0])) {
                 print("GO! Difficulty:" + String(game.difficulty) +
                       "\nSequence: " +
-                      intArrayToString(offeset(game.sequence, game.len, 1),
+                      intArrayToString(offset(game.sequence, game.len, 1),
                                        game.len, ""));
                 changeState(&game, PLAYING);
                 timerInit(&t0, SECOND_10);
@@ -55,7 +55,7 @@ void loop() {
             if (isWin(&game)) {
                 shuffle(&game);
                 print("GOOD! Score: " + String(game.score) + "\nSequence: " +
-                      intArrayToString(offeset(game.sequence, game.len, 1),
+                      intArrayToString(offset(game.sequence, game.len, 1),
                                        game.len, ""));
                 timerInit(&t0, SECOND_10 - F * game.difficulty * game.round);
                 turnOffAllLEDs();

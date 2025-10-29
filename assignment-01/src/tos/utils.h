@@ -42,6 +42,18 @@
  */
 String intArrayToString(const int *array, int len, const char *sep);
 
-int *offeset(const int *array, int len, const int value);
+/**
+ * @brief Creates a new integer array with a fixed offset applied to each element.
+ *
+ * This function allocates a new array on the heap, copies all elements from the
+ * source array, and adds the specified `value` to each element.
+ *
+ * @param array Pointer to the source array of integers.
+ * @param len Number of elements in the source array.
+ * @param value The offset value to add to each element.
+ * @return Pointer to the newly allocated array with offset applied.
+ *         Returns nullptr if the input array is nullptr or len <= 0.
+ */
+int *offset(const int *array, int len, const int value);
 
 #endif
