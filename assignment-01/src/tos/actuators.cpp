@@ -19,7 +19,7 @@ extern int SEQ_LEN;
 static unsigned long lastFadeUpdate = 0;
 
 /** Current brightness used by ledFade(). */
-static int brightness = FADE_INITIAL_BRIGHTNESS;
+static int brightness = 0;
 
 /** Fade step applied to brightness on each fade update. */
 static int fadeAmount = FADE_INITIAL_AMOUNT;
@@ -32,10 +32,6 @@ static int fadeAmount = FADE_INITIAL_AMOUNT;
  * (INPUT vs INPUT_PULLUP) must match the physical wiring: this code
  * sets button pins to INPUT and assumes external pull-ups or hardware
  * wiring that provides a stable HIGH idle state.
- *
- * @note The status LED identifier used in this file is `LSLED` (legacy).
- * The project-wide name defined in `config.h` is `LSLED_PIN`. Ensure the
- * two identifiers match in the code base; otherwise update references.
  */
 void actuatorsInit() {
     for (int i = 0; i < SEQ_LEN; i++) {
@@ -45,18 +41,6 @@ void actuatorsInit() {
     pinMode(POTENTIOMETER_PIN, INPUT);
     pinMode(LSLED, OUTPUT);
 }
-
-/**
- * @brief Create a Button instance bound to a specific GPIO pin.
- *
- * Constructs and returns a Button object configured to read the digital input
- * on the given pin. The returned object represents the button connected to that
- * pin and can be used with the Button class' polling or event APIs.
- *
- * @param pin The microcontroller pin number where the button is connected.
- * @return Button A Button instance associated with the specified pin.
- */
-Button button(const uint8_t pin) { return {pin, HIGH, HIGH, 0}; }
 
 /**
  * @brief Determine whether the specified Button is currently pressed.
@@ -82,7 +66,7 @@ bool isPressed(Button &button) {
     if ((currentTime - button.lastTime) > DEBOUNCE_TIME) {
         if (button.rawReading != button.lastReading) {
             button.lastReading = button.rawReading;
-            return button.lastReading == LOW;
+            return button.lastReading == HIGH;
         }
     }
 

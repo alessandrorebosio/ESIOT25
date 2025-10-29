@@ -11,35 +11,24 @@
  * (with debouncing), read a potentiometer used for difficulty selection
  * and perform simple LED operations such as fading and turning off all
  * LEDs.
- *
- * Note: this header name and include guard use `INPUT_H` for historical
- * reasons; the implementation file is `actuators.cpp` and the public API
- * functions are named accordingly.
  */
 
 /**
- * @brief Data structure representing the runtime state of a button input.
+ * @brief Represents a button with software debouncing support.
  *
- * This struct stores information needed to read, debounce and track changes
+ * This structure stores the button state readings and timing information
+ * required for debouncing. It is intended for buttons wired as active LOW, 
+ * but can also work with active HIGH configurations if logic is adjusted
+ * accordingly.
  */
 struct Button {
     uint8_t pin;
-    int lastReading;
-    int rawReading;
-    unsigned long lastTime;
-};
+    int rawReading = HIGH;
+    int lastReading = HIGH;
+    unsigned long lastTime = 0;
 
-/**
- * @brief Create a Button instance bound to a specific GPIO pin.
- *
- * Constructs and returns a Button object configured to read the digital input
- * on the given pin. The returned object represents the button connected to that
- * pin and can be used with the Button class' polling or event APIs.
- *
- * @param pin The microcontroller pin number where the button is connected.
- * @return Button A Button instance associated with the specified pin.
- */
-Button button(const uint8_t pin);
+    Button(uint8_t p) : pin(p) {}
+};
 
 /**
  * @brief Initialize the input and actuator subsystem.
