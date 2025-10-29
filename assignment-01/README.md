@@ -28,10 +28,21 @@ The relationship shown is a UML dependency, indicating that one file includes an
 - **tos.ino** is the main file and depends on all other modules.
 - **config.h** provides configuration parameters and shared constants used across modules.
 
-Each module is responsible for a specific functional part of the game:
-- **logic.h:** game logic (state, sequence, score)
-- **actuators.h:** control of actuators (LEDs and buttons)
-- **output.h:** user output and display messages
-- **timer.h:** timer management and timeouts
+<div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; width:80%">
 
-![UML ToS](./docs/tos.png)
+  <div style="flex: 1; min-width: 250px;">
+    <p><strong>Each module is responsible for a specific functional part of the game:</strong></p>
+    <ul>
+      <li><b>logic.h:</b> game logic (state, sequence, score)</li>
+      <li><b>actuators.h:</b> control of actuators (LEDs and buttons)</li>
+      <li><b>output.h:</b> user output and display messages</li>
+      <li><b>timer.h:</b> timer management and timeouts</li>
+    </ul>
+  </div>
+
+  <div style="flex: 1; min-width: 250px; text-align: center;">
+    <img src="./docs/tos.png" alt="UML ToS"
+         style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1);" />
+  </div>
+
+</div>
