@@ -43,8 +43,7 @@ void loop() {
             if (isPressed(BUTTONS[0])) {
                 print("GO! Difficulty:" + String(game.difficulty) +
                       "\nSequence: " +
-                      intArrayToString(offset(game.sequence, game.len, 1),
-                                       game.len, ""));
+                      intArrayToStringOffset(game.sequence, game.len, "", 1));
                 changeState(&game, PLAYING);
                 timerInit(&t0, SECOND_10);
                 turnOffAllLEDs();
@@ -55,8 +54,7 @@ void loop() {
             if (isWin(&game)) {
                 shuffle(&game);
                 print("GOOD! Score: " + String(game.score) + "\nSequence: " +
-                      intArrayToString(offset(game.sequence, game.len, 1),
-                                       game.len, ""));
+                      intArrayToStringOffset(game.sequence, game.len, "", 1));
                 timerInit(&t0, SECOND_10 - F * game.difficulty * game.round);
                 turnOffAllLEDs();
             }

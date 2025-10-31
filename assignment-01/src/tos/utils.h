@@ -28,32 +28,20 @@
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 /**
- * @brief Convert an integer array to an Arduino String.
+ * @brief Converts an integer array into a String, applying an integer offset to each element.
  *
- * Joins the first @p len elements of @p array into a single String, inserting
- * the provided separator between values. If @p array is nullptr or len <= 0,
- * an empty String is returned.
+ * This function takes an input integer array, applies a constant offset to each element,
+ * and concatenates all resulting values into a single Arduino String. Each value is
+ * separated by the specified separator string.
  *
- * @param array Pointer to the first element of the integer array.
- * @param len Number of elements to convert.
- * @param sep Separator string placed between elements (defaults to empty
- * string).
- * @return Arduino String representing the joined values.
+ * @param array   Pointer to the source integer array.
+ * @param len     Number of elements in the array.
+ * @param sep     Separator string to insert between elements (e.g. " ", ", ").
+ * @param offset  Integer value to add to each element before conversion.
+ *
+ * @return A String containing all array elements with offset applied and separated by @p sep.
+ *         Returns an empty String if @p array is nullptr or @p len <= 0.
  */
-String intArrayToString(const int *array, int len, const char *sep);
-
-/**
- * @brief Creates a new integer array with a fixed offset applied to each element.
- *
- * This function allocates a new array on the heap, copies all elements from the
- * source array, and adds the specified `value` to each element.
- *
- * @param array Pointer to the source array of integers.
- * @param len Number of elements in the source array.
- * @param value The offset value to add to each element.
- * @return Pointer to the newly allocated array with offset applied.
- *         Returns nullptr if the input array is nullptr or len <= 0.
- */
-int *offset(const int *array, int len, const int value);
+String intArrayToStringOffset(const int *array, int len, const char *sep, const int offset);
 
 #endif
