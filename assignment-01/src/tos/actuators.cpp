@@ -4,7 +4,7 @@
 #include "config.h"
 
 extern Button BUTTONS[];
-extern int LEDS[];
+extern uint8_t LEDS[];
 extern int SEQ_LEN;
 
 /**

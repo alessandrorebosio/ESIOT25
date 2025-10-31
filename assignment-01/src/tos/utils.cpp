@@ -25,7 +25,8 @@ String intArrayToString(const int *array, int len, const char *sep) {
 }
 
 /**
- * @brief Creates a new integer array with a fixed offset applied to each element.
+ * @brief Creates a new integer array with a fixed offset applied to each
+ * element.
  *
  * This function allocates a new array on the heap, copies all elements from the
  * source array, and adds the specified `value` to each element.
@@ -40,7 +41,7 @@ int *offset(const int *array, int len, const int value) {
     if (!array || len <= 0)
         return nullptr;
 
-    int *out = new int[len];
+    int out[len];
     for (int i = 0; i < len; ++i) {
         out[i] = array[i] + value;
     }
