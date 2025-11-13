@@ -6,8 +6,22 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
-    application
+    // Apply the java plugin to add support for Java
+    id("java")
+
+    // Apply the application plugin to add support for building a CLI application
+    // You can run your app via task "run": ./gradlew run
+    id("application")
+
+    /*
+     * Adds tasks to export a runnable jar.
+     * In order to create it, launch the "shadowJar" task.
+     * The runnable jar will be found in build/libs/projectname-all.jar
+     */
+    // Use the maintained Shadow plugin coordinates (GradleUp) for Gradle 9 compatibility
+    id("com.gradleup.shadow") version "9.2.2"
+
+    id("org.danilopianini.gradle-java-qa") version "1.151.0"
 }
 
 repositories {
@@ -16,11 +30,34 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit test framework.
-    testImplementation(libs.junit)
+    // Suppressions for SpotBugs
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.9.3")
 
-    // This dependency is used by the application.
-    implementation(libs.guava)
+    // Maven dependencies are composed by a group name, a name and a version, separated by colons
+    implementation("com.omertron:API-OMDB:1.5")
+    implementation("org.jooq:jool:0.9.15")
+
+    implementation("com.fazecast:jSerialComm:2.10.4")
+
+    /*
+     * Simple Logging Facade for Java (SLF4J) with Apache Log4j
+     * See: http://www.slf4j.org/
+     */
+    val slf4jVersion = "2.0.17"
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    // Logback backend for SLF4J
+    runtimeOnly("ch.qos.logback:logback-classic:1.5.18")
+
+    // JUnit API and testing engine
+    val jUnitVersion = "5.11.4"
+    // when dependencies share the same version, grouping in a val helps to keep them in sync
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
+
+    // Mockito dependencies for mock-based testing (JUnit 5 integration)
+    testImplementation("org.mockito:mockito-core:5.10.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.10.0")  
+
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -33,4 +70,17 @@ java {
 application {
     // Define the main class for the application.
     mainClass = "it.unibo.iot.App"
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events(*org.gradle.api.tasks.testing.logging.TestLogEvent.values())
+        showStandardStreams = true
+    }
+    // Suppress Java agent warnings in tests
+    jvmArgs(
+        "-XX:+EnableDynamicAgentLoading",
+        "-Djdk.instrument.traceUsage=false"
+    )
 }
