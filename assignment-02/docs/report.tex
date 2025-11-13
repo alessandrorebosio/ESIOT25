@@ -22,28 +22,28 @@
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
 \lstdefinestyle{sqlstyle}{
-    language=SQL,
-    backgroundcolor=\color{backcolour},
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{codepurple},
-    numberstyle=\numberstyle,
-    stringstyle=\color{codepurple},
-    basicstyle=\footnotesize\ttfamily,
-    breakatwhitespace=false,
-    breaklines=true,
-    captionpos=b,
-    keepspaces=true,
-    numbers=left,
-    numbersep=10pt,
-    showspaces=false,
-    showstringspaces=false,
-    showtabs=false
+  language=SQL,
+  backgroundcolor=\color{backcolour},
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{codepurple},
+  numberstyle=\numberstyle,
+  stringstyle=\color{codepurple},
+  basicstyle=\footnotesize\ttfamily,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=10pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false
 }
 \newcommand\numberstyle[1]{%
-    \footnotesize
-    \color{codegray}%
-    \ttfamily
-    \ifnum#1<10 0\fi#1 |%
+  \footnotesize
+  \color{codegray}%
+  \ttfamily
+  \ifnum#1<10 0\fi#1 |%
 }
 
 \usepackage{textcomp}
@@ -58,31 +58,77 @@
 \begin{document}
 
 \begin{titlepage}
-\begin{center}
-{{\Large{\textsc{Alma Mater Studiorum $\cdot$ University of Bologna}}}}\\[1ex]
-\rule{15.8cm}{0.6mm}\\[2ex]
-{\small Degree Programme in Engineering and Computer Science}\\
-{\small{ A.A. 2025/26}}
-\end{center}
+  \begin{center}
+    {{\Large{\textsc{Alma Mater Studiorum $\cdot$ University of
+    Bologna}}}}\\[1ex]
+    \rule{15.8cm}{0.6mm}\\[2ex]
+    {\small Degree Programme in Engineering and Computer Science}\\
+    {\small{ A.A. 2025/26}}
+  \end{center}
 
-\vfill
-\begin{center}
-{\LARGE{\bf Smart Drone Hangar}}\\[1ex]
-\end{center}
-\vfill
+  \vfill
+  \begin{center}
+    {\LARGE{\bf Smart Drone Hangar}}\\[1ex]
+  \end{center}
+  \vfill
 
-\begin{center}
-\begin{tabular}{@{}c@{\qquad}c@{}}
-{\large\bf Grazia Bochdanovits de Kavna} & {\large\bf Alessandro Rebosio} \\[0.5ex]
-{\small matr.\ 0000000000} & {\small matr.\ 0001130557}
-\end{tabular}
-\end{center}
+  \begin{center}
+    \begin{tabular}{@{}c@{\qquad}c@{}}
+      {\large\bf Grazia Bochdanovits de Kavna} & {\large\bf
+      Alessandro Rebosio} \\[0.5ex]
+      {\small matr.\ 0000000000} & {\small matr.\ 0001130557}
+    \end{tabular}
+  \end{center}
 
-\vspace{2mm}
-\noindent\rule{\linewidth}{0.4pt}
+  \vspace{2mm}
+  \noindent\rule{\linewidth}{0.4pt}
 
 \end{titlepage}
 
 \tableofcontents
+
+\chapter{Analysis}
+
+\section{Introduction}
+Initially the system starts with the hangar door HD closed; the DRONE
+INSIDE state holds, L1 on, L2 and L3 off, and the LCD shows DRONE INSIDE.
+
+\vspace{\baselineskip}
+Take-off: the drone requests opening via DRU. On command the HD
+opens, the LCD shows TAKE OFF, and the system waits for exit. Exit is
+detected by the DDD: when distance {$>$} D1 for more than T1 the drone is
+assumed out, the  HD closes and the LCD shows DRONE OUT.
+
+\vspace{\baselineskip}
+Landing: the drone requests opening via DRU. If DPD detects presence,
+the HD opens and the LCD shows LANDING. When DDD measures distance {$ < $}
+D2 for more than T2 the drone is landed, the HD closes and the LCD
+shows DRONE INSIDE.
+
+\vspace{\baselineskip}
+During take-off/landing L2 blinks (0.5 s period); otherwise it is off.
+
+\vspace{\baselineskip}
+Temperature monitoring runs whenever the drone is inside (rest,
+take-off, landing). If temperature $\geq$ Temp1 for more than T3 the
+system enters pre-alarm: new take-offs/landings are suspended until
+return to normal operation (in-progress operations may complete). If
+temperature $\geq$ Temp2 ($>$ Temp1) for more than T4 the HD is
+closed (if open), L3 turns on and the LCD shows ALARM. If the drone
+is outside, an ALARM message is sent via DRU. All operations stay
+suspended until the RESET button is pressed; pressing it returns the
+system to normal operation.
+
+\vspace{\baselineskip}
+\noindent Parameters D1, D2, T1, T2, T3, T4, Temp1, Temp2 are left
+configurable for testing.
+
+The DRU GUI must allow:
+\begin{itemize}
+  \item sending take-off/landing commands (simulate the drone);
+  \item displaying drone state (rest, taking off, operating, landing);
+  \item displaying hangar state (normal, ALARM);
+  \item (during landing) showing current distance to ground.
+\end{itemize}
 
 \end{document}
