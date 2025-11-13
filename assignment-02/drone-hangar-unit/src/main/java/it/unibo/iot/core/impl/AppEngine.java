@@ -46,7 +46,8 @@ public class AppEngine implements Engine {
 
         while (this.controller.isRunning()) {
             try {
-                System.out.println("Engine"); // NOPMD
+                this.controller.update();
+
 
                 Thread.sleep(PERIOD);
             } catch (final InterruptedException e) {

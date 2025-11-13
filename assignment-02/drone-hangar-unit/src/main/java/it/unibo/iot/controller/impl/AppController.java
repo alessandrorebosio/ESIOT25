@@ -3,6 +3,8 @@ package it.unibo.iot.controller.impl;
 import java.util.Objects;
 
 import it.unibo.iot.controller.api.Controller;
+import it.unibo.iot.controller.api.serial.Connection;
+import it.unibo.iot.controller.impl.serial.SerialConnection;
 import it.unibo.iot.model.api.Model;
 import it.unibo.iot.model.impl.AppModel;
 
@@ -15,6 +17,10 @@ import it.unibo.iot.model.impl.AppModel;
  */
 public class AppController implements Controller {
 
+    private static final String PORT = "/dev/cu.usbmodem11201";
+    private static final int BAUDRATE = 9600;
+
+    private final Connection connection;
     private final Model model;
 
     /**
@@ -32,6 +38,7 @@ public class AppController implements Controller {
      */
     public AppController(final Model model) {
         this.model = Objects.requireNonNull(model, "The model cannot be null.");
+        this.connection = new SerialConnection();
     }
 
     /**
@@ -39,7 +46,10 @@ public class AppController implements Controller {
      */
     @Override
     public void start() {
-        this.model.start();
+        if (this.connection.isPortAvailable(PORT)
+                && this.connection.connect(PORT, BAUDRATE)) {
+            this.model.start();
+        }
     }
 
     /**
@@ -48,6 +58,17 @@ public class AppController implements Controller {
     @Override
     public void stop() {
         this.model.stop();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update() {
+        if (this.connection.isConnected()
+                && this.connection.isConnectionActive()) {
+            this.connection.receive().ifPresent(System.out::println);
+        }
     }
 
     /**

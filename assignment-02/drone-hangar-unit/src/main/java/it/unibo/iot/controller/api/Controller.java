@@ -22,6 +22,11 @@ public interface Controller {
     void stop();
 
     /**
+     * Perform a single update cycle of the controller.
+     */
+    void update();
+
+    /**
      * Checks if the controller is currently running.
      *
      * @return true if the controller is running, false otherwise
