@@ -1,0 +1,65 @@
+package it.unibo.iot.view.impl;
+
+import java.awt.event.WindowEvent;
+import java.io.Serial;
+import java.util.Optional;
+
+import javax.swing.JFrame;
+
+import it.unibo.iot.view.api.View;
+
+/**
+ * Swing-based implementation of the View interface.
+ * Represents the main application window with close handling functionality.
+ * 
+ * @author Alessandro Rebosio
+ * @since 1.0
+ */
+public class AppView extends JFrame implements View {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    private transient Optional<Runnable> onClose = Optional.empty();
+
+    /**
+     * Constructs the application view with default settings.
+     * Sets up window properties and close handling behavior.
+     */
+    public AppView() {
+        super("Drone Hangar Unit");
+
+        super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+        super.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(final WindowEvent e) {
+                AppView.this.onClose.ifPresent(Runnable::run);
+            }
+        });
+
+        super.setLocationRelativeTo(null);
+        super.setVisible(true);
+        super.pack();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setOnClose(final Runnable onClose) {
+        this.onClose = Optional.of(onClose);
+    }
+
+    /**
+     * {@inheritDoc}
+     * Closes the view by dispatching a window closing event and disposing the
+     * frame.
+     */
+    @Override
+    public void close() {
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        this.dispose();
+    }
+
+}

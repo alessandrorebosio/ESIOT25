@@ -1,5 +1,9 @@
 package it.unibo.iot;
 
+import it.unibo.iot.controller.impl.AppController;
+import it.unibo.iot.core.impl.AppEngine;
+import it.unibo.iot.view.impl.AppView;
+
 /**
  * Entry point of the app.
  * 
@@ -17,6 +21,6 @@ public final class App {
      * @param args unused
      */
     public static void main(final String[] args) {
-        System.out.println("entry point"); // NOPMD
+        new AppEngine(new AppController(), new AppView()).run();
     }
 }
