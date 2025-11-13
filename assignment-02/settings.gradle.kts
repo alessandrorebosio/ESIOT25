@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = "drone-remote-unit"
-include("app")
+include("drone-hangar-unit")
