@@ -89,7 +89,7 @@
 
 \chapter{Analysis}
 
-\section{Introduction}
+\section{Description and requirements}
 Initially the system starts with the hangar door HD closed; the DRONE
 INSIDE state holds, L1 on, L2 and L3 off, and the LCD shows DRONE INSIDE.
 
@@ -106,7 +106,7 @@ D2 for more than T2 the drone is landed, the HD closes and the LCD
 shows DRONE INSIDE.
 
 \vspace{\baselineskip}
-During take-off/landing L2 blinks (0.5 s period); otherwise it is off.
+\noindent During take-off/landing L2 blinks (0.5 s period); otherwise it is off.
 
 \vspace{\baselineskip}
 Temperature monitoring runs whenever the drone is inside (rest,
@@ -130,5 +130,50 @@ The DRU GUI must allow:
   \item displaying hangar state (normal, ALARM);
   \item (during landing) showing current distance to ground.
 \end{itemize}
+
+\section{Wiring}
+Below is a concise list of the essential hardware components required
+to build and test the Smart Drone Hangar. Quantities, components and
+brief notes on their function are provided to assist with procurement
+and wiring.
+
+\begin{table}[H]
+  \centering
+  \small
+  \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}r l p{0.6\textwidth}@{}}
+      \hline
+      Qty & Component & Notes \\
+      \hline
+      1 & Microcontroller & Handles sensors, actuators, and serial
+      communication \\
+      1 & Servo motor & Used as the hangar door actuator \\
+      1 & Distance sensor (DDD) & Measures the drone's distance
+      inside the hangar \\
+      1 & Presence sensor (DPD) & Detects the drone approaching the hangar \\
+      1 & Temperature sensor & Monitors internal hangar temperature \\
+      3 & LEDs (L1, L2, L3) & System status indicators (normal,
+      activity, alarm) \\
+      3 & Resistors 220\,$\Omega$ & Current-limiting resistors for LEDs
+      L1, L2, L3 \\
+      1 & LCD display & Displays system messages \\
+      1 & RESET button & Used to clear alarms and restore normal operation \\
+      1 & Resistor 10\,k$\Omega$ & Pull-up / pull-down resistor for the
+      RESET button \\
+      \hline
+    \end{tabular}%
+  }
+  \caption{Essential hardware list}
+\end{table}
+
+Figure \ref{fig:hangar} shows the wiring diagram of the hangar
+control unit, highlighting the main connections between the
+microcontroller, sensors, actuators, and indicators.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./img/wiring.png}
+  \caption{Wiring diagram of the hangar control unit.}
+  \label{fig:hangar}
+\end{figure}
 
 \end{document}
