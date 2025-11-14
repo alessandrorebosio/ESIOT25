@@ -1,18 +1,19 @@
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
+#include "config.h"
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+    Serial.begin(BAUD);
+    pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+    if (Serial.available()) {
+        String s = Serial.readStringUntil('\n');
+        if (s == "ON") {
+            digitalWrite(LED_BUILTIN, HIGH);
+        } else if (s == "OFF") {
+            digitalWrite(LED_BUILTIN, LOW);
+        }
+    }
 }

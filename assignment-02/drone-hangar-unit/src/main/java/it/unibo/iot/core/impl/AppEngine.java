@@ -48,7 +48,6 @@ public class AppEngine implements Engine {
             try {
                 this.controller.update();
 
-
                 Thread.sleep(PERIOD);
             } catch (final InterruptedException e) {
                 Thread.currentThread().interrupt();

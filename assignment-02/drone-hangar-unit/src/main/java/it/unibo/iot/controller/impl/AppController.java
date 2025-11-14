@@ -65,8 +65,7 @@ public class AppController implements Controller {
      */
     @Override
     public void update() {
-        if (this.connection.isConnected()
-                && this.connection.isConnectionActive()) {
+        if (this.connection.isConnected()) {
             this.connection.receive().ifPresent(System.out::println);
         }
     }

@@ -29,7 +29,7 @@ public class AppView extends JFrame implements View {
     public AppView() {
         super("Drone Hangar Unit");
 
-        super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        super.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         super.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
