@@ -176,6 +176,25 @@ microcontroller, sensors, actuators, and indicators.
   \label{fig:hangar}
 \end{figure}
 
+\chapter{Schematics}
+\section{State diagram}
+The state diagram compactly shows the main operating modes of the
+system (\texttt{DRONE INSIDE}, \texttt{TAKE OFF}, \texttt{LANDING},
+\texttt{DRONE OUT}, \texttt{PRE-ALARM}, \texttt{ALARM}) and the
+transitions caused by events such as commands from the \texttt{DRU},
+sensor detections (\texttt{DDD}, \texttt{DPD}), the exceeding of
+temperature thresholds, and the pressing of the \texttt{RESET}
+button. Transitions also indicate temporal conditions and the
+configurable parameters (\texttt{D1}, \texttt{D2}, \texttt{T1},
+\texttt{T2}, \texttt{T3}, \texttt{T4}, \texttt{Temp1}, \texttt{Temp2}).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.9\textwidth]{./pdf/state-diagram.pdf}
+  \caption{System state diagram.}
+  \label{fig:state}
+\end{figure}
+
 \appendix
 \chapter{User Guide}
 
