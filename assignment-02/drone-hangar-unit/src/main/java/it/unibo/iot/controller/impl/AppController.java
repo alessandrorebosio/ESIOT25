@@ -17,28 +17,36 @@ import it.unibo.iot.model.impl.AppModel;
  */
 public class AppController implements Controller {
 
-    private static final String PORT = "/dev/cu.usbmodem11201";
-    private static final int BAUDRATE = 9600;
-
     private final Connection connection;
     private final Model model;
+    private final String port;
+    private final int baudrate;
 
     /**
-     * Constructs an AppController with a default AppModel.
+     * Constructs an AppController with the specified port and baudrate using a
+     * default model.
+     *
+     * @param port     the serial port to use, cannot be null
+     * @param baudrate the baud rate to use
      */
-    public AppController() {
-        this(new AppModel());
+    public AppController(final String port, final int baudrate) {
+        this(new AppModel(), port, baudrate);
     }
 
     /**
-     * Constructs an AppController with the specified model.
+     * Constructs an AppController with the specified model, port and baudrate.
      *
-     * @param model the model to be used by this controller, cannot be null
-     * @throws NullPointerException if the model is null
+     * @param model    the model to be used by this controller, cannot be null
+     * @param port     the serial port to use, cannot be null
+     * @param baudrate the baud rate to use
+     * @throws NullPointerException if the model or port is null
      */
-    public AppController(final Model model) {
+    public AppController(final Model model, final String port, final int baudrate) {
         this.model = Objects.requireNonNull(model, "The model cannot be null.");
+        this.port = Objects.requireNonNull(port, "The port cannot be null.");
         this.connection = new SerialConnection();
+
+        this.baudrate = baudrate;
     }
 
     /**
@@ -46,8 +54,8 @@ public class AppController implements Controller {
      */
     @Override
     public void start() {
-        if (this.connection.isPortAvailable(PORT)
-                && this.connection.connect(PORT, BAUDRATE)) {
+        if (this.connection.isPortAvailable(this.port)
+                && this.connection.connect(this.port, this.baudrate)) {
             this.model.start();
         }
     }
