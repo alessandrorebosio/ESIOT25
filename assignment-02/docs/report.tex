@@ -177,6 +177,31 @@ microcontroller, sensors, actuators, and indicators.
 \end{figure}
 
 \appendix
-\section{User Guide}
+\chapter{User Guide}
+
+\section{Cloning the repository}
+Clone the project from GitHub and change to the project directory:
+\begin{verbatim}
+> git clone https://github.com/alessandrorebosio/ESIOT25.git
+> cd ESIOT25/assignment-02
+\end{verbatim}
+
+\section{Connecting and starting the application}
+Connect the Arduino to your computer, identify the serial port, then
+start the application with:
+\begin{verbatim}
+> java -jar drone-hangar-unit-all.jar port baud
+\end{verbatim}
+
+\vspace{\baselineskip}
+\noindent Alternatively you can start the project with:
+\begin{verbatim}
+> ./gradlew run --args='port baud'
+\end{verbatim}
+
+\vspace{\baselineskip}
+Note: adjust the serial port name for your system (for example, COM3
+on Windows or /dev/ttyACM0 on Linux). If the baud rate is not changed
+from the default, use 9600. Ensure Java is installed before running the command.
 
 \end{document}
