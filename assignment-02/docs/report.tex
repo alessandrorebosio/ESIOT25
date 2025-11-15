@@ -176,8 +176,8 @@ microcontroller, sensors, actuators, and indicators.
   \label{fig:hangar}
 \end{figure}
 
-\chapter{Schematics}
-\section{State diagram}
+\chapter{Diagrams}
+\section{State}
 The state diagram compactly shows the main operating modes of the
 system (\texttt{DRONE INSIDE}, \texttt{TAKE OFF}, \texttt{LANDING},
 \texttt{DRONE OUT}, \texttt{PRE-ALARM}, \texttt{ALARM}) and the
@@ -195,31 +195,36 @@ configurable parameters (\texttt{D1}, \texttt{D2}, \texttt{T1},
   \label{fig:state}
 \end{figure}
 
+\section{Application class}
+
+\section{Arduino module}
+
+
 \appendix
 \chapter{User Guide}
 
 \section{Cloning the repository}
 Clone the project from GitHub and change to the project directory:
-\begin{verbatim}
+\begin{Verbatim}[tabsize=4,xleftmargin=2em]
 > git clone https://github.com/alessandrorebosio/ESIOT25.git
 > cd ESIOT25/assignment-02
-\end{verbatim}
+\end{Verbatim}
 
 \section{Connecting and starting the application}
 Connect the Arduino to your computer, identify the serial port, then
 start the application with:
-\begin{verbatim}
+\begin{Verbatim}[tabsize=4,xleftmargin=2em]
 > java -jar drone-hangar-unit-all.jar port baud
-\end{verbatim}
+\end{Verbatim}
 
 \vspace{\baselineskip}
 \noindent Alternatively you can start the project with:
-\begin{verbatim}
+\begin{Verbatim}[tabsize=4,xleftmargin=2em]
 > ./gradlew run --args='port baud'
-\end{verbatim}
+\end{Verbatim}
 
 \vspace{\baselineskip}
-Note: adjust the serial port name for your system (for example, COM3
+\noindent Note: adjust the serial port name for your system (for example, COM3
 on Windows or /dev/ttyACM0 on Linux). If the baud rate is not changed
 from the default, use 9600. Ensure Java is installed before running the command.
 
