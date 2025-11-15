@@ -1,5 +1,6 @@
 package it.unibo.iot.view.impl;
 
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.Serial;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class AppView extends JFrame implements View {
 
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        super.addWindowListener(new java.awt.event.WindowAdapter() {
+        super.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(final WindowEvent e) {
                 AppView.this.onClose.ifPresent(Runnable::run);
