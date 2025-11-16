@@ -1,19 +1,28 @@
 #include <Arduino.h>
+#include <Button.h>
+#include <Led.h>
+#include <Servo.h>
 
 #include "config.h"
+#include "logic.h"
 
-void setup() {
-    Serial.begin(BAUD);
-    pinMode(LED_BUILTIN, OUTPUT);
-}
+Logic logic;
+
+void setup() { Serial.begin(BAUD); }
 
 void loop() {
-    if (Serial.available()) {
-        String s = Serial.readStringUntil('\n');
-        if (s == "ON") {
-            digitalWrite(LED_BUILTIN, HIGH);
-        } else if (s == "OFF") {
-            digitalWrite(LED_BUILTIN, LOW);
-        }
+    switch (logic.state) {
+        case INSIDE:
+            break;
+        case TAKEOFF:
+            break;
+        case LANDING:
+            break;
+        case OUTSIDE:
+            break;
+        case PREALARM:
+            break;
+        case ALARM:
+            break;
     }
 }
