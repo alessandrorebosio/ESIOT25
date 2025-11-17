@@ -1,3 +1,7 @@
+#include <MyServo.h>
+
+#define ROTATION 90
+#define PERIOD 15
 
 /**
  * @file MyServo.cpp
@@ -8,11 +12,6 @@
  * blocking helpers intended for straightforward door open/close
  * operations in educational/example projects.
  */
-
-#include <MyServo.h>
-
-#define ROTATION 90
-#define PERIOD 15
 
 /**
  * @brief Construct a MyServo instance bound to a pin.

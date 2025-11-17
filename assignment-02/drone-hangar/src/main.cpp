@@ -14,8 +14,9 @@ void setup() { Serial.begin(BAUD); }
 
 void loop() {
     /*
-        if temperature > temp1
+        if (!t1.is_running() && temperature > temp1) {
             t1.init(T3)
+        }
     */
     switch (logic.state) {
         case INSIDE:
