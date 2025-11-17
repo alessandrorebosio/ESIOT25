@@ -1,7 +1,8 @@
 #include <Arduino.h>
 #include <Button.h>
+#include <Lcd.h>
 #include <Led.h>
-#include <Servo.h>
+#include <MyServo.h>
 #include <Timer.h>
 
 #include "config.h"
@@ -13,7 +14,7 @@ void setup() { Serial.begin(BAUD); }
 
 void loop() {
     /*
-        if temperature > temp1 
+        if temperature > temp1
             t1.init(T3)
     */
     switch (logic.state) {

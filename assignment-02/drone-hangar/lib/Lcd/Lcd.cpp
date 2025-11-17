@@ -7,7 +7,6 @@
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);
 
 Lcd::Lcd() {
-    lcd.init();
     lcd.backlight();
     lcd.clear();
 }
