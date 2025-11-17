@@ -1,33 +1,30 @@
-#ifndef BUTTON_H
-#define BUTTON_H
-
-#include <Arduino.h>
+#include "IButton.h"
 
 /**
- * @brief Interface for a digital push-button.
- *
- * Implementations provide debounced press detection. The `isPressed`
- * method should be non-blocking and return true when a valid press
- * event (after debouncing) is detected.
+ * @file Button.cpp
+ * @brief Debounced digital push-button implementation.
  */
-class IButton {
+
+/**
+ * @brief Concrete implementation of `IButton` for a digital input pin.
+ *
+ * This class implements a simple edge-detection debouncer. Call
+ * `isPressed()` frequently (for example inside `loop()`) to detect
+ * press events. The implementation returns true only once when a
+ * debounced press edge is observed.
+ */
+class Button : public IButton {
+  private:
+    unsigned long lastTime = 0;
+    uint8_t lastReading = HIGH;
+    uint8_t rawReading = HIGH;
+    uint8_t pin;
+
   public:
     /**
-     * @brief Check whether the button was pressed.
-     *
-     * This method returns true when a debounced press is detected.
-     * It does not block waiting for a press; instead it should be
-     * called repeatedly (for example from a loop) to detect press
-     * events.
+     * @brief Check whether the button was pressed (debounced).
      *
      * @return true if a debounced press edge was detected, false otherwise
      */
-    virtual bool isPressed() = 0;
-
-    /**
-     * @brief Virtual destructor for interface safety.
-     */
-    virtual ~IButton() = default;
+    bool isPressed();
 };
-
-#endif
