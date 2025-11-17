@@ -35,8 +35,3 @@ bool Timer::is_expired() {
         return false;
     return (millis() - this->start) >= this->timeout;
 }
-
-/**
- * @brief Defaulted destructor.
- */
-Timer::~Timer() = default;

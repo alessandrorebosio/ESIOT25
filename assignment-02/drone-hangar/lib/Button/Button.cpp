@@ -35,8 +35,3 @@ bool Button::isPressed() {
 
     return false;
 }
-
-/**
- * @brief Defaulted destructor.
- */
-Button::~Button() = default;
