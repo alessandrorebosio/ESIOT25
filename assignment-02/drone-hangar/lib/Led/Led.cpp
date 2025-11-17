@@ -6,30 +6,32 @@
  * @file Led.cpp
  * @brief Implementation of LED control functions.
  *
- * The functions use Arduino APIs: `digitalWrite()` and `delay()`.
+ * The functions use Arduino APIs: `digitalWrite()` and `millis()` for
+ * non-blocking timing.
  */
 
 /**
- * @brief Turn the LED on at the given pin.
- * @param pin Digital pin number where the LED is connected.
- */
-void turnOn(const uint8_t pin) { digitalWrite(pin, HIGH); }
-
-/**
- * @brief Turn the LED off at the given pin.
- * @param pin Digital pin number where the LED is connected.
- */
-void turnOff(const uint8_t pin) { digitalWrite(pin, LOW); }
-
-/**
- * @brief Blink the LED once using a fixed period.
- * @param pin Digital pin of the LED.
+ * @brief Turn the LED on using the configured pin.
  *
- * Sequence: ON -> delay(PERIOD) -> OFF -> delay(PERIOD).
- * This is a blocking function (uses `delay()`), so it is not suitable
- * for non-blocking timing or time-critical tasks.
+ * Drives the stored `pin` to `HIGH`.
  */
-void blinking(const uint8_t pin) {
+void Led::turnOn() { digitalWrite(this->pin, HIGH); }
+
+/**
+ * @brief Turn the LED off using the configured pin.
+ *
+ * Drives the stored `pin` to `LOW`.
+ */
+void Led::turnOff() { digitalWrite(this->pin, LOW); }
+
+/**
+ * @brief Non-blocking blinking implementation.
+ *
+ * This implementation toggles the LED state every `PERIOD` milliseconds
+ * using `millis()` and static state variables. It is non-blocking and
+ * suitable for calling frequently from the main loop.
+ */
+void Led::blinking() {
     static unsigned long lastToggle = 0;
     static bool ledState = false;
 
@@ -37,6 +39,6 @@ void blinking(const uint8_t pin) {
     if (now - lastToggle >= PERIOD) {
         lastToggle = now;
         ledState = !ledState;
-        ledState ? turnOn(pin) : turnOff(pin);
+        ledState ? turnOn() : turnOff();
     }
 }

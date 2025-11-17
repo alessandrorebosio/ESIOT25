@@ -13,15 +13,19 @@ Logic logic;
 void setup() { Serial.begin(BAUD); }
 
 void loop() {
+    /*
+        if temperature > temp1 
+            t1.init(T3)
+    */
     switch (logic.state) {
         case INSIDE:
             /*
                 closeDoor
 
                 if message avaiable "takeoff"
-                    change to Takeoff, print "Takeoff"
+                    change to Takeoff, print "Takeoff", t0.init(T1)
 
-                if temperature > temp1 after T3
+                if (t1.is_expired())
                     change to "PREALARM", print "Prealarm"
             */
             break;
@@ -29,7 +33,7 @@ void loop() {
             /*
                 led blinking + openDoor
 
-                if distance > D1 after T1
+                if distance > D1 after t0.is_expired()
                     change to OUTSIDE, print "Drone out", turn off led
              */
             break;
@@ -38,23 +42,23 @@ void loop() {
                 closeDoor
 
                 if message avaiable "landing" and pir detect drone presence
-                    change to LANDING, print "Landing"
+                    change to LANDING, print "Landing", t0.init(T2)
 
-                if temperature > temp1 after T3
-                    change to "PREALARM", print "Prealarm"
+                if (t2.is_expired())
+                    change to "PREALARM", print "Prealarm", t1.init(T4)
             */
             break;
         case LANDING:
             /*
                 led blinking + openDoor
 
-                if distance < D2 after T2
+                if distance < D2 after t0.is_expired()
                     change to INSIDE, print "Inside", turn off led
              */
             break;
         case PREALARM:
             /*
-                if temperature < temp1 after T4
+                if temperature < temp1 after t1.is_expired()
                     return to previous state
                 else
                     change to ALARM, print "Alarm"

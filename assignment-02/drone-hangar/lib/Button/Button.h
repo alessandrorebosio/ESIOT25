@@ -1,3 +1,6 @@
+#ifndef BUTTON_H
+#define BUTTON_H
+
 #include "IButton.h"
 
 /**
@@ -28,3 +31,5 @@ class Button : public IButton {
      */
     bool isPressed();
 };
+
+#endif

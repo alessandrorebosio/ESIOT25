@@ -1,35 +1,44 @@
 #ifndef LED_H
 #define LED_H
 
-#include <Arduino.h>
+#include "ILed.h"
 
 /**
  * @file Led.h
- * @brief Utility functions to manage a LED on Arduino.
+ * @brief Concrete LED control implementation header.
  *
- * Provides simple functions to turn a LED on, turn it off, and
- * perform a blinking cycle on a specified digital pin.
+ * The `Led` class implements `ILed` and controls a single LED connected
+ * to a digital pin. The pin number is stored in the `pin` member and
+ * should be configured by the user (for example via a constructor or a
+ * setter — not provided here). The provided `Led` implementation uses
+ * a non-blocking `blinking()` implementation based on `millis()`.
  */
 
 /**
- * @brief Turn the LED on at the given pin.
- * @param pin Digital pin number where the LED is connected.
+ * @brief Concrete LED implementation using a configured digital pin.
  */
-void turnOn(const uint8_t pin);
+class Led : public ILed {
+  private:
+    uint8_t pin;
 
-/**
- * @brief Turn the LED off at the given pin.
- * @param pin Digital pin number where the LED is connected.
- */
-void turnOff(const uint8_t pin);
+  public:
+    /**
+     * @brief Turn the LED on using the configured pin.
+     */
+    void turnOn();
 
-/**
- * @brief Perform a single blink cycle (on -> off) using a fixed period.
- * @param pin Digital pin number where the LED is connected.
- *
- * Note: The blink period is defined in `Led.cpp` by the `PERIOD` macro (ms).
- * This function is blocking because it uses `delay()`.
- */
-void blinking(const uint8_t pin);
+    /**
+     * @brief Turn the LED off using the configured pin.
+     */
+    void turnOff();
+
+    /**
+     * @brief Toggle the LED state periodically (non-blocking).
+     *
+     * The blink period is defined in `Led.cpp` by the `PERIOD` macro.
+     * This implementation is non-blocking and relies on `millis()`.
+     */
+    void blinking();
+};
 
 #endif
