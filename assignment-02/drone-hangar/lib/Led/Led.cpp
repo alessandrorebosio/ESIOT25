@@ -11,6 +11,13 @@
  */
 
 /**
+ * @brief Construct a Led instance bound to a digital pin.
+ *
+ * @param pin Digital input pin number where the led is connected.
+ */
+Led::Led(const uint8_t pin) { this->pin = pin; }
+
+/**
  * @brief Turn the LED on using the configured pin.
  *
  * Drives the stored `pin` to `HIGH`.

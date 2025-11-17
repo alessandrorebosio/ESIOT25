@@ -1,7 +1,4 @@
 
-#include <MyServo.h>
-#include <Servo.h>
-
 /**
  * @file MyServo.cpp
  * @brief Implementation of simple door-control helpers using a servo.
@@ -12,37 +9,50 @@
  * operations in educational/example projects.
  */
 
+#include <MyServo.h>
+
 #define PERIOD 15
 
 /**
- * @brief Close the door by moving the servo to the closed angle.
- * @param pin Digital pin where the servo is attached.
- *
- * This wrapper calls the internal `move()` helper with the
- * predefined angle for the closed position. The operation is
- * blocking.
+ * @brief Construct a MyServo instance bound to a pin.
+ * @param pin Digital pin used for the servo signal.
  */
-void closeDoor(const uint8_t pin) { move(pin, -90); }
+MyServo::MyServo(const uint8_t pin) { this->pin = pin; }
+
+/**
+ * @brief Attach the servo to the configured pin and enable control.
+ */
+void MyServo::on() { motor.attach(this->pin); }
+
+/**
+ * @brief Detach the servo and stop driving the pin.
+ */
+void MyServo::off() { motor.detach(); }
+
+/**
+ * @brief Close the door by moving the servo to the closed angle.
+ *
+ * This implementation performs a blocking, incremental movement from
+ * the current position to the closed angle using small delays defined
+ * by `PERIOD` to smooth motion.
+ */
+void MyServo::closeDoor() {
+    for (int i = 0; i < 90; i++) {
+        motor.write(i);
+        delay(PERIOD);
+    }
+}
 
 /**
  * @brief Open the door by moving the servo to the open angle.
- * @param pin Digital pin where the servo is attached.
  *
- * This wrapper calls the internal `move()` helper with the
- * predefined angle for the open position. The operation is
- * blocking.
+ * This implementation performs a blocking, incremental movement from
+ * the current position to the open angle using small delays defined
+ * by `PERIOD` to smooth motion.
  */
-void openDoor(const uint8_t pin) { move(pin, 90); }
-
-/**
- * @brief Internal helper that performs a blocking incremental move.
- * @param pin Digital pin where the servo is attached.
- * @param degree Number of incremental steps (signed). Positive values
- * move towards the open direction, negative towards closed.
- */
-void move(const uint8_t pin, const int degree) {
-    for (int i = 0; i < abs(degree); i++) { // TOFIX
-
+void MyServo::openDoor() {
+    for (int i = 90; i > 0; i--) {
+        motor.write(i);
         delay(PERIOD);
     }
 }

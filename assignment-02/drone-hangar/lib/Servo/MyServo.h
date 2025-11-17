@@ -1,35 +1,53 @@
 #ifndef MYSERVO_H
 #define MYSERVO_H
 
-#include <Arduino.h>
+#include <Servo.h>
 
+#include "IMyServo.h"
 /**
  * @file MyServo.h
- * @brief High-level servo helpers for the drone hangar door.
+ * @brief Servo-based door controller declaration.
  *
- * Provides two simple blocking operations to open and close a door
- * using a servo motor. Implementation relies on the Arduino `Servo`
- * library (see `MyServo.cpp`).
+ * `MyServo` implements `IMyServo` using the Arduino `Servo` library
+ * to move a servo between open and closed positions. The provided
+ * implementation is blocking and uses small delays between incremental
+ * position changes for smooth movement.
  */
 
 /**
- * @brief Move the door to the "closed" position.
- * @param pin Digital pin number used to control the servo.
- *
- * This is a convenience wrapper that calls the internal movement
- * routine with the target angle for the closed position.
- * The function is blocking.
+ * @brief Concrete servo controller for a door mechanism.
  */
-void closeDoor(const uint8_t pin);
+class MyServo : public IMyServo {
+  private:
+    Servo motor;
+    uint8_t pin;
 
-/**
- * @brief Move the door to the "open" position.
- * @param pin Digital pin number used to control the servo.
- *
- * This is a convenience wrapper that calls the internal movement
- * routine with the target angle for the open position.
- * The function is blocking.
- */
-void openDoor(const uint8_t pin);
+  public:
+    /**
+     * @brief Construct a MyServo instance bound to a pin.
+     * @param pin Digital pin used for the servo signal.
+     */
+    MyServo(uint8_t pin);
+
+    /**
+     * @brief Attach and enable the servo motor.
+     */
+    void on();
+
+    /**
+     * @brief Detach and disable the servo motor.
+     */
+    virtual void off();
+
+    /**
+     * @brief Move the servo to the open position (blocking).
+     */
+    void openDoor();
+
+    /**
+     * @brief Move the servo to the closed position (blocking).
+     */
+    void closeDoor();
+};
 
 #endif

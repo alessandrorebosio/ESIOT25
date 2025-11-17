@@ -23,6 +23,12 @@ class Led : public ILed {
 
   public:
     /**
+     * @brief Construct a Led instance bound to a pin.
+     * @param pin Digital pin used for the led signal.
+     */
+    Led(uint8_t pin);
+
+    /**
      * @brief Turn the LED on using the configured pin.
      */
     void turnOn();

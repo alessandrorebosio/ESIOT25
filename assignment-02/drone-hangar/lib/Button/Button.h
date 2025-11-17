@@ -25,6 +25,12 @@ class Button : public IButton {
 
   public:
     /**
+     * @brief Construct a Button instance bound to a pin.
+     * @param pin Digital pin used for the button signal.
+     */
+    Button(uint8_t pin);
+
+    /**
      * @brief Check whether the button was pressed (debounced).
      *
      * @return true if a debounced press edge was detected, false otherwise
