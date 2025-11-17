@@ -13,6 +13,16 @@
 class IButton {
   public:
     /**
+     * @brief Initialize the button hardware and internal state.
+     *
+     * Configure the pin mode and perform any initialisation required to
+     * start debounced press detection. Implementations should set up
+     * hardware (for example with `pinMode`) and prepare internal timers
+     * so that `isPressed()` can be called afterwards.
+     */
+    virtual void begin() = 0;
+
+    /**
      * @brief Check whether the button was pressed.
      *
      * This method returns true when a debounced press is detected.

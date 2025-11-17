@@ -17,6 +17,15 @@
 class ILed {
   public:
     /**
+     * @brief Initialize the LED hardware and internal state.
+     *
+     * Configure the digital pin used by the LED and prepare any timers or
+     * internal state required by non-blocking behaviors such as `blinking()`.
+     * Call this method once during system setup before using other methods.
+     */
+    virtual void begin() = 0;
+
+    /**
      * @brief Turn the LED on (uses the implementation's configured pin).
      *
      * Implementations should drive the configured digital pin to the

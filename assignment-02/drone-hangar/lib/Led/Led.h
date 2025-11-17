@@ -29,6 +29,15 @@ class Led : public ILed {
     Led(uint8_t pin);
 
     /**
+     * @brief Initialize the LED pin and any internal timing state.
+     *
+     * This configures the LED pin as an output and prepares any variables
+     * used by non-blocking functions such as `blinking()`. Call this once
+     * during setup before invoking other LED methods.
+     */
+    void begin();
+
+    /**
      * @brief Turn the LED on using the configured pin.
      */
     void turnOn();

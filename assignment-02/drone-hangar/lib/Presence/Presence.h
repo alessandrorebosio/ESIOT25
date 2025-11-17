@@ -23,6 +23,15 @@ class Presence : public IPresence {
     Presence(uint8_t pin);
 
     /**
+     * @brief Initialize the presence sensor instance.
+     *
+     * Configures the digital input pin and performs any required startup
+     * calibration so the sensor is ready to provide reliable `isHere()`
+     * readings. Call this during the system setup phase.
+     */
+    void begin();
+
+    /**
      * @brief Check whether presence is detected by reading the pin.
      * @return true if the sensor reports presence, false otherwise.
      */

@@ -1,7 +1,5 @@
 #include "Led.h"
 
-#define PERIOD 500
-
 /**
  * @file Led.cpp
  * @brief Implementation of LED control functions.
@@ -10,12 +8,23 @@
  * non-blocking timing.
  */
 
+#define PERIOD 500
+
 /**
  * @brief Construct a Led instance bound to a digital pin.
  *
  * @param pin Digital input pin number where the led is connected.
  */
 Led::Led(const uint8_t pin) { this->pin = pin; }
+
+/**
+ * @brief Configure the LED pin as output and prepare timing state.
+ *
+ * Sets the configured pin to `OUTPUT` and ensures any timers or state
+ * used by blinking are ready. Call once during the application setup
+ * phase before using `turnOn()`, `turnOff()` or `blinking()`.
+ */
+void Led::begin() { pinMode(this->pin, OUTPUT); }
 
 /**
  * @brief Turn the LED on using the configured pin.

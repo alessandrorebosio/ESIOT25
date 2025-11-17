@@ -31,6 +31,15 @@ class Button : public IButton {
     Button(uint8_t pin);
 
     /**
+     * @brief Initialize the button hardware and internal debouncer.
+     *
+     * This method should configure the input pin (e.g., via `pinMode`)
+     * and reset any internal state required by the debounce algorithm.
+     * Call this once during system setup before using `isPressed()`.
+     */
+    void begin();
+
+    /**
      * @brief Check whether the button was pressed (debounced).
      *
      * @return true if a debounced press edge was detected, false otherwise

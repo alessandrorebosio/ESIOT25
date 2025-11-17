@@ -23,6 +23,14 @@
 Button::Button(const uint8_t pin) { this->pin = pin; }
 
 /**
+ * @brief Configure the button pin and prepare the debouncer.
+ *
+ * Sets the configured pin to `INPUT` and resets any internal state
+ * required by the debounce logic. Call once during application setup.
+ */
+void Button::begin() { pinMode(this->pin, INPUT); }
+
+/**
  * @brief Check whether the button was pressed (debounced).
  *
  * This method implements a non-blocking debounce algorithm:

@@ -1,8 +1,5 @@
 #include <MyServo.h>
 
-#define ROTATION 90
-#define PERIOD 15
-
 /**
  * @file MyServo.cpp
  * @brief Implementation of simple door-control helpers using a servo.
@@ -12,6 +9,9 @@
  * blocking helpers intended for straightforward door open/close
  * operations in educational/example projects.
  */
+
+#define ROTATION 90
+#define PERIOD 15
 
 /**
  * @brief Construct a MyServo instance bound to a pin.

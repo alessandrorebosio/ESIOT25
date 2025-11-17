@@ -18,13 +18,15 @@
 
 #define BTN_PIN 2
 
-#define ALARM_LED_PIN 3
-#define ACTION_LED_PIN 4
-#define ON_LED_PIN 5
+#define L3_LED 3
+#define L2_LED 4
+#define L1_LED 5
 
 #define SERVO_PIN 6
 
 #define TEMP_PIN 7
+
+#define PIR_PIN 8
 
 #define RADAR_ECHO_PIN 9
 #define RADAR_TRIG_PIN 10

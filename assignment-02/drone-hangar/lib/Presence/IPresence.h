@@ -22,6 +22,16 @@
 class IPresence {
   public:
     /**
+     * @brief Initialize the presence sensor.
+     *
+     * Prepare the sensor hardware for operation. Implementations should
+     * configure any required pins and perform any startup/calibration steps
+     * necessary before `isHere()` may be called. This method should be
+     * called once during setup.
+     */
+    virtual void begin() = 0;
+
+    /**
      * @brief Check whether presence is detected.
      * @return true if presence is detected (sensor active), false otherwise.
      */

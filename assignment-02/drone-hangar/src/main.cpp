@@ -3,14 +3,32 @@
 #include <Lcd.h>
 #include <Led.h>
 #include <MyServo.h>
+#include <Presence.h>
 #include <Timer.h>
 
 #include "config.h"
 #include "logic.h"
 
+MyServo servo(SERVO_PIN);
+Button button(BTN_PIN);
+Presence pir(PIR_PIN);
+Led l1(L1_LED);
+Led l2(L2_LED);
+Led l3(L3_LED);
+
+Timer t0();
+Timer t1();
+
 Logic logic;
 
-void setup() { Serial.begin(BAUD); }
+void setup() {
+    Serial.begin(BAUD);
+    button.begin();
+    l1.begin();
+    l2.begin();
+    l3.begin();
+    pir.begin();
+}
 
 void loop() {
     /*
