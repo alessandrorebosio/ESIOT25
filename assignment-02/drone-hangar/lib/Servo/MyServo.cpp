@@ -11,6 +11,7 @@
 
 #include <MyServo.h>
 
+#define ROTATION 90
 #define PERIOD 15
 
 /**
@@ -37,7 +38,7 @@ void MyServo::off() { motor.detach(); }
  * by `PERIOD` to smooth motion.
  */
 void MyServo::closeDoor() {
-    for (int i = 0; i < 90; i++) {
+    for (int i = 0; i < ROTATION; i++) {
         motor.write(i);
         delay(PERIOD);
     }
@@ -51,7 +52,7 @@ void MyServo::closeDoor() {
  * by `PERIOD` to smooth motion.
  */
 void MyServo::openDoor() {
-    for (int i = 90; i > 0; i--) {
+    for (int i = ROTATION; i > 0; i--) {
         motor.write(i);
         delay(PERIOD);
     }

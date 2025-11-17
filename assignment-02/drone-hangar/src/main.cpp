@@ -7,7 +7,6 @@
 #include "config.h"
 #include "logic.h"
 
-Button button;
 Logic logic;
 
 void setup() { Serial.begin(BAUD); }
