@@ -11,7 +11,7 @@
  * - ALARM_LED_PIN, ACTION_LED_PIN, ON_LED_PIN: status LEDs
  * - SERVO_PIN: servo control pin
  * - TEMP_PIN: temperature sensor pin
- * - RADAR_ECHO_PIN, RADAR_TRIG_PIN: ultrasonic radar pins
+ * - SONAR_ECHO_PIN, SONAR_TRIG_PIN: ultrasonic sonar pins
  */
 
 #define BAUD 9600
@@ -28,7 +28,7 @@
 
 #define PIR_PIN 8
 
-#define RADAR_ECHO_PIN 9
-#define RADAR_TRIG_PIN 10
+#define SONAR_ECHO_PIN 9 
+#define SONAR_TRIG_PIN 10
 
 #endif
