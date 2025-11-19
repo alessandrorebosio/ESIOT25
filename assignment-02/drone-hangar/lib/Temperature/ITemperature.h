@@ -28,6 +28,8 @@ public:
      */
     virtual float read() = 0;
 
+    virtual int equals(int value) = 0;
+
     /**
      * @brief Virtual destructor for safe polymorphic deletion.
      */

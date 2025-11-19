@@ -16,26 +16,28 @@
  * @brief Simple driver for the TMP36 temperature sensor.
  */
 class Temperature : public ITemperature {
- private:
-  uint8_t pin;
+  private:
+    uint8_t pin;
 
- public:
-  /**
-    * @brief Creates a Temperature reader bound to an analog pin.
-    * @param pin Analog input pin (e.g., A0).
-    */
-  Temperature(uint8_t pin);
+  public:
+    /**
+     * @brief Creates a Temperature reader bound to an analog pin.
+     * @param pin Analog input pin (e.g., A0).
+     */
+    Temperature(uint8_t pin);
 
-  /**
-    * @brief Initializes the sensor pin as input.
-    */
-  void begin();
+    /**
+     * @brief Initializes the sensor pin as input.
+     */
+    void begin();
 
-  /**
-    * @brief Reads the current temperature in Celsius.
-    * @return Temperature in °C.
-    */
-  float read();
+    /**
+     * @brief Reads the current temperature in Celsius.
+     * @return Temperature in °C.
+     */
+    float read();
+
+    int equals(int value);
 };
 
 #endif

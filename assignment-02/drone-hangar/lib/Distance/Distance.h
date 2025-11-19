@@ -38,6 +38,8 @@ public:
      * @return Distance in centimeters, or NO_OBJECTS if no echo is detected.
      */
     float read();
+
+    int equals(int value);
 };
 
 #endif

@@ -1,12 +1,11 @@
 #include <Temperature.h>
 
-//
-// Constants for TMP36 conversion
-//
-#define ADC_TO_VOLT  0.00488f   // 5V / 1024 steps
-#define TMP36_OFFSET 0.5f       // 500 mV offset at 0°C
-#define TMP36_SCALE  0.01f      // 10 mV/°C
+#define PERIOD 20
+#define FOR 10
 
+#define ADC_TO_VOLT 5 / 1024 // 5V / 1024 steps
+#define TMP36_OFFSET 0.5f    // 500 mV offset at 0°C
+#define TMP36_SCALE 0.01f    // 10 mV/°C
 
 /**
  * @brief Constructs a Temperature reader for the given analog pin.
@@ -28,11 +27,23 @@ void Temperature::begin() { pinMode(pin, INPUT); }
  * @return Temperature in °C.
  */
 float Temperature::read() {
-    int raw = analogRead(pin);
+    int measure = 0;
 
-    float voltage = raw * ADC_TO_VOLT;
+    for (int i = 0; i < FOR; i++) {
+        measure += analogRead(pin);
+        delay(PERIOD);
+    }
 
-    float tempC = (voltage - TMP36_OFFSET) / TMP36_SCALE;
+    float voltage = measure * ADC_TO_VOLT / FOR;
+    return (voltage - TMP36_OFFSET) / TMP36_SCALE;
+}
 
-    return tempC;
+int Temperature::equals(const int value) {
+    if (int(this->read()) == value) {
+        return 0;
+    }
+    if (int(this->read()) > value) {
+        return 1;
+    }
+    return -1;
 }
