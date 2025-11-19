@@ -10,6 +10,9 @@
 
 #define PERIOD 500
 
+static unsigned long lastToggle = 0;
+static bool ledState = false;
+
 /**
  * @brief Construct a Led instance bound to a digital pin.
  *
@@ -47,12 +50,11 @@ void Led::turnOff() { digitalWrite(this->pin, LOW); }
  * using `millis()` and static state variables. It is non-blocking and
  * suitable for calling frequently from the main loop.
  */
-void Led::blinking() {
-    static unsigned long lastToggle = 0;
-    static bool ledState = false;
-
+void Led::blinking()
+{
     unsigned long now = millis();
-    if (now - lastToggle >= PERIOD) {
+    if (now - lastToggle >= PERIOD)
+    {
         lastToggle = now;
         ledState = !ledState;
         ledState ? turnOn() : turnOff();

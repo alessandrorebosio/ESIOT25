@@ -19,8 +19,8 @@
 class Button : public IButton {
   private:
     unsigned long lastTime = 0;
-    uint8_t lastReading = HIGH;
-    uint8_t rawReading = HIGH;
+    uint8_t lastReading = LOW;
+    uint8_t rawReading = LOW;
     uint8_t pin;
 
   public:

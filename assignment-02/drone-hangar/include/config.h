@@ -24,7 +24,7 @@
 
 #define SERVO_PIN 6
 
-#define TEMP_PIN 7
+#define TEMP_PIN A0
 
 #define PIR_PIN 8
 
