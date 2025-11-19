@@ -21,9 +21,9 @@
  */
 class Timer : public ITimer {
   private:
-    unsigned long timeout;
-    unsigned long start;
-    bool running;
+    unsigned long timeout = 0;
+    unsigned long start = 0;
+    bool running = false;
 
   public:
     /**
