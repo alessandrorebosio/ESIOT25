@@ -1,6 +1,7 @@
-#pragma once
+#ifndef BUTTON_H
+#define BUTTON_H
 
-#include "devices/Switch.h"
+#include "../../include/devices/Switch.h"
 
 class Button : public Switch {
   private:
@@ -16,3 +17,5 @@ class Button : public Switch {
 
     bool isPressed() override;
 };
+
+#endif

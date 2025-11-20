@@ -1,4 +1,6 @@
-#pragma one
+#pragma once
+
+#include <Arduino.h>
 
 class TempSensor {
   public:

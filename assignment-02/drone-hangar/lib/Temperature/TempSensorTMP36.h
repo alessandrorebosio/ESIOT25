@@ -1,8 +1,6 @@
 #pragma once
 
-#include <Arduino.h>
-
-#include "devices/TempSensor.h"
+#include "../../include/devices/TempSensor.h"
 
 class TempSensorTMP36 : public TempSensor {
   private:

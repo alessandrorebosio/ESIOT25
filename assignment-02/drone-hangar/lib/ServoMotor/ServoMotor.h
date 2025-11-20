@@ -1,9 +1,8 @@
 #pragma once
 
-#include <Arduino.h>
 #include <Servo.h>
 
-#include "devices/Motor.h"
+#include "../../include/devices/Motor.h"
 
 class ServoMotor : public Motor {
   private:
