@@ -9,9 +9,9 @@ Scheduler scheduler;
 HWPlatform *hw;
 
 void setup() {
-    scheduler.init(100);
-
     hw = new HWPlatform();
+
+    scheduler.init(100);
 }
 
 void loop() { scheduler.schedule(); }

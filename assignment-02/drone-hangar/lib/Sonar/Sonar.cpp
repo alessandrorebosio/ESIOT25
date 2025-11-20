@@ -1,7 +1,5 @@
 #include "Sonar.h"
 
-#include "Arduino.h"
-
 #define DELAY1 3
 #define DELAY2 5
 
