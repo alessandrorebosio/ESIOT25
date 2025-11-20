@@ -1,4 +1,4 @@
-#include <MyServo.h>
+#include <ServoMotor.h>
 
 void MyServo::on() { motor.attach(this->pin); }
 
