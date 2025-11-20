@@ -11,6 +11,8 @@ class BlinkingTask : public Task {
   public:
     BlinkingTask(Light *led) : led(led) {}
 
+    BlinkingTask(Light *led, int period) : led(led) { this->init(period); }
+
     void init(int period);
 
     void tick();
