@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include <Lcd.h>
 
 #include "devices/Light.h"
 #include "devices/Motor.h"
@@ -19,6 +20,7 @@ enum State {
 class HWPlatform {
   private:
     Switch *button;
+    Lcd *lcd;
     Light *led1;
     Light *led2;
     Light *led3;

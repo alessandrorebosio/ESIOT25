@@ -13,6 +13,7 @@ HWPlatform::HWPlatform() { this->init(); }
 
 void HWPlatform::init() {
     button = new Button(BUTTON_PIN);
+    lcd = new Lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);
     led1 = new Led(LED1_PIN);
     led2 = new Led(LED2_PIN);
     led3 = new Led(LED3_PIN);
