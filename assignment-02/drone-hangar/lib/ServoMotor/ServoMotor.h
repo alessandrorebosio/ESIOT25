@@ -2,7 +2,7 @@
 
 #include <Servo.h>
 
-#include "../../include/devices/Motor.h"
+#include "devices/Motor.h"
 
 class ServoMotor : public Motor {
   private:

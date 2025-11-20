@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../include/devices/ProximitySensor.h"
+#include "devices/ProximitySensor.h"
 
 #define NO_OBJ_DETECTED -1
 

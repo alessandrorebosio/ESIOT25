@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-HWPlatform::HWPlatform() {}
+HWPlatform::HWPlatform() { this->init(); }
 
 void HWPlatform::init() {
     button = new Button(BUTTON_PIN);
