@@ -23,11 +23,11 @@
 
 #define BAUD 9600
 
-#define TEMP_PIN A0
-#define BTN_PIN 2
-#define L3_LED 3
-#define L2_LED 4
-#define L1_LED 5
+#define TEMPERATURE_PIN A0
+#define BUTTON_PIN 2
+#define LED3_PIN 3
+#define LED2_PIN 4
+#define LED1_PIN 5
 #define SERVO_PIN 6
 #define PIR_PIN 7
 #define SONAR_ECHO_PIN 8
@@ -41,5 +41,7 @@
 #define T4 10000
 #define TEMP1 50
 #define TEMP2 50
+
+#define MAXTIME 5000
 
 #endif

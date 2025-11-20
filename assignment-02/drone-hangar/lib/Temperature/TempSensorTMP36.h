@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-#include "Device/TempSensor.h"
+#include "devices/TempSensor.h"
 
 class TempSensorTMP36 : public TempSensor {
   private:

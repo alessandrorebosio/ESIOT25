@@ -3,15 +3,15 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-#include "Device/Motor.h"
+#include "devices/Motor.h"
 
-class MyServo : public Motor {
+class ServoMotor : public Motor {
   private:
     Servo motor;
     uint8_t pin;
 
   public:
-    MyServo(uint8_t pin) : pin(pin) {};
+    ServoMotor(uint8_t pin) : pin(pin) {};
 
     void on() override;
 

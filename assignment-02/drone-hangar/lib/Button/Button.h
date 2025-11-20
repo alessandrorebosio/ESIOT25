@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Device/Switch.h"
+#include "devices/Switch.h"
 
 class Button : public Switch {
   private:

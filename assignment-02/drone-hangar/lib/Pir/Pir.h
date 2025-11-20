@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-#include "Device/PresenceSensor.h"
+#include "devices/PresenceSensor.h"
 
 class Pir : public PresenceSensor {
 

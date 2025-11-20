@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Device/Light.h"
+#include "devices/Light.h"
 
 class Led : public Light {
   private:
