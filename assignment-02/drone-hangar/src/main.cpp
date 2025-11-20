@@ -1,7 +1,14 @@
 #include <Arduino.h>
 
+#include "model/HWPlatform.h"
+
 #include "config.h"
 
-void setup() {}
+HWPlatform *hw;
+
+void setup() {
+    hw = new HWPlatform();
+    hw->init();
+}
 
 void loop() {}

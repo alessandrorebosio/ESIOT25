@@ -1,6 +1,7 @@
-#pragma once
+#ifndef LED_H
+#define LED_H
 
-#include "Device/Light.h"
+#include "../../include/devices/Light.h"
 
 class Led : public Light {
   private:
@@ -15,3 +16,5 @@ class Led : public Light {
 
     void off() override;
 };
+
+#endif

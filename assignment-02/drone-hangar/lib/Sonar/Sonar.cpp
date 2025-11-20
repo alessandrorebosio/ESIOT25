@@ -27,3 +27,16 @@ float Sonar::getDistance() {
         return d;
     }
 }
+
+void Sonar::begin() {
+    pinMode(this->trigPin, OUTPUT);
+    pinMode(this->echoPin, INPUT);
+}
+
+int Sonar::equals(int value) {
+    float d = this->getDistance();
+    if (d == NO_OBJ_DETECTED) {
+        return 0;
+    }
+    return (int)d == value;
+}

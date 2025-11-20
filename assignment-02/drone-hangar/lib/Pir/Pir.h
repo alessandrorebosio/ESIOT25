@@ -1,8 +1,6 @@
 #pragma once
 
-#include <Arduino.h>
-
-#include "Device/PresenceSensor.h"
+#include "../../include/devices/PresenceSensor.h"
 
 class Pir : public PresenceSensor {
 

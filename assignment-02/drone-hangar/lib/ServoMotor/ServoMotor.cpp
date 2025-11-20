@@ -1,10 +1,10 @@
 #include <ServoMotor.h>
 
-void MyServo::on() { motor.attach(this->pin); }
+void ServoMotor::on() { motor.attach(this->pin); }
 
-void MyServo::off() { motor.detach(); }
+void ServoMotor::off() { motor.detach(); }
 
-void MyServo::setPosition(int angle) {
+void ServoMotor::setPosition(int angle) {
     if (angle > 180) {
         angle = 180;
     } else if (angle < 0) {
