@@ -9,6 +9,8 @@
 
 #include "config.h"
 
+HWPlatform::HWPlatform() {}
+
 void HWPlatform::init() {
     button = new Button(BUTTON_PIN);
     led1 = new Led(LED1_PIN);
