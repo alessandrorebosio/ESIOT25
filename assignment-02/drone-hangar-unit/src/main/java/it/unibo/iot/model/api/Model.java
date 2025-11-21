@@ -1,5 +1,8 @@
 package it.unibo.iot.model.api;
 
+import it.unibo.iot.common.SystemState;
+import it.unibo.iot.model.api.states.AppState;
+
 /**
  * Interface representing the application model.
  * Defines methods to manage the running state of the application.
@@ -25,5 +28,11 @@ public interface Model {
      * @return true if the model is running, false otherwise
      */
     boolean isRunning();
+
+    void changeState(AppState newState);
+
+    void handle(SystemState state);
+
+    SystemState getState();
 
 }
