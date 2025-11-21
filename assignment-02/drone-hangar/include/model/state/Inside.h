@@ -9,7 +9,5 @@ class Inside : public State<HWPlatform> {
 
     void onExit(HWPlatform &hw) override;
 
-    void update(HWPlatform &hw) override;
-
     String toString();
 };

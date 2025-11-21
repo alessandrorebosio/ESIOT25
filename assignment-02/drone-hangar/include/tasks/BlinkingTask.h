@@ -12,7 +12,7 @@ class BlinkingTask : public Task {
     BlinkingTask(Light *led) : led(led) {
     }
 
-    BlinkingTask(Light *led, int period) : led(led) {
+    BlinkingTask(Light *led, int period) : BlinkingTask(led) {
         this->init(period);
     }
 

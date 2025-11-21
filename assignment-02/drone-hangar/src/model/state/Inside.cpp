@@ -8,9 +8,6 @@ void Inside::onEntry(HWPlatform &hw) {
 void Inside::onExit(HWPlatform &hw) {
 }
 
-void Inside::update(HWPlatform &hw) {
-}
-
 String Inside::toString() {
     return "Drone Inside";
 }

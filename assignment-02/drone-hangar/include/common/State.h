@@ -7,6 +7,4 @@ template <typename T> class State {
     virtual void onEntry(T &t) = 0;
 
     virtual void onExit(T &t) = 0;
-
-    virtual void update(T &t) = 0;
 };

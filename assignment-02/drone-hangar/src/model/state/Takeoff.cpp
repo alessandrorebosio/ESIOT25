@@ -7,9 +7,6 @@ void Takeoff::onEntry(HWPlatform &hw) {
 void Takeoff::onExit(HWPlatform &hw) {
 }
 
-void Takeoff::update(HWPlatform &hw) {
-}
-
 String Takeoff::toString() {
     return "Takeoff";
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Arduino.h>
-#include <Lcd.h>
 
 #include "devices/Light.h"
 #include "devices/Motor.h"
@@ -9,6 +8,9 @@
 #include "devices/ProximitySensor.h"
 #include "devices/Switch.h"
 #include "devices/TempSensor.h"
+#include <Lcd.h>
+
+#include "common/State.h"
 
 class HWPlatform {
   private:
@@ -21,6 +23,8 @@ class HWPlatform {
     Motor *motor;
     ProximitySensor *sonar;
     TempSensor *tempSensor;
+
+    State<HWPlatform> *state;
 
   public:
     HWPlatform();
@@ -35,9 +39,11 @@ class HWPlatform {
 
     bool isButtonPressed();
 
+    void changeState(State<HWPlatform> *newState);
+
     void ledOffs();
 
     void printOnLcd(String text);
-    
-    Light* getLed(uint8_t index);
+
+    Light *getLed(uint8_t index);
 };

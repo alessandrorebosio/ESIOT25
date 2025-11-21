@@ -3,7 +3,7 @@
 #include "common/State.h"
 #include "model/HWPlatform.h"
 
-class Takeoff : public State<HWPlatform> {
+class Outside : public State<HWPlatform> {
   public:
     void onEntry(HWPlatform &hw) override;
 

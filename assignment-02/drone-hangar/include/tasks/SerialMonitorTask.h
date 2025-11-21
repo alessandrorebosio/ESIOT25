@@ -10,7 +10,7 @@ class SerialMonitorTask : public Task {
     SerialMonitorTask(const int baud) : baud(baud) {
     }
 
-    SerialMonitorTask(const int baud, const int period) : baud(baud) {
+    SerialMonitorTask(const int baud, const int period) : SerialMonitorTask(baud) {
         this->init(period);
     }
 
