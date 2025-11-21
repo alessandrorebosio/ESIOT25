@@ -3,7 +3,7 @@
 #include "Task.h"
 #include "devices/Light.h"
 
-class BlinkingTask : public Task {
+class BlinkingTask final : public Task {
   private:
     Light *led;
     bool isOn;

@@ -4,7 +4,7 @@
 
 #define MAX_TASKS 50
 
-class Scheduler {
+class Scheduler final {
   private:
     Task *taskList[MAX_TASKS];
 

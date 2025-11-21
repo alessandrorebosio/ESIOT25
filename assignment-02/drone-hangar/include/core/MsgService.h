@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-class MsgSerivce {
+class MsgSerivce final {
   private:
     unsigned short baud;
 
