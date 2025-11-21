@@ -1,6 +1,8 @@
 #include "TempSensorTMP36.h"
 
-void TempSensorTMP36::begin() { pinMode(this->pin, INPUT); }
+void TempSensorTMP36::begin() {
+    pinMode(this->pin, INPUT);
+}
 
 float TempSensorTMP36::getTemperature() {
     float values[5];

@@ -7,7 +7,9 @@ class Led : public Light {
     uint8_t pin;
 
   public:
-    Led(uint8_t pin) : pin(pin) { this->begin(); }
+    Led(uint8_t pin) : pin(pin) {
+        this->begin();
+    }
 
     void begin() override;
 

@@ -27,9 +27,15 @@ class Task {
         }
     }
 
-    void setPeriod(const int period) { this->period = period; }
+    void setPeriod(const int period) {
+        this->period = period;
+    }
 
-    bool isActive() { return active; }
+    bool isActive() {
+        return active;
+    }
 
-    void setActive(const bool active) { this->active = active; }
+    void setActive(const bool active) {
+        this->active = active;
+    }
 };

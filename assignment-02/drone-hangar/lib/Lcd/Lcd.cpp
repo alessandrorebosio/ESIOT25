@@ -19,4 +19,6 @@ void Lcd::setCursor(const uint8_t x, const uint8_t y) {
     this->lcd->setCursor(x, y);
 }
 
-void Lcd::clear() { this->lcd->clear(); }
+void Lcd::clear() {
+    this->lcd->clear();
+}

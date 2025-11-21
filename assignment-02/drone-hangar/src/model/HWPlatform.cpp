@@ -9,7 +9,9 @@
 
 #include "config.h"
 
-HWPlatform::HWPlatform() { this->init(); }
+HWPlatform::HWPlatform() {
+    this->init();
+}
 
 void HWPlatform::init() {
     button = new Button(BUTTON_PIN);
@@ -32,8 +34,14 @@ float HWPlatform::getDistance() {
     return this->sonar->getDistance();
 }
 
-bool HWPlatform::isDetected() { return this->pir->isDetected(); }
+bool HWPlatform::isDetected() {
+    return this->pir->isDetected();
+}
 
-bool HWPlatform::isButtonPressed() { return this->button->isPressed(); }
+bool HWPlatform::isButtonPressed() {
+    return this->button->isPressed();
+}
 
-void HWPlatform::printOnLcd(const String text) { this->lcd->print(text); }
+void HWPlatform::printOnLcd(const String text) {
+    this->lcd->print(text);
+}

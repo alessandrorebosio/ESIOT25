@@ -7,7 +7,9 @@ class TempSensorTMP36 : public TempSensor {
     uint8_t pin;
 
   public:
-    TempSensorTMP36(const uint8_t pin) : pin(pin) { this->begin(); }
+    TempSensorTMP36(const uint8_t pin) : pin(pin) {
+        this->begin();
+    }
 
     void begin();
 

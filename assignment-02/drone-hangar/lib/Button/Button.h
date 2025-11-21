@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include "devices/Switch.h"
 
@@ -10,7 +10,9 @@ class Button : public Switch {
     uint8_t pin;
 
   public:
-    Button(const uint8_t pin) : pin(pin) { this->begin(); }
+    Button(const uint8_t pin) : pin(pin) {
+        this->begin();
+    }
 
     void begin() override;
 

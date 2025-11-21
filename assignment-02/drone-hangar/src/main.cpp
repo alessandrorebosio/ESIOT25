@@ -15,4 +15,6 @@ void setup() {
     scheduler.addTask(new SerialMonitorTask(BAUD, 100));
 }
 
-void loop() { scheduler.schedule(); }
+void loop() {
+    scheduler.schedule();
+}

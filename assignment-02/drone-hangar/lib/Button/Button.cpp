@@ -2,7 +2,9 @@
 
 #define DEBOUNCE_TIME 50
 
-void Button::begin() { pinMode(this->pin, INPUT); }
+void Button::begin() {
+    pinMode(this->pin, INPUT);
+}
 
 bool Button::isPressed() {
     unsigned long currentTime = millis();

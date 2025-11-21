@@ -7,7 +7,9 @@ void Sonar::setTemperature(const float temperature) {
     this->temperature = temperature;
 }
 
-float Sonar::getSoundSpeed() { return 331.5 + 0.6 * this->temperature; }
+float Sonar::getSoundSpeed() {
+    return 331.5 + 0.6 * this->temperature;
+}
 
 float Sonar::getDistance() {
     digitalWrite(this->trigPin, LOW);

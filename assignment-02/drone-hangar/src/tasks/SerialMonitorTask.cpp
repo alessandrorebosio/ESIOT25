@@ -5,9 +5,13 @@ void SerialMonitorTask::init(const int period) {
     Serial.begin(this->baud);
 }
 
-void SerialMonitorTask::tick() { Serial.print("TODO"); }
+void SerialMonitorTask::tick() {
+    Serial.print("TODO");
+}
 
-bool SerialMonitorTask::isMsgAvailable() { return Serial.available() > 0; }
+bool SerialMonitorTask::isMsgAvailable() {
+    return Serial.available() > 0;
+}
 
 String SerialMonitorTask::getMsg() {
     String msg = "";
