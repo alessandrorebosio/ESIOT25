@@ -35,4 +35,14 @@ class HWPlatform {
     HWPlatform();
 
     void init();
+
+    float getTemperature();
+
+    float getDistance();
+
+    bool isDetected();
+
+    bool isButtonPressed();
+
+    void printOnLcd(String text);
 };

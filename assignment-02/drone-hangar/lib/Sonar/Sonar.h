@@ -21,7 +21,7 @@ class Sonar : public ProximitySensor {
 
     void begin() override;
 
-    void setTemperature(const float temperature);
+    void setTemperature(const float temperature) override;
 
     float getDistance() override;
 

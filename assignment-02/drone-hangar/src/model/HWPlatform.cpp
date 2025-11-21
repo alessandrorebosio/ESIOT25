@@ -22,3 +22,18 @@ void HWPlatform::init() {
     sonar = new Sonar(SONAR_TRIG_PIN, SONAR_ECHO_PIN, MAXTIME);
     tempSensor = new TempSensorTMP36(TEMPERATURE_PIN);
 }
+
+float HWPlatform::getTemperature() {
+    return this->tempSensor->getTemperature();
+}
+
+float HWPlatform::getDistance() {
+    this->sonar->setTemperature(this->getTemperature());
+    return this->sonar->getDistance();
+}
+
+bool HWPlatform::isDetected() { return this->pir->isDetected(); }
+
+bool HWPlatform::isButtonPressed() { return this->button->isPressed(); }
+
+void HWPlatform::printOnLcd(const String text) { this->lcd->print(text); }
