@@ -2,14 +2,15 @@ package it.unibo.iot.common;
 
 /**
  * Represents a generic state in a state machine or state pattern.
+ * 
  * <p>
  * Implementations can define behavior for entering, exiting, and updating the
  * state. The type parameter {@code T} represents the context or owner of the
  * state.
  * </p>
  *
- * @param <T> the type of the context or owner associated with this state
  * @author Alessandro Rebosio
+ * @param <T> the type of the context or owner associated with this state
  */
 public interface State<T> {
 

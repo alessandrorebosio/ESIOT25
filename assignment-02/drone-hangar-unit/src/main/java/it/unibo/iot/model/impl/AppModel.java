@@ -5,6 +5,7 @@ import java.util.Objects;
 import it.unibo.iot.common.SystemState;
 import it.unibo.iot.model.api.Model;
 import it.unibo.iot.model.api.states.AppState;
+import it.unibo.iot.model.impl.states.normal.NormalState;
 
 /**
  * Simple implementation of the Model interface that maintains a running state.
@@ -15,7 +16,8 @@ import it.unibo.iot.model.api.states.AppState;
  */
 public class AppModel implements Model {
 
-    private AppState state;
+    /** The current application state; initialized to a safe default. */
+    private AppState state = new NormalState();
 
     private volatile boolean running;
 
@@ -45,20 +47,30 @@ public class AppModel implements Model {
         return this.running;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void changeState(AppState newState) {
+    public void changeState(final AppState newState) {
+        final AppState ns = Objects.requireNonNull(newState, "The new state cannot be null.");
         if (this.state != null) {
-            this.state.onEnter(this);
+            this.state.onExit(this);
         }
-        this.state = Objects.requireNonNull(newState, "The new state cannot be null.");
-        this.state.onExit(this);
+        this.state = ns;
+        this.state.onEnter(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void handle(final SystemState state) {
-        this.state.handle(this, state);
+    public void handle(final SystemState systemState) {
+        this.state.handle(this, systemState);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SystemState getState() {
         return this.state.getStateType();
