@@ -6,15 +6,15 @@ import it.unibo.iot.model.api.states.AppState;
 public abstract class AbstractAppState implements AppState {
 
     @Override
-    public void onEnter(Model t) {
+    public void onEnter(final Model t) {
     }
 
     @Override
-    public void onExit(Model t) {
+    public void onExit(final Model t) {
     }
 
     @Override
-    public void update(Model t, float deltaTime) {
+    public void update(final Model t, final float deltaTime) {
     }
 
 }
