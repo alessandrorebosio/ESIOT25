@@ -6,7 +6,7 @@ void SerialMonitorTask::init(const int period) {
 }
 
 void SerialMonitorTask::tick() {
-    Serial.print("TODO");
+    Serial.println("TODO");
 }
 
 bool SerialMonitorTask::isMsgAvailable() {

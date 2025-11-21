@@ -1,7 +1,5 @@
 #include "model/HWPlatform.h"
 
-#include "model/state/Inside.h"
-
 #include <Button.h>
 #include <Led.h>
 #include <Pir.h>
@@ -25,8 +23,6 @@ void HWPlatform::init() {
     this->motor = new ServoMotor(SERVO_PIN);
     this->sonar = new Sonar(SONAR_TRIG_PIN, SONAR_ECHO_PIN, MAXTIME);
     this->tempSensor = new TempSensorTMP36(TEMPERATURE_PIN);
-
-    this->state = new Inside();
 }
 
 float HWPlatform::getTemperature() {
@@ -54,4 +50,17 @@ void HWPlatform::ledOffs() {
 
 void HWPlatform::printOnLcd(const String text) {
     this->lcd->print(text);
+}
+
+Light *HWPlatform::getLed(uint8_t index) {
+    switch (index) {
+        case 0:
+            return this->led1;
+        case 1:
+            return this->led2;
+        case 2:
+            return this->led3;
+        default:
+            return new Led(LED_BUILTIN);
+    }
 }

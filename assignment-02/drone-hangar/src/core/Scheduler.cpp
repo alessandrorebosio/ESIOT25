@@ -11,8 +11,7 @@ void timerHandler(void) {
 void Scheduler::init(int basePeriod) {
     this->basePeriod = basePeriod;
     timerFlag = false;
-    long period = 10001 * basePeriod;
-    Timer1.initialize(period);
+    Timer1.initialize((unsigned long)basePeriod * 1000UL);
     Timer1.attachInterrupt(timerHandler);
     nTasks = 0;
 }

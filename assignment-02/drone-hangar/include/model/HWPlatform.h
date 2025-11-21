@@ -3,8 +3,6 @@
 #include <Arduino.h>
 #include <Lcd.h>
 
-#include "common/State.h"
-
 #include "devices/Light.h"
 #include "devices/Motor.h"
 #include "devices/PresenceSensor.h"
@@ -24,8 +22,6 @@ class HWPlatform {
     ProximitySensor *sonar;
     TempSensor *tempSensor;
 
-    State<HWPlatform> *state;
-
   public:
     HWPlatform();
 
@@ -42,4 +38,6 @@ class HWPlatform {
     void ledOffs();
 
     void printOnLcd(String text);
+    
+    Light* getLed(uint8_t index);
 };
