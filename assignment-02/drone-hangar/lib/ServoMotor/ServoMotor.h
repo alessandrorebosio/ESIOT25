@@ -4,7 +4,7 @@
 
 #include "devices/Motor.h"
 
-class ServoMotor : public Motor {
+class ServoMotor final : public Motor {
   private:
     Servo motor;
 

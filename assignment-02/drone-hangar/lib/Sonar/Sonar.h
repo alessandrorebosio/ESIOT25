@@ -3,7 +3,7 @@
 #include "devices/Device.h"
 #include "devices/ProximitySensor.h"
 
-class Sonar : public ProximitySensor {
+class Sonar final: public ProximitySensor {
   private:
     Device trig, echo;
     float temperature;

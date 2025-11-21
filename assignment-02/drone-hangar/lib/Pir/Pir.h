@@ -2,7 +2,7 @@
 
 #include "devices/PresenceSensor.h"
 
-class Pir : public PresenceSensor {
+class Pir final : public PresenceSensor {
   public:
     explicit Pir(const uint8_t pin);
 
