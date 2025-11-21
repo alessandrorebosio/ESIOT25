@@ -1,24 +1,20 @@
 #pragma once
 
-#include "SerialMonitorTask.h"
 #include "Task.h"
 #include "model/HWPlatform.h"
 
 class HangarControlTask : public Task {
   private:
     HWPlatform *hw;
-    SerialMonitorTask *serialMonitor;
 
     enum { WAITING } state;
 
   public:
-    HangarControlTask(HWPlatform *hw, SerialMonitorTask *serialMonitor)
-        : hw(hw), serialMonitor(serialMonitor) {
+    HangarControlTask(HWPlatform *hw) : hw(hw) {
     }
 
-    HangarControlTask(HWPlatform *hw, SerialMonitorTask *serialMonitor,
-                      const int period)
-        : HangarControlTask(hw, serialMonitor) {
+    HangarControlTask(HWPlatform *hw, const int period)
+        : HangarControlTask(hw) {
         this->init(period);
     }
 
