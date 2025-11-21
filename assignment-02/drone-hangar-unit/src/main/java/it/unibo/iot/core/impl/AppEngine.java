@@ -33,6 +33,8 @@ public class AppEngine implements Engine {
         this.view = Objects.requireNonNull(view, "The view cannot be null.");
 
         this.view.setOnClose(this.controller::stop);
+        this.view.setEventListener(this.controller::onEvent);
+        this.view.initialize();
     }
 
     /**
