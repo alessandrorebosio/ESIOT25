@@ -7,7 +7,7 @@ package it.unibo.iot.model.api;
  * @author Alessandro Rebosio
  * @since 1.0
  */
-public interface Model extends DroneModel {
+public interface Model extends HangarModel {
 
     /**
      * Starts the model and sets it to running state.
@@ -26,10 +26,4 @@ public interface Model extends DroneModel {
      */
     boolean isRunning();
 
-    /**
-     * Registers a listener that will receive outgoing command strings.
-     *
-     * @param cmd a consumer receiving command messages
-     */
-    void setCommandSender(CommandSender cmd);
 }

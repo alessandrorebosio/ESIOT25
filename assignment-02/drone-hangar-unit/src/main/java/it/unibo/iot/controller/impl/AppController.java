@@ -5,7 +5,6 @@ import java.util.Objects;
 import it.unibo.iot.controller.api.Controller;
 import it.unibo.iot.controller.api.serial.Connection;
 import it.unibo.iot.controller.impl.serial.SerialConnection;
-import it.unibo.iot.model.api.Event;
 import it.unibo.iot.model.api.Model;
 import it.unibo.iot.model.impl.AppModel;
 
@@ -48,8 +47,6 @@ public class AppController implements Controller {
         this.connection = new SerialConnection();
 
         this.baudrate = baudrate;
-
-        this.model.setCommandSender(connection::send);
     }
 
     /**
@@ -79,14 +76,6 @@ public class AppController implements Controller {
         if (this.connection.isConnected()) {
             this.connection.receive().ifPresent(System.out::println);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onEvent(final Event event) {
-        this.model.handle(event);
     }
 
     /**

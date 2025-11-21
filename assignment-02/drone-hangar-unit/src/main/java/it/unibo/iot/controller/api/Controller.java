@@ -1,7 +1,5 @@
 package it.unibo.iot.controller.api;
 
-import it.unibo.iot.model.api.Event;
-
 /**
  * Interface representing a controller that manages the application state.
  * Provides methods to check if the controller is running, start it, and stop
@@ -35,10 +33,4 @@ public interface Controller {
      */
     boolean isRunning();
 
-    /**
-     * Handles an incoming event.
-     * 
-     * @param event the incoming event
-     */
-    void onEvent(Event event);
 }

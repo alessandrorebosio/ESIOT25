@@ -1,12 +1,11 @@
 package it.unibo.iot.model.impl;
 
-import it.unibo.iot.model.api.CommandSender;
-import it.unibo.iot.model.api.Event;
+import java.util.Objects;
+
 import it.unibo.iot.model.api.Model;
-import it.unibo.iot.model.api.states.DroneState;
-import it.unibo.iot.model.impl.states.AlarmState;
-import it.unibo.iot.model.impl.states.DroneInsideState;
-import it.unibo.iot.model.impl.states.PreAlarmState;
+import it.unibo.iot.model.api.device.Device;
+import it.unibo.iot.model.api.states.AppState;
+import it.unibo.iot.model.impl.drone.Drone;
 
 /**
  * Simple implementation of the Model interface that maintains a running state.
@@ -17,20 +16,21 @@ import it.unibo.iot.model.impl.states.PreAlarmState;
  */
 public class AppModel implements Model {
 
+    private final Device device;
+    private AppState state;
+
     private volatile boolean running;
-
-    private DroneState currentState;
-    private DroneState previousState;
-
-    private CommandSender commandSender = cmd -> { };
 
     /**
      * Creates a new application model and initializes the drone
      * finite-state machine in the default state {@code DroneInsideState}.
      */
     public AppModel() {
-        this.currentState = new DroneInsideState();
-        this.previousState = this.currentState;
+        this(new Drone());
+    }
+
+    public AppModel(final Device device) {
+        this.device = Objects.requireNonNull(device, "The device cannot be null.");
     }
 
     /**
@@ -40,7 +40,7 @@ public class AppModel implements Model {
     @Override
     public void start() {
         this.running = true;
-        this.currentState.onEnter(this);
+        this.state.onEnter(this);
     }
 
     /**
@@ -50,7 +50,7 @@ public class AppModel implements Model {
     @Override
     public void stop() {
         this.running = false;
-        this.currentState.onExit(this);
+        this.state.onExit(this);
     }
 
     /**
@@ -65,52 +65,20 @@ public class AppModel implements Model {
      * {@inheritDoc}
      */
     @Override
-    public void handle(final Event event) {
-        this.currentState.handle(this, event);
+    public String getAppState() {
+        return this.state.toString();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setState(final DroneState newState) {
-        if (!(newState instanceof PreAlarmState) && !(newState instanceof AlarmState)) {
-            this.previousState = newState;
+    public void changeState(final AppState newState) {
+        if (this.state != null) {
+            this.state.onExit(this);
         }
-        this.currentState.onExit(this);
-        this.currentState = newState;
-        this.currentState.onEnter(this);
+        this.state = newState;
+        this.state.onEnter(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getCurrentState() {
-        return this.currentState.toString();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public DroneState getPreviousState() {
-        return this.previousState;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setCommandSender(final CommandSender cmd) {
-        this.commandSender = cmd;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void sendCommand(final String cmd) {
-        this.commandSender.send(cmd);
-    }
 }
