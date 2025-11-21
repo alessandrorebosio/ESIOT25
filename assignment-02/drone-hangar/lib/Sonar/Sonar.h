@@ -1,29 +1,22 @@
 #pragma once
 
+#include "devices/Device.h"
 #include "devices/ProximitySensor.h"
-
-#define NO_OBJ_DETECTED -1
 
 class Sonar : public ProximitySensor {
   private:
-    uint8_t trigPin, echoPin;
+    Device trig, echo;
     float temperature;
     long timeOut;
 
     float getSoundSpeed();
 
   public:
-    Sonar(uint8_t trigPin, uint8_t echoPin, long maxTime)
-        : trigPin(trigPin), echoPin(echoPin), timeOut(maxTime) {
-        this->temperature = 20;
-        this->begin();
-    }
+    Sonar(uint8_t trigPin, uint8_t echoPin, long maxTime);
 
     void begin() override;
 
     void setTemperature(const float temperature) override;
 
     float getDistance() override;
-
-    int equals(int value) override;
 };

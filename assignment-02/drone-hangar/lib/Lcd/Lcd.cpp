@@ -1,7 +1,5 @@
 #include "Lcd.h"
 
-#define ADDR 0x27
-
 Lcd::Lcd(const uint8_t address, const uint8_t cols, const uint8_t rows) {
     this->lcd = new LiquidCrystal_I2C(address, cols, rows);
     this->lcd->init();

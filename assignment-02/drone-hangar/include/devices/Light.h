@@ -1,10 +1,11 @@
 #pragma once
 
-#include <Arduino.h>
+#include "Device.h"
 
-class Light {
+class Light : public Device {
   public:
-    virtual void begin() = 0;
+    explicit Light(uint8_t pin) : Device(pin) {
+    }
 
     virtual void on() = 0;
 

@@ -1,7 +1,19 @@
 #include "Sonar.h"
 
+#define NO_OBJ_DETECTED -1
+
 #define DELAY1 3
 #define DELAY2 5
+
+Sonar::Sonar(uint8_t trigPin, uint8_t echoPin, long maxTime)
+    : trig(trigPin), echo(echoPin), temperature(20.0f), timeOut(maxTime) {
+    this->begin();
+}
+
+void Sonar::begin() {
+    trig.begin(OUTPUT);
+    echo.begin(INPUT);
+}
 
 void Sonar::setTemperature(const float temperature) {
     this->temperature = temperature;
@@ -12,13 +24,13 @@ float Sonar::getSoundSpeed() {
 }
 
 float Sonar::getDistance() {
-    digitalWrite(this->trigPin, LOW);
+    trig.write(LOW);
     delayMicroseconds(DELAY1);
-    digitalWrite(this->trigPin, HIGH);
+    trig.write(HIGH);
     delayMicroseconds(DELAY2);
-    digitalWrite(this->trigPin, LOW);
+    trig.write(LOW);
 
-    float tUS = pulseIn(this->echoPin, HIGH, this->timeOut);
+    float tUS = pulseIn(this->echo.getPin(), HIGH, this->timeOut);
     if (tUS == 0) {
         return NO_OBJ_DETECTED;
     } else {
@@ -26,17 +38,4 @@ float Sonar::getDistance() {
         float d = t * getSoundSpeed();
         return d;
     }
-}
-
-void Sonar::begin() {
-    pinMode(this->trigPin, OUTPUT);
-    pinMode(this->echoPin, INPUT);
-}
-
-int Sonar::equals(int value) {
-    float d = this->getDistance();
-    if (d == NO_OBJ_DETECTED) {
-        return 0;
-    }
-    return (int)d == value;
 }

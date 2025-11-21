@@ -1,7 +1,7 @@
 #include "TempSensorTMP36.h"
 
-void TempSensorTMP36::begin() {
-    pinMode(this->pin, INPUT);
+TempSensorTMP36::TempSensorTMP36(const uint8_t pin) : TempSensor(pin) {
+    Device::begin(INPUT);
 }
 
 float TempSensorTMP36::getTemperature() {

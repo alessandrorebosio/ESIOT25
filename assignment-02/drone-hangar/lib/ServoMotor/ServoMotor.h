@@ -7,14 +7,13 @@
 class ServoMotor : public Motor {
   private:
     Servo motor;
-    uint8_t pin;
 
   public:
-    ServoMotor(uint8_t pin) : pin(pin) {};
+    explicit ServoMotor(uint8_t pin);
 
     void on() override;
 
     void off() override;
 
-    void setPosition(int angle) override;
+    void setPosition(short angle) override;
 };
