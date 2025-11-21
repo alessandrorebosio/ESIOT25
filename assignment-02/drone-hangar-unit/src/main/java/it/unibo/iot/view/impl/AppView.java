@@ -1,20 +1,13 @@
 package it.unibo.iot.view.impl;
 
-import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.Serial;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import it.unibo.iot.model.api.Event;
 import it.unibo.iot.view.api.View;
@@ -28,21 +21,10 @@ import it.unibo.iot.view.api.View;
  */
 public class AppView extends JFrame implements View {
 
-    private static final Map<String, Event> BUTTON_CONFIG = new LinkedHashMap<>();
-
-    static {
-        BUTTON_CONFIG.put("TAKE OFF", Event.TAKEOFF);
-        BUTTON_CONFIG.put("LANDING", Event.LANDING);
-        BUTTON_CONFIG.put("RESET", Event.RESET);
-    }
-
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private static final int BUTTON_SPACING = 10;
-    private static final int PANEL_PADDING = 15;
-    private static final int BUTTON_WIDTH = 200;
-    private static final int BUTTON_HEIGHT = 30;
+    private final ControlPanel panel;
 
     private transient Optional<Runnable> onClose = Optional.empty();
     private transient Optional<Consumer<Event>> listener = Optional.empty();
@@ -53,6 +35,7 @@ public class AppView extends JFrame implements View {
      */
     public AppView() {
         super("Drone Hangar Unit");
+        this.panel = new ControlPanel();
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
@@ -61,8 +44,8 @@ public class AppView extends JFrame implements View {
      */
     @Override
     public void initialize() {
-        final JPanel panel = buildPanel();
         this.add(panel);
+        this.panel.setActionListener(this::handleAction);
 
         super.addWindowListener(new WindowAdapter() {
             @Override
@@ -76,21 +59,13 @@ public class AppView extends JFrame implements View {
         super.setVisible(true);
     }
 
-    private JPanel buildPanel() {
-        final JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(PANEL_PADDING, PANEL_PADDING, PANEL_PADDING, PANEL_PADDING));
-
-        BUTTON_CONFIG.forEach((label, event) -> {
-            final JButton btn = new JButton(label);
-            btn.setMaximumSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-            btn.setAlignmentX(CENTER_ALIGNMENT);
-            btn.addActionListener(e -> listener.ifPresent(l -> l.accept(event)));
-            panel.add(btn);
-            panel.add(Box.createRigidArea(new Dimension(0, BUTTON_SPACING)));
-        });
-
-        return panel;
+    private void handleAction(final ActionEvent e) {
+        final String cmd = e.getActionCommand();
+        switch (cmd) {
+            case "TAKEOFF" -> listener.ifPresent(l -> l.accept(Event.TAKEOFF));
+            case "LANDING" -> listener.ifPresent(l -> l.accept(Event.LANDING));
+            default -> { }
+        }
     }
 
     /**
