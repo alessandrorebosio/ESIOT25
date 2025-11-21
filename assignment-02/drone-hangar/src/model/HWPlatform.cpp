@@ -1,5 +1,7 @@
 #include "model/HWPlatform.h"
 
+#include "model/state/Inside.h"
+
 #include <Button.h>
 #include <Led.h>
 #include <Pir.h>
@@ -14,15 +16,17 @@ HWPlatform::HWPlatform() {
 }
 
 void HWPlatform::init() {
-    button = new Button(BUTTON_PIN);
-    lcd = new Lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);
-    led1 = new Led(LED1_PIN);
-    led2 = new Led(LED2_PIN);
-    led3 = new Led(LED3_PIN);
-    pir = new Pir(PIR_PIN);
-    motor = new ServoMotor(SERVO_PIN);
-    sonar = new Sonar(SONAR_TRIG_PIN, SONAR_ECHO_PIN, MAXTIME);
-    tempSensor = new TempSensorTMP36(TEMPERATURE_PIN);
+    this->button = new Button(BUTTON_PIN);
+    this->lcd = new Lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);
+    this->led1 = new Led(LED1_PIN);
+    this->led2 = new Led(LED2_PIN);
+    this->led3 = new Led(LED3_PIN);
+    this->pir = new Pir(PIR_PIN);
+    this->motor = new ServoMotor(SERVO_PIN);
+    this->sonar = new Sonar(SONAR_TRIG_PIN, SONAR_ECHO_PIN, MAXTIME);
+    this->tempSensor = new TempSensorTMP36(TEMPERATURE_PIN);
+
+    this->state = new Inside();
 }
 
 float HWPlatform::getTemperature() {
@@ -40,6 +44,12 @@ bool HWPlatform::isDetected() {
 
 bool HWPlatform::isButtonPressed() {
     return this->button->isPressed();
+}
+
+void HWPlatform::ledOffs() {
+    this->led1->off();
+    this->led2->off();
+    this->led3->off();
 }
 
 void HWPlatform::printOnLcd(const String text) {

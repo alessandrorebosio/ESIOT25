@@ -3,19 +3,14 @@
 #include <Arduino.h>
 #include <Lcd.h>
 
+#include "common/State.h"
+
 #include "devices/Light.h"
 #include "devices/Motor.h"
 #include "devices/PresenceSensor.h"
 #include "devices/ProximitySensor.h"
 #include "devices/Switch.h"
 #include "devices/TempSensor.h"
-
-enum State {
-    INSIDE,
-    TAKEOOF,
-    OUTSIDE,
-    LANDING,
-};
 
 class HWPlatform {
   private:
@@ -29,7 +24,7 @@ class HWPlatform {
     ProximitySensor *sonar;
     TempSensor *tempSensor;
 
-    State state;
+    State<HWPlatform> *state;
 
   public:
     HWPlatform();
@@ -43,6 +38,8 @@ class HWPlatform {
     bool isDetected();
 
     bool isButtonPressed();
+
+    void ledOffs();
 
     void printOnLcd(String text);
 };
