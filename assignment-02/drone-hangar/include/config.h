@@ -1,5 +1,7 @@
 #pragma once
 
+#define DEFAULT_PERIOD 100
+
 #define BAUD 9600
 
 #define TEMPERATURE_PIN A0
