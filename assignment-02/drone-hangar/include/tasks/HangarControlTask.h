@@ -5,7 +5,7 @@
 
 #include "Task.h"
 
-class HangarControlTask : public Task {
+class HangarControlTask final : public Task {
   private:
     HWPlatform *hw;
     MsgSerivce *msg;

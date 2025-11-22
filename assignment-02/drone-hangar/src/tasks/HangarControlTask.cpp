@@ -25,25 +25,34 @@ void HangarControlTask::tick() {
             if (this->msg->isMsgAvailable()) {
                 String msg = this->msg->getMsg();
                 if (msg == LANDING_MSG || msg == TAKEOFF_MSG) {
+                    this->hw->printOnLcd(msg);
                     this->state = MANAGE;
                 }
             }
 
-            // TODO: if after T3 [temp > temp1] set PREALARM
+            // TODO: if after T3 [temp > temp1] set PREALARM and msg send
+            // "prealarm"
             break;
 
         case MANAGE:
-            // TODO: openDoor + blinking at the end set NORMAL
+            // TODO: openDoor + blinking
+
+            // TODO: if (d > d1 || d < d2) start count
+            // TODO: after T1 or T2 set NORMAL
+            // and this->hw->printOnLcd("inside" or "outside");
+            // and send msg "inside or ouside"
             break;
 
         case PREALARM:
-            // TODO: if after T4 if [temp > temp2] set ALARM else NORMAL
+            // TODO: if [temp > temp2] after set ALARM and msg send
+            // "alarm" else NORMAL and send msg "normal"
             break;
 
         case ALARM:
             // TODO: doorClose + L3 ON
             if (this->hw->isPressed()) {
                 this->state = NORMAL;
+                this->msg->sendMsg("normal");
                 // TODO: turn off L3
             }
             break;

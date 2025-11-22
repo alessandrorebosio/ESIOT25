@@ -28,3 +28,7 @@ void HWPlatform::init() {
 bool HWPlatform::isPressed() {
     return this->button->isPressed();
 }
+
+void HWPlatform::printOnLcd(const String text) {
+    this->lcd->print(text);
+}
