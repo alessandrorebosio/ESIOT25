@@ -22,9 +22,8 @@ class Task {
         if (timeElapsed >= this->period) {
             timeElapsed = 0;
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     void setPeriod(const int period) {
@@ -32,7 +31,7 @@ class Task {
     }
 
     bool isActive() {
-        return active;
+        return this->active;
     }
 
     void setActive(const bool active) {

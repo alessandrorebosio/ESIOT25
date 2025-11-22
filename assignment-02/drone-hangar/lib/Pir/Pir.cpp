@@ -1,26 +1,15 @@
 #include "Pir.h"
 
-void Pir::begin() {
-    pinMode(this->pin, INPUT);
-}
+#define CALIBRATION_TIME 100000
 
-void Pir::sync() {
-    this->detected = digitalRead(this->pin) == HIGH;
-    this->updateSyncTime(millis());
+Pir::Pir(const uint8_t pin) : PresenceSensor(pin) {
+    Device::begin(INPUT);
 }
 
 bool Pir::isDetected() {
-    return this->detected;
+    return Device::read();
 }
 
 void Pir::calibrate() {
-    delay(10000);
-}
-
-void Pir::updateSyncTime(const long time) {
-    this->lastTimeSync = time;
-}
-
-long Pir::getLastSyncTime() {
-    return this->lastTimeSync;
+    delay(CALIBRATION_TIME);
 }

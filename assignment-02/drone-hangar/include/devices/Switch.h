@@ -1,10 +1,11 @@
 #pragma once
 
-#include <Arduino.h>
+#include "Device.h"
 
-class Switch {
+class Switch : public Device {
   public:
-    virtual void begin() = 0;
+    explicit Switch(uint8_t pin) : Device(pin) {
+    }
 
     virtual bool isPressed() = 0;
 };

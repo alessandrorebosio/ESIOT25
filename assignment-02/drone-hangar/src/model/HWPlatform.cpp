@@ -1,7 +1,5 @@
 #include "model/HWPlatform.h"
 
-#include "model/state/Inside.h"
-
 #include <Button.h>
 #include <Led.h>
 #include <Pir.h>
@@ -25,56 +23,4 @@ void HWPlatform::init() {
     this->motor = new ServoMotor(SERVO_PIN);
     this->sonar = new Sonar(SONAR_TRIG_PIN, SONAR_ECHO_PIN, MAXTIME);
     this->tempSensor = new TempSensorTMP36(TEMPERATURE_PIN);
-
-    this->changeState(new ::Inside);
-}
-
-float HWPlatform::getTemperature() {
-    return this->tempSensor->getTemperature();
-}
-
-float HWPlatform::getDistance() {
-    this->sonar->setTemperature(this->getTemperature());
-    return this->sonar->getDistance();
-}
-
-bool HWPlatform::isDetected() {
-    return this->pir->isDetected();
-}
-
-bool HWPlatform::isButtonPressed() {
-    return this->button->isPressed();
-}
-
-void HWPlatform::changeState(State<HWPlatform> *newState) {
-    if (this->state != nullptr) {
-        this->state->onExit(*this);
-    }
-    this->state = newState;
-    if (this->state != nullptr) {
-        this->state->onEntry(*this);
-    }
-}
-
-void HWPlatform::ledOffs() {
-    this->led1->off();
-    this->led2->off();
-    this->led3->off();
-}
-
-void HWPlatform::printOnLcd(const String text) {
-    this->lcd->print(text);
-}
-
-Light *HWPlatform::getLed(uint8_t index) {
-    switch (index) {
-        case 0:
-            return this->led1;
-        case 1:
-            return this->led2;
-        case 2:
-            return this->led3;
-        default:
-            return new Led(LED_BUILTIN);
-    }
 }

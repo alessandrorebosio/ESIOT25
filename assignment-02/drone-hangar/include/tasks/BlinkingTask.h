@@ -3,18 +3,15 @@
 #include "Task.h"
 #include "devices/Light.h"
 
-class BlinkingTask : public Task {
+class BlinkingTask final : public Task {
   private:
     Light *led;
-    enum { ON, OFF } state;
+    bool isOn;
 
   public:
-    BlinkingTask(Light *led) : led(led) {
-    }
+    explicit BlinkingTask(Light *led);
 
-    BlinkingTask(Light *led, int period) : BlinkingTask(led) {
-        this->init(period);
-    }
+    explicit BlinkingTask(Light *led, int period);
 
     void init(int period);
 

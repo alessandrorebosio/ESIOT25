@@ -1,14 +1,17 @@
-#include <ServoMotor.h>
+#include "ServoMotor.h"
+
+ServoMotor::ServoMotor(const uint8_t pin) : Motor(pin) {
+}
 
 void ServoMotor::on() {
-    motor.attach(this->pin);
+    this->motor.attach(this->pin);
 }
 
 void ServoMotor::off() {
-    motor.detach();
+    this->motor.detach();
 }
 
-void ServoMotor::setPosition(int angle) {
+void ServoMotor::setPosition(short angle) {
     if (angle > 180) {
         angle = 180;
     } else if (angle < 0) {
@@ -18,5 +21,5 @@ void ServoMotor::setPosition(int angle) {
     // 750 + angle*(2250-750)/180
     // updated values: min is 544, max 2400 (see ServoTimer2 doc)
     float coeff = (2400.0 - 544.0) / 180;
-    motor.write(544 + angle * coeff);
+    this->motor.write(544 + angle * coeff);
 }

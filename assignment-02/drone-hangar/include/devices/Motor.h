@@ -1,12 +1,15 @@
 #pragma once
 
-#include <Arduino.h>
+#include "Device.h"
 
-class Motor {
+class Motor : public Device {
   public:
+    explicit Motor(uint8_t pin) : Device(pin) {
+    }
+
     virtual void on() = 0;
 
     virtual void off() = 0;
 
-    virtual void setPosition(int angle) = 0;
+    virtual void setPosition(short angle) = 0;
 };

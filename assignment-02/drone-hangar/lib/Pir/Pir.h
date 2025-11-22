@@ -2,29 +2,11 @@
 
 #include "devices/PresenceSensor.h"
 
-class Pir : public PresenceSensor {
-
-  private:
-    long lastTimeSync;
-    int pin;
-    bool detected;
-
+class Pir final : public PresenceSensor {
   public:
-    Pir(const int pin) : pin(pin) {
-        this->begin();
-        this->calibrate();
-    };
-
-    void begin();
+    explicit Pir(const uint8_t pin);
 
     bool isDetected() override;
 
-    void calibrate();
-
-    void sync();
-
-    long getLastSyncTime();
-
-  protected:
-    void updateSyncTime(long time);
+    void calibrate() override;
 };

@@ -1,8 +1,11 @@
 #pragma once
 
-#include <Arduino.h>
+#include "Device.h"
 
-class TempSensor {
+class TempSensor : public Device {
   public:
+    explicit TempSensor(uint8_t pin) : Device(pin) {
+    }
+
     virtual float getTemperature() = 0;
 };
