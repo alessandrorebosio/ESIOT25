@@ -15,8 +15,6 @@ void setup() {
     hw = new HWPlatform();
 
     scheduler.init(100);
-
-    scheduler.addTask(new BlinkingTask(hw->getLed(-1), 1000));
 }
 
 void loop() {
