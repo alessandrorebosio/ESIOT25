@@ -176,29 +176,46 @@ microcontroller, sensors, actuators, and indicators.
   \label{fig:hangar}
 \end{figure}
 
-\chapter{Diagrams}
-\section{State}
-The state diagram compactly shows the main operating modes of the
-system (\texttt{DRONE INSIDE}, \texttt{TAKE OFF}, \texttt{LANDING},
-\texttt{DRONE OUT}, \texttt{PRE-ALARM}, \texttt{ALARM}) and the
-transitions caused by events such as commands from the \texttt{DRU},
-sensor detections (\texttt{DDD}, \texttt{DPD}), the exceeding of
-temperature thresholds, and the pressing of the \texttt{RESET}
-button. Transitions also indicate temporal conditions and the
-configurable parameters (\texttt{D1}, \texttt{D2}, \texttt{T1},
-\texttt{T2}, \texttt{T3}, \texttt{T4}, \texttt{Temp1}, \texttt{Temp2}).
+\chapter{Architecture}
+The implementation is organized into multiple tasks, each responsible
+for a specific function of the project. A simple scheduler was
+implemented to run these tasks concurrently. The main tasks are described below.
+
+\section{Blinking Task}
+The blinking task controls the LED used for activity indication. It
+implements two states, On and Off. On each invocation the task
+toggles its state and updates the LED output accordingly.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=.9\textwidth]{./pdf/state-diagram.pdf}
-  \caption{System state diagram.}
-  \label{fig:state}
+  \includegraphics[width=\textwidth]{./pdf/BlinkingTask.pdf}
+  \caption{Blinking Task state diagram.}
+  \label{fig:BlinkingTask}
 \end{figure}
+
+\newpage
+\section{Hangar Control Task}
+The state diagram shows the main operating modes of the system:
+\texttt{NORMAL}, \texttt{MANAGE}, \texttt{PRE-ALARM}, and
+\texttt{ALARM}. Transitions are triggered by commands from the
+\texttt{DRU}, sensor events (\texttt{DDD}, \texttt{DPD}), temperature
+thresholds being exceeded, and by pressing the \texttt{RESET} button.
+Temporal conditions and the configurable parameters (\texttt{D1},
+  \texttt{D2}, \texttt{T1}, \texttt{T2}, \texttt{T3}, \texttt{T4},
+\texttt{Temp1}, \texttt{Temp2}) are shown on the transition edges.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./pdf/HangarControlTask.pdf}
+  \caption{Hangar Control Task state diagram.}
+  \label{fig:HangarControlTask}
+\end{figure}
+
+\chapter{Diagrams}
 
 \section{Application class}
 
 \section{Arduino module}
-
 
 \appendix
 \chapter{User Guide}

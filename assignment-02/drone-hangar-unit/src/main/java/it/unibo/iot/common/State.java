@@ -14,14 +14,14 @@ public interface State<T> {
      *
      * @param t the model entering the state
      */
-    void onEnter(final T t);
+    void onEnter(T t);
 
     /**
      * Called when exiting this state.
      *
      * @param t the model leaving the state
      */
-    void onExit(final T t);
+    void onExit(T t);
 
     /**
      * Updates the state logic.
@@ -29,6 +29,6 @@ public interface State<T> {
      * @param t         the context or owner being updated
      * @param deltaTime the time elapsed since the last update (in seconds)
      */
-    void update(final T t, final float deltaTime);
+    void update(T t, float deltaTime);
 
 }

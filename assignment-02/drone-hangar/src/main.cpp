@@ -14,7 +14,7 @@ HWPlatform *hw;
 void setup() {
     hw = new HWPlatform();
 
-    scheduler.init(100);
+    scheduler.init(DEFAULT_PERIOD);
 }
 
 void loop() {
