@@ -26,4 +26,6 @@ class HWPlatform {
     HWPlatform();
 
     void init();
+
+    bool isPressed();
 };

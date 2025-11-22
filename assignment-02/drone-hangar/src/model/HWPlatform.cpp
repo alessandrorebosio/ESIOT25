@@ -24,3 +24,7 @@ void HWPlatform::init() {
     this->sonar = new Sonar(SONAR_TRIG_PIN, SONAR_ECHO_PIN, MAXTIME);
     this->tempSensor = new TempSensorTMP36(TEMPERATURE_PIN);
 }
+
+bool HWPlatform::isPressed() {
+    return this->button->isPressed();
+}
