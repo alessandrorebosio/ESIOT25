@@ -1,7 +1,7 @@
 #include "tasks/HangarControlTask.h"
 
 #define LANDING_MSG "landing"
-#define TAKEOFF_MSG "landing"
+#define TAKEOFF_MSG "takeoff"
 
 HangarControlTask::HangarControlTask(HWPlatform *hw, MsgSerivce *msg)
     : hw(hw), msg(msg) {
