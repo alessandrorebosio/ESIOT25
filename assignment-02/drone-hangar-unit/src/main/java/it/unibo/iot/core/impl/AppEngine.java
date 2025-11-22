@@ -33,7 +33,6 @@ public class AppEngine implements Engine {
         this.view = Objects.requireNonNull(view, "The view cannot be null.");
 
         this.view.setOnClose(this.controller::stop);
-        this.view.initialize();
     }
 
     /**
@@ -48,6 +47,7 @@ public class AppEngine implements Engine {
         while (this.controller.isRunning()) {
             try {
                 this.controller.update();
+                this.view.update();
 
                 Thread.sleep(PERIOD);
             } catch (final InterruptedException e) {

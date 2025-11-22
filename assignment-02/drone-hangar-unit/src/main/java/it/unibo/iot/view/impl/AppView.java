@@ -1,16 +1,15 @@
 package it.unibo.iot.view.impl;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.Serial;
+import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import javax.swing.JFrame;
 
-import it.unibo.iot.model.api.Event;
 import it.unibo.iot.view.api.View;
+import it.unibo.iot.view.impl.panel.ControlPanel;
 
 /**
  * Swing-based implementation of the View interface.
@@ -24,28 +23,17 @@ public class AppView extends JFrame implements View {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final ControlPanel panel;
-
     private transient Optional<Runnable> onClose = Optional.empty();
-    private transient Optional<Consumer<Event>> listener = Optional.empty();
 
     /**
-     * Creates the main application window and dynamically builds
-     * the button panel based on {@link #BUTTON_CONFIG}.
+     * Constructs the application view with default settings.
+     * Sets up window properties and close handling behavior.
      */
     public AppView() {
         super("Drone Hangar Unit");
-        this.panel = new ControlPanel();
-        super.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void initialize() {
-        this.add(panel);
-        this.panel.setActionListener(this::handleAction);
+        super.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        super.add(new ControlPanel());
 
         super.addWindowListener(new WindowAdapter() {
             @Override
@@ -54,18 +42,9 @@ public class AppView extends JFrame implements View {
             }
         });
 
-        super.pack();
         super.setLocationRelativeTo(null);
         super.setVisible(true);
-    }
-
-    private void handleAction(final ActionEvent e) {
-        final String cmd = e.getActionCommand();
-        switch (cmd) {
-            case "TAKEOFF" -> listener.ifPresent(l -> l.accept(Event.TAKEOFF));
-            case "LANDING" -> listener.ifPresent(l -> l.accept(Event.LANDING));
-            default -> { }
-        }
+        super.pack();
     }
 
     /**
@@ -73,15 +52,7 @@ public class AppView extends JFrame implements View {
      */
     @Override
     public void setOnClose(final Runnable onClose) {
-        this.onClose = Optional.of(onClose);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setEventListener(final Consumer<Event> l) {
-        this.listener = Optional.of(l);
+        this.onClose = Optional.ofNullable(onClose);
     }
 
     /**
@@ -94,4 +65,16 @@ public class AppView extends JFrame implements View {
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         this.dispose();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update() {
+        Arrays.stream(super.getContentPane().getComponents())
+                .filter(ControlPanel.class::isInstance)
+                .map(ControlPanel.class::cast)
+                .forEach(ControlPanel::update);
+    }
+
 }

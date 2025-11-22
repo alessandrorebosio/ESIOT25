@@ -1,4 +1,4 @@
-package it.unibo.iot.view.impl;
+package it.unibo.iot.view.impl.panel;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import it.unibo.iot.view.api.panel.Panel;
+
 /**
  * A control panel component containing two labels and three buttons.
  * The entire content is centered both horizontally and vertically.
@@ -24,7 +26,8 @@ import javax.swing.border.EmptyBorder;
  * 
  * @author Grazia Bochdanovits de Kavna
  */
-public final class ControlPanel extends JPanel {
+public final class ControlPanel extends JPanel implements Panel {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -40,7 +43,8 @@ public final class ControlPanel extends JPanel {
     private final JButton landingButton;
 
     /**
-     * Builds a new {@code ControlPanel} with two state labels and three control buttons.
+     * Builds a new {@code ControlPanel} with two state labels and three control
+     * buttons.
      * The layout automatically centers all components inside the parent frame.
      */
     public ControlPanel() {
@@ -95,4 +99,12 @@ public final class ControlPanel extends JPanel {
         this.takeOffButton.addActionListener(listener);
         this.landingButton.addActionListener(listener);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update() {
+    }
+
 }

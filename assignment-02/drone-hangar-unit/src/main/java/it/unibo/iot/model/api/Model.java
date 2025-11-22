@@ -7,7 +7,7 @@ package it.unibo.iot.model.api;
  * @author Alessandro Rebosio
  * @since 1.0
  */
-public interface Model extends HangarModel {
+public interface Model {
 
     /**
      * Starts the model and sets it to running state.
