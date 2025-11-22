@@ -176,6 +176,23 @@ microcontroller, sensors, actuators, and indicators.
   \label{fig:hangar}
 \end{figure}
 
+\chapter{Architecture}
+The implementation is organized into multiple tasks, each responsible
+for a specific function of the project. A simple scheduler was
+implemented to run these tasks concurrently. The main tasks are described below.
+
+\section{Blinking Task}
+The blinking task controls the LED used for activity indication. It
+implements two states, On and Off. On each invocation the task
+toggles its state and updates the LED output accordingly.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./pdf/BlinkingTask.pdf}
+  \caption{Blinking Task state diagram.}
+  \label{fig:BlinkingTask}
+\end{figure}
+
 \chapter{Diagrams}
 \section{State}
 The state diagram compactly shows the main operating modes of the
@@ -190,7 +207,7 @@ configurable parameters (\texttt{D1}, \texttt{D2}, \texttt{T1},
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=.9\textwidth]{./pdf/state-diagram.pdf}
+  \includegraphics[width=\textwidth]{./pdf/state-diagram.pdf}
   \caption{System state diagram.}
   \label{fig:state}
 \end{figure}
@@ -198,7 +215,6 @@ configurable parameters (\texttt{D1}, \texttt{D2}, \texttt{T1},
 \section{Application class}
 
 \section{Arduino module}
-
 
 \appendix
 \chapter{User Guide}
