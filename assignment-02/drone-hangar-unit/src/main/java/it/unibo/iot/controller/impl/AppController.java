@@ -2,7 +2,6 @@ package it.unibo.iot.controller.impl;
 
 import java.util.Objects;
 
-import it.unibo.iot.common.SystemState;
 import it.unibo.iot.controller.api.Controller;
 import it.unibo.iot.controller.api.serial.Connection;
 import it.unibo.iot.controller.impl.serial.SerialConnection;
@@ -21,6 +20,7 @@ public class AppController implements Controller {
     private final Connection connection;
     private final Model model;
     private final String port;
+
     private final int baudrate;
 
     /**
@@ -75,9 +75,7 @@ public class AppController implements Controller {
     @Override
     public void update() {
         if (this.connection.isConnected()) {
-            this.connection.receive()
-                    .map(SystemState::fromStringOrThrow)
-                    .ifPresent(model::handle);
+            this.connection.receive();
         }
     }
 
