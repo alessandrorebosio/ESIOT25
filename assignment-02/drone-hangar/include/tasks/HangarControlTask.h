@@ -2,21 +2,24 @@
 
 #include "core/MsgService.h"
 #include "model/HWPlatform.h"
+#include "model/Context.h"
 
 #include "Task.h"
 
-class HangarControlTask final : public Task {
-  private:
-    HWPlatform *hw;
-    MsgSerivce *msg;
-    enum { NORMAL, MANAGE, PREALARM, ALARM } state;
+class HangarControlTask final : public Task
+{
+private:
+  HWPlatform *hw;
+  MsgSerivce *msg;
+  Context *context;
+  enum { NORMAL, OPERATING, PREALARM, ALARM } state;
 
-  public:
-    explicit HangarControlTask(HWPlatform *hw, MsgSerivce *msg);
+public:
+  explicit HangarControlTask(HWPlatform *hw, MsgSerivce *msg, Context *context);
 
-    explicit HangarControlTask(HWPlatform *hw, MsgSerivce *msg, int period);
+  explicit HangarControlTask(HWPlatform *hw, MsgSerivce *msg, Context *context, int period);
 
-    void init(int period);
+  void init(int period);
 
-    void tick();
+  void tick();
 };
