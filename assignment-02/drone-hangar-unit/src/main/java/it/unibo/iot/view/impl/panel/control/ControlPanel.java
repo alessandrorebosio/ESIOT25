@@ -2,10 +2,14 @@ package it.unibo.iot.view.impl.panel.control;
 
 import java.awt.GridLayout;
 import java.io.Serial;
+import java.util.Locale;
 
 import javax.swing.JButton;
 
 import it.unibo.iot.controller.api.Controller;
+import it.unibo.iot.model.impl.device.states.operating.OperatingDeviceState;
+import it.unibo.iot.model.impl.device.states.rest.RestDeviceState;
+import it.unibo.iot.model.impl.states.normal.NormalSystemState;
 import it.unibo.iot.view.impl.panel.AbstractPanel;
 
 /**
@@ -17,9 +21,6 @@ import it.unibo.iot.view.impl.panel.AbstractPanel;
  * @since 1.0
  */
 public final class ControlPanel extends AbstractPanel {
-
-    private static final int ROWS = 2;
-    private static final int COLS = 1;
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -37,11 +38,10 @@ public final class ControlPanel extends AbstractPanel {
     public ControlPanel(final Controller controller) {
         super(controller, "Drone Control");
 
-        super.setLayout(new GridLayout(ROWS, COLS));
+        super.setLayout(new GridLayout(2, 1));
 
-        this.takeoff.addActionListener(l -> controller.sendMsg(takeoff.getText()));
-
-        this.landing.addActionListener(l -> controller.sendMsg(landing.getText()));
+        this.takeoff.addActionListener(l -> controller.sendMsg(takeoff.getText().toLowerCase(Locale.ROOT)));
+        this.landing.addActionListener(l -> controller.sendMsg(landing.getText().toLowerCase(Locale.ROOT)));
 
         super.add(this.takeoff);
         super.add(this.landing);
@@ -55,8 +55,11 @@ public final class ControlPanel extends AbstractPanel {
      */
     @Override
     protected void update(final Controller controller) {
-        this.takeoff.setEnabled(controller.isConnected());
-        this.landing.setEnabled(controller.isConnected());
+        final boolean base = controller.isConnected()
+                && controller.getSystemState() instanceof NormalSystemState;
+
+        this.takeoff.setEnabled(base && controller.getDeviceState() instanceof RestDeviceState);
+        this.landing.setEnabled(base && controller.getDeviceState() instanceof OperatingDeviceState);
     }
 
 }

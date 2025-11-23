@@ -1,6 +1,8 @@
 package it.unibo.iot.controller.impl.serial;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
@@ -41,7 +43,7 @@ public class SerialConnection implements Connection {
      * received data and will attempt to open the specified serial port with the
      * given baud rate.
      *
-     * @param queue    the queue used to enqueue received messages; must not be null
+     * @param queue the queue used to enqueue received messages; must not be null
      * @throws NullPointerException if {@code queue} or {@code portName} is null
      */
     public SerialConnection(final Queue<String> queue) {
@@ -123,6 +125,16 @@ public class SerialConnection implements Connection {
     @Override
     public Optional<String> receive() {
         return Optional.ofNullable(this.receivedQueue.poll());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> getAvailablePort() {
+        return Arrays.stream(SerialPort.getCommPorts())
+                .map(SerialPort::getSystemPortPath)
+                .toList();
     }
 
     /**

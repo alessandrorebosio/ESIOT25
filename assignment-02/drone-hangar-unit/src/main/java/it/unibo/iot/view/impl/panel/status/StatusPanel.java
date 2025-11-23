@@ -23,9 +23,6 @@ import it.unibo.iot.view.impl.panel.AbstractPanel;
  */
 public class StatusPanel extends AbstractPanel {
 
-    private static final int ROWS = 2;
-    private static final int COLS = 1;
-
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -43,7 +40,7 @@ public class StatusPanel extends AbstractPanel {
     public StatusPanel(final Controller controller) {
         super(controller, "Status");
 
-        super.setLayout(new GridLayout(ROWS, COLS));
+        super.setLayout(new GridLayout(2, 1));
 
         this.hangarLabel.setVerticalAlignment(JLabel.CENTER);
         super.add(hangarLabel);
@@ -61,8 +58,8 @@ public class StatusPanel extends AbstractPanel {
      */
     @Override
     public void update(final Controller controller) {
-        this.hangarLabel.setText("HANGAR:" + controller.toString());
-        this.droneLabel.setText("DRONE:" + controller.toString());
+        this.hangarLabel.setText("HANGAR: " + controller.getSystemState() + " STATE");
+        this.droneLabel.setText("DRONE: " + controller.getDeviceState() + " STATE");
     }
 
 }

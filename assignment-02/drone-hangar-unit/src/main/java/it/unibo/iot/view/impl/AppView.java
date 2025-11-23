@@ -40,7 +40,7 @@ public class AppView extends JFrame implements View {
     public AppView(final Controller controller) {
         super("Drone Hangar Unit");
 
-        super.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         super.setLayout(new GridLayout(3, 1));
 

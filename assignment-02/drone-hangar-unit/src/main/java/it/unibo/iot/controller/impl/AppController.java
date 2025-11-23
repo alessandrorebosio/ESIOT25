@@ -2,11 +2,14 @@ package it.unibo.iot.controller.impl;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import it.unibo.iot.controller.api.Controller;
 import it.unibo.iot.controller.api.serial.Connection;
 import it.unibo.iot.controller.impl.serial.SerialConnection;
 import it.unibo.iot.model.api.Model;
+import it.unibo.iot.model.api.device.states.DeviceState;
+import it.unibo.iot.model.api.states.SystemState;
 import it.unibo.iot.model.impl.AppModel;
 
 /**
@@ -57,6 +60,7 @@ public class AppController implements Controller {
      */
     @Override
     public void stop() {
+        this.connection.disconnect();
         this.model.stop();
     }
 
@@ -67,7 +71,7 @@ public class AppController implements Controller {
     @Override
     public void update() {
         if (this.isConnected()) {
-            this.connection.receive();
+            this.connection.receive().ifPresent(str -> this.model.addMsg("received: " + str));
         }
     }
 
@@ -75,24 +79,9 @@ public class AppController implements Controller {
      * {@inheritDoc}
      */
     @Override
-    public boolean isRunning() {
-        return this.model.isRunning();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> getAvailablePort() {
-        return Connection.getAvailablePort();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isConnected() {
-        return this.connection.isConnected();
+    public void sendMsg(final String msg) {
+        this.connection.send(msg);
+        this.model.addMsg("send: " + msg);
     }
 
     /**
@@ -115,8 +104,45 @@ public class AppController implements Controller {
      * {@inheritDoc}
      */
     @Override
-    public void sendMsg(final String msg) {
-        this.connection.send(msg);
+    public boolean isRunning() {
+        return this.model.isRunning();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isConnected() {
+        return this.connection.isConnected();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> getAvailablePort() {
+        return this.connection.getAvailablePort();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DeviceState getDeviceState() {
+        return this.model.getDeviceState();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SystemState getSystemState() {
+        return this.model.getAppState();
+    }
+
+    @Override
+    public Optional<String> message() {
+        return this.model.take();
     }
 
 }

@@ -1,10 +1,7 @@
 package it.unibo.iot.controller.api.serial;
 
 import java.util.List;
-import java.util.Arrays;
 import java.util.Optional;
-
-import com.fazecast.jSerialComm.SerialPort;
 
 /**
  * Interface for managing serial port connections.
@@ -61,26 +58,9 @@ public interface Connection {
      * Returns a list of system paths for the serial ports currently available on
      * the host.
      *
-     * <p>
-     * The method enumerates serial ports using SerialPort.getCommPorts() and maps
-     * each
-     * detected port to its system-specific path via SerialPort#getSystemPortPath().
-     * 
-     * <p>
-     * The returned list contains zero or more strings (for example "/dev/ttyUSB0"
-     * on Unix-like
-     * systems or "COM3" on Windows). The order corresponds to the order provided by
-     * the
-     * underlying library. This operation may perform brief I/O while querying
-     * attached devices.
-     *
      * @return a List of system port path strings for the available serial ports;
      *         empty if none are found
      */
-    static List<String> getAvailablePort() {
-        return Arrays.stream(SerialPort.getCommPorts())
-                .map(SerialPort::getSystemPortPath)
-                .toList();
-    }
+    List<String> getAvailablePort();
 
 }
