@@ -1,5 +1,6 @@
 package it.unibo.iot.view.impl;
 
+import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.Serial;
@@ -8,8 +9,12 @@ import java.util.Optional;
 
 import javax.swing.JFrame;
 
+import it.unibo.iot.controller.api.Controller;
 import it.unibo.iot.view.api.View;
-import it.unibo.iot.view.impl.panel.ControlPanel;
+import it.unibo.iot.view.impl.panel.AbstractPanel;
+import it.unibo.iot.view.impl.panel.connection.ConnectionPanel;
+import it.unibo.iot.view.impl.panel.control.ControlPanel;
+import it.unibo.iot.view.impl.panel.status.StatusPanel;
 
 /**
  * Swing-based implementation of the View interface.
@@ -26,14 +31,22 @@ public class AppView extends JFrame implements View {
     private transient Optional<Runnable> onClose = Optional.empty();
 
     /**
-     * Constructs the application view with default settings.
-     * Sets up window properties and close handling behavior.
+     * Constructs and displays the main application window for the Drone Hangar
+     * Unit.
+     *
+     * @param controller the controller instance used to initialize the child
+     *                   panels; must not be {@code null}
      */
-    public AppView() {
+    public AppView(final Controller controller) {
         super("Drone Hangar Unit");
 
-        super.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        super.add(new ControlPanel());
+        super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+        super.setLayout(new GridLayout(3, 1));
+
+        super.add(new ConnectionPanel(controller));
+        super.add(new ControlPanel(controller));
+        super.add(new StatusPanel(controller));
 
         super.addWindowListener(new WindowAdapter() {
             @Override
@@ -72,9 +85,9 @@ public class AppView extends JFrame implements View {
     @Override
     public void update() {
         Arrays.stream(super.getContentPane().getComponents())
-                .filter(ControlPanel.class::isInstance)
-                .map(ControlPanel.class::cast)
-                .forEach(ControlPanel::update);
+                .filter(AbstractPanel.class::isInstance)
+                .map(AbstractPanel.class::cast)
+                .forEach(AbstractPanel::update);
     }
 
 }

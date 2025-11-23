@@ -1,7 +1,6 @@
 package it.unibo.iot;
 
-import java.util.Objects;
-
+import it.unibo.iot.controller.api.Controller;
 import it.unibo.iot.controller.impl.AppController;
 import it.unibo.iot.core.impl.AppEngine;
 import it.unibo.iot.view.impl.AppView;
@@ -20,14 +19,10 @@ public final class App {
     /**
      * Starts the application.
      *
-     * @param args optional CLI args: [port] [baudrate]
+     * @param args not used
      */
     public static void main(final String[] args) {
-        Objects.requireNonNull(args, "The args cannot be null");
-        if (args.length < 2) {
-            return;
-        }
-
-        new AppEngine(new AppController(args[0], Integer.parseInt(args[1])), new AppView()).run();
+        final Controller controller = new AppController();
+        new AppEngine(controller, new AppView(controller)).run();
     }
 }

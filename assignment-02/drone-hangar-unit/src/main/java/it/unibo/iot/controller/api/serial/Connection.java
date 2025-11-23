@@ -1,9 +1,7 @@
 package it.unibo.iot.controller.api.serial;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-
-import com.fazecast.jSerialComm.SerialPort;
 
 /**
  * Interface for managing serial port connections.
@@ -16,11 +14,14 @@ import com.fazecast.jSerialComm.SerialPort;
 public interface Connection {
 
     /**
-     * Establishes a connection to the specified serial port.
+     * Establishes a connection to the specified serial port using the given baud
+     * rate.
      *
-     * @param portName the system name of the serial port
-     * @param baudRate the baud rate for communication
-     * @return true if connection was successful, false otherwise
+     * @param portName the system port path or name (for example "/dev/ttyUSB0" or
+     *                 "COM3")
+     * @param baudRate the serial communication baud rate (for example 9600 or
+     *                 115200)
+     * @return true if the connection was successful, false otherwise
      */
     boolean connect(String portName, int baudRate);
 
@@ -39,13 +40,6 @@ public interface Connection {
     boolean isConnected();
 
     /**
-     * Verifies if the connection is active and responsive.
-     *
-     * @return true if the connection responds to communication, false otherwise
-     */
-    boolean isConnectionActive();
-
-    /**
      * Sends a message through the serial connection.
      *
      * @param message the message to send
@@ -61,14 +55,12 @@ public interface Connection {
     Optional<String> receive();
 
     /**
-     * Checks if the specified serial port is available on the system.
+     * Returns a list of system paths for the serial ports currently available on
+     * the host.
      *
-     * @param portName the port name to check
-     * @return true if the port is available, false otherwise
+     * @return a List of system port path strings for the available serial ports;
+     *         empty if none are found
      */
-    default boolean isPortAvailable(final String portName) {
-        return Arrays.stream(SerialPort.getCommPorts())
-                .map(SerialPort::getSystemPortPath)
-                .anyMatch(name -> name.contains(portName));
-    }
+    List<String> getAvailablePort();
+
 }

@@ -1,7 +1,9 @@
 package it.unibo.iot.controller.impl.serial;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -26,18 +28,31 @@ public class SerialConnection implements Connection {
     private SerialPort port;
 
     /**
-     * Constructs a new SerialConnection instance.
-     * Initializes the received message queue.
+     * Constructs a new SerialConnection using a newly created ConcurrentLinkedQueue
+     * as the incoming message queue. This constructor delegates to the primary
+     * constructor that accepts a queue, configuring the connection for the given
+     * serial port name and baud rate.
      */
     public SerialConnection() {
-        this.receivedQueue = new ConcurrentLinkedQueue<>();
+        this(new ConcurrentLinkedQueue<>());
+    }
+
+    /**
+     * Creates a new SerialConnection instance that will use the provided queue to
+     * deliver
+     * received data and will attempt to open the specified serial port with the
+     * given baud rate.
+     *
+     * @param queue the queue used to enqueue received messages; must not be null
+     * @throws NullPointerException if {@code queue} or {@code portName} is null
+     */
+    public SerialConnection(final Queue<String> queue) {
+        this.receivedQueue = Objects.requireNonNull(queue, "The queue cannot be null.");
     }
 
     /**
      * Establishes a connection to the specified serial port.
-     *
-     * @param portName the system name of the serial port
-     * @param baudRate the baud rate for communication
+     * 
      * @return true if connection was successful, false otherwise
      */
     @Override
@@ -83,27 +98,6 @@ public class SerialConnection implements Connection {
     }
 
     /**
-     * Verifies if the connection is active and responsive by attempting to write a
-     * test character.
-     *
-     * @return true if the connection responds to communication, false otherwise
-     */
-    @Override
-    public boolean isConnectionActive() {
-        if (!this.isConnected()) {
-            return false;
-        }
-
-        try {
-            this.port.getOutputStream().write('x');
-            this.port.getOutputStream().flush();
-            return true;
-        } catch (final IOException e) {
-            return false;
-        }
-    }
-
-    /**
      * Sends a message through the serial connection.
      * Automatically appends a newline character if not present.
      *
@@ -131,6 +125,16 @@ public class SerialConnection implements Connection {
     @Override
     public Optional<String> receive() {
         return Optional.ofNullable(this.receivedQueue.poll());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> getAvailablePort() {
+        return Arrays.stream(SerialPort.getCommPorts())
+                .map(SerialPort::getSystemPortPath)
+                .toList();
     }
 
     /**
