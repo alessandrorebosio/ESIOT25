@@ -25,24 +25,14 @@ public class SerialConnection implements Connection {
     private final Queue<String> receivedQueue;
     private SerialPort port;
 
-    private final String portName;
-    private final int buadRate;
-
     /**
      * Constructs a new SerialConnection using a newly created ConcurrentLinkedQueue
      * as the incoming message queue. This constructor delegates to the primary
      * constructor that accepts a queue, configuring the connection for the given
      * serial port name and baud rate.
-     *
-     * <p>
-     * The queue used is thread-safe (ConcurrentLinkedQueue).
-     *
-     * @param portName the name or path of the serial port (e.g. "/dev/ttyUSB0" or
-     *                 "COM3")
-     * @param baudRate the baud rate for the serial connection
      */
-    public SerialConnection(final String portName, final int baudRate) {
-        this(new ConcurrentLinkedQueue<>(), portName, baudRate);
+    public SerialConnection() {
+        this(new ConcurrentLinkedQueue<>());
     }
 
     /**
@@ -52,17 +42,10 @@ public class SerialConnection implements Connection {
      * given baud rate.
      *
      * @param queue    the queue used to enqueue received messages; must not be null
-     * @param portName the name of the serial port to open (e.g. "COM3" or
-     *                 "/dev/ttyUSB0"); must not be null
-     * @param baudRate the baud rate (bits per second) to use for the serial
-     *                 communication
      * @throws NullPointerException if {@code queue} or {@code portName} is null
      */
-    public SerialConnection(final Queue<String> queue, final String portName, final int baudRate) {
+    public SerialConnection(final Queue<String> queue) {
         this.receivedQueue = Objects.requireNonNull(queue, "The queue cannot be null.");
-        this.portName = Objects.requireNonNull(portName, "The port name cannot be null.");
-
-        this.buadRate = baudRate;
     }
 
     /**
@@ -71,10 +54,10 @@ public class SerialConnection implements Connection {
      * @return true if connection was successful, false otherwise
      */
     @Override
-    public boolean connect() {
+    public boolean connect(final String portName, final int baudRate) {
         if (this.port == null) {
-            this.port = SerialPort.getCommPort(this.portName);
-            this.port.setBaudRate(this.buadRate);
+            this.port = SerialPort.getCommPort(portName);
+            this.port.setBaudRate(baudRate);
         }
 
         if (this.port.openPort()) {
@@ -140,17 +123,6 @@ public class SerialConnection implements Connection {
     @Override
     public Optional<String> receive() {
         return Optional.ofNullable(this.receivedQueue.poll());
-    }
-
-    /**
-     * Checks whether the serial port configured for this connection is available.
-     *
-     * @return {@code true} if the configured serial port is available;
-     *         {@code false} if it is not present or not available
-     */
-    @Override
-    public boolean isPortAvailable() {
-        return Connection.isPortAvailable(this.portName);
     }
 
     /**

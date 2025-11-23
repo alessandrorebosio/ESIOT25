@@ -1,5 +1,6 @@
 package it.unibo.iot.controller.api.serial;
 
+import java.util.List;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -16,11 +17,16 @@ import com.fazecast.jSerialComm.SerialPort;
 public interface Connection {
 
     /**
-     * Establishes a connection to the specified serial port.
+     * Establishes a connection to the specified serial port using the given baud
+     * rate.
      *
-     * @return true if connection was successful, false otherwise
+     * @param portName the system port path or name (for example "/dev/ttyUSB0" or
+     *                 "COM3")
+     * @param baudRate the serial communication baud rate (for example 9600 or
+     *                 115200)
+     * @return true if the connection was successful, false otherwise
      */
-    boolean connect();
+    boolean connect(String portName, int baudRate);
 
     /**
      * Closes the serial connection and releases resources.
@@ -52,26 +58,29 @@ public interface Connection {
     Optional<String> receive();
 
     /**
-     * Checks whether the serial port associated with this connection is currently
-     * available
-     * for opening and use.
+     * Returns a list of system paths for the serial ports currently available on
+     * the host.
      *
-     * @return {@code true} if the port appears available for use; {@code false} if
-     *         the port
-     *         is occupied, inaccessible, or otherwise not available.
-     */
-    boolean isPortAvailable();
-
-    /**
-     * Checks if the specified serial port is available on the system.
+     * <p>
+     * The method enumerates serial ports using SerialPort.getCommPorts() and maps
+     * each
+     * detected port to its system-specific path via SerialPort#getSystemPortPath().
+     * 
+     * <p>
+     * The returned list contains zero or more strings (for example "/dev/ttyUSB0"
+     * on Unix-like
+     * systems or "COM3" on Windows). The order corresponds to the order provided by
+     * the
+     * underlying library. This operation may perform brief I/O while querying
+     * attached devices.
      *
-     * @param portName the port name to check
-     * @return true if the port is available, false otherwise
+     * @return a List of system port path strings for the available serial ports;
+     *         empty if none are found
      */
-    static boolean isPortAvailable(final String portName) {
+    static List<String> getAvailablePort() {
         return Arrays.stream(SerialPort.getCommPorts())
                 .map(SerialPort::getSystemPortPath)
-                .anyMatch(name -> name.contains(portName));
+                .toList();
     }
 
 }
