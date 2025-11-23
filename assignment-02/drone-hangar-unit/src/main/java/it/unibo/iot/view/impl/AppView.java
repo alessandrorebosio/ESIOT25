@@ -3,11 +3,13 @@ package it.unibo.iot.view.impl;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.Serial;
+import java.util.Arrays;
 import java.util.Optional;
 
 import javax.swing.JFrame;
 
 import it.unibo.iot.view.api.View;
+import it.unibo.iot.view.impl.panel.ControlPanel;
 
 /**
  * Swing-based implementation of the View interface.
@@ -31,6 +33,7 @@ public class AppView extends JFrame implements View {
         super("Drone Hangar Unit");
 
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        super.add(new ControlPanel());
 
         super.addWindowListener(new WindowAdapter() {
             @Override
@@ -49,7 +52,7 @@ public class AppView extends JFrame implements View {
      */
     @Override
     public void setOnClose(final Runnable onClose) {
-        this.onClose = Optional.of(onClose);
+        this.onClose = Optional.ofNullable(onClose);
     }
 
     /**
@@ -61,6 +64,17 @@ public class AppView extends JFrame implements View {
     public void close() {
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         this.dispose();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update() {
+        Arrays.stream(super.getContentPane().getComponents())
+                .filter(ControlPanel.class::isInstance)
+                .map(ControlPanel.class::cast)
+                .forEach(ControlPanel::update);
     }
 
 }

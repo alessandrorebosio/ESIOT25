@@ -1,17 +1,10 @@
 #pragma once
 
-#include <Arduino.h>
+#include "devices/TempSensor.h"
 
-#include "Device/TempSensor.h"
-
-class TempSensorTMP36 : public TempSensor {
-  private:
-    uint8_t pin;
-
+class TempSensorTMP36 final : public TempSensor {
   public:
-    TempSensorTMP36(const uint8_t pin) : pin(pin) { this->begin(); }
-
-    void begin();
+    explicit TempSensorTMP36(uint8_t pin);
 
     float getTemperature() override;
 };

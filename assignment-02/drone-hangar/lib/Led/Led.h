@@ -1,15 +1,10 @@
 #pragma once
 
-#include "Device/Light.h"
+#include "devices/Light.h"
 
-class Led : public Light {
-  private:
-    uint8_t pin;
-
+class Led final : public Light {
   public:
-    Led(uint8_t pin) : pin(pin) { this->begin(); }
-
-    void begin() override;
+    explicit Led(uint8_t pin);
 
     void on() override;
 

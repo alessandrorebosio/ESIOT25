@@ -47,6 +47,7 @@ public class AppEngine implements Engine {
         while (this.controller.isRunning()) {
             try {
                 this.controller.update();
+                this.view.update();
 
                 Thread.sleep(PERIOD);
             } catch (final InterruptedException e) {

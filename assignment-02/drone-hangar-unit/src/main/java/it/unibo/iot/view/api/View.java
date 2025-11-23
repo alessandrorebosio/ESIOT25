@@ -21,4 +21,9 @@ public interface View {
      */
     void close();
 
+    /**
+     * Refreshes the view to reflect the current state of the underlying model.
+     */
+    void update();
+
 }

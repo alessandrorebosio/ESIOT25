@@ -2,7 +2,9 @@
 
 #define DEBOUNCE_TIME 50
 
-void Button::begin() { pinMode(this->pin, INPUT); }
+Button::Button(const uint8_t pin) : Switch(pin) {
+    Device::begin(INPUT);
+}
 
 bool Button::isPressed() {
     unsigned long currentTime = millis();
