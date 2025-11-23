@@ -18,11 +18,9 @@ public interface Connection {
     /**
      * Establishes a connection to the specified serial port.
      *
-     * @param portName the system name of the serial port
-     * @param baudRate the baud rate for communication
      * @return true if connection was successful, false otherwise
      */
-    boolean connect(String portName, int baudRate);
+    boolean connect();
 
     /**
      * Closes the serial connection and releases resources.
@@ -37,13 +35,6 @@ public interface Connection {
      * @return true if the connection is open, false otherwise
      */
     boolean isConnected();
-
-    /**
-     * Verifies if the connection is active and responsive.
-     *
-     * @return true if the connection responds to communication, false otherwise
-     */
-    boolean isConnectionActive();
 
     /**
      * Sends a message through the serial connection.
@@ -61,14 +52,26 @@ public interface Connection {
     Optional<String> receive();
 
     /**
+     * Checks whether the serial port associated with this connection is currently
+     * available
+     * for opening and use.
+     *
+     * @return {@code true} if the port appears available for use; {@code false} if
+     *         the port
+     *         is occupied, inaccessible, or otherwise not available.
+     */
+    boolean isPortAvailable();
+
+    /**
      * Checks if the specified serial port is available on the system.
      *
      * @param portName the port name to check
      * @return true if the port is available, false otherwise
      */
-    default boolean isPortAvailable(final String portName) {
+    static boolean isPortAvailable(final String portName) {
         return Arrays.stream(SerialPort.getCommPorts())
                 .map(SerialPort::getSystemPortPath)
                 .anyMatch(name -> name.contains(portName));
     }
+
 }

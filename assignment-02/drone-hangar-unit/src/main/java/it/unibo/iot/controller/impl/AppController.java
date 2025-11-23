@@ -19,9 +19,6 @@ public class AppController implements Controller {
 
     private final Connection connection;
     private final Model model;
-    private final String port;
-
-    private final int baudrate;
 
     /**
      * Constructs an AppController with the specified port and baudrate using a
@@ -38,16 +35,13 @@ public class AppController implements Controller {
      * Constructs an AppController with the specified model, port and baudrate.
      *
      * @param model    the model to be used by this controller, cannot be null
-     * @param port     the serial port to use, cannot be null
+     * @param portName the serial port to use, cannot be null
      * @param baudrate the baud rate to use
      * @throws NullPointerException if the model or port is null
      */
-    public AppController(final Model model, final String port, final int baudrate) {
+    public AppController(final Model model, final String portName, final int baudrate) {
         this.model = Objects.requireNonNull(model, "The model cannot be null.");
-        this.port = Objects.requireNonNull(port, "The port cannot be null.");
-        this.connection = new SerialConnection();
-
-        this.baudrate = baudrate;
+        this.connection = new SerialConnection(portName, baudrate);
     }
 
     /**
@@ -55,8 +49,7 @@ public class AppController implements Controller {
      */
     @Override
     public void start() {
-        if (this.connection.isPortAvailable(this.port)
-                && this.connection.connect(this.port, this.baudrate)) {
+        if (this.connection.isPortAvailable() && this.connection.connect()) {
             this.model.start();
         }
     }
