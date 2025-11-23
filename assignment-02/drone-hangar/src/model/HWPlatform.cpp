@@ -32,3 +32,11 @@ bool HWPlatform::isPressed() {
 void HWPlatform::printOnLcd(const String text) {
     this->lcd->print(text);
 }
+
+Motor* HWPlatform::getMotor() {
+    return this->motor;
+}
+
+ProximitySensor* HWPlatform::getSonar() {
+    return this->sonar;
+}

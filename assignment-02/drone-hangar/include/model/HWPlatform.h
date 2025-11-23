@@ -30,4 +30,7 @@ class HWPlatform {
     bool isPressed();
 
     void printOnLcd(String text);
+
+    Motor *getMotor();
+    ProximitySensor *getSonar();
 };
