@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEFAULT_PERIOD 100
+#define BASEPERIOD 100
 
 #define BAUD 9600
 

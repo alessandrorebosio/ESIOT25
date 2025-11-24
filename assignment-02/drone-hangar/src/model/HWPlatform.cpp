@@ -33,10 +33,32 @@ void HWPlatform::printOnLcd(const String text) {
     this->lcd->print(text);
 }
 
-Motor* HWPlatform::getMotor() {
+void HWPlatform::turnLedOffs() {
+    this->led1->off();
+    this->led2->off();
+    this->led3->off();
+}
+
+bool HWPlatform::isDetected() {
+    return this->pir->isDetected();
+}
+
+bool HWPlatform::isOverTemperature(int temp) {
+    return this->tempSensor->getTemperature() > temp;
+}
+
+bool HWPlatform::isOverDistance(int distance) {
+    return this->sonar->getDistance() > distance;
+}
+
+Light *HWPlatform::getL2() {
+    return this->led2;
+}
+
+Motor *HWPlatform::getMotor() {
     return this->motor;
 }
 
-ProximitySensor* HWPlatform::getSonar() {
+ProximitySensor *HWPlatform::getSonar() {
     return this->sonar;
 }

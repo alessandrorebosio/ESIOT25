@@ -31,6 +31,17 @@ class HWPlatform {
 
     void printOnLcd(String text);
 
+    void turnLedOffs();
+
+    bool isDetected();
+
+    bool isOverTemperature(int temperature);
+
+    bool isOverDistance(int distance);
+
+    Light *getL2();
+
     Motor *getMotor();
+
     ProximitySensor *getSonar();
 };
