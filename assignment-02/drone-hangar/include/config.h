@@ -10,9 +10,9 @@
 #define LED2_PIN 4
 #define LED1_PIN 5
 #define SERVO_PIN 6
-#define PIR_PIN 7
-#define SONAR_ECHO_PIN 8
-#define SONAR_TRIG_PIN 9
+#define PIR_PIN 8
+#define SONAR_ECHO_PIN 9
+#define SONAR_TRIG_PIN 10
 
 #define LCD_ADDR 0x27
 #define LCD_COLS 16
