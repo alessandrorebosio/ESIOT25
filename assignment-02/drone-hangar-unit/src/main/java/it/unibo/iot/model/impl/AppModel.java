@@ -39,8 +39,8 @@ public class AppModel implements Model {
     /**
      * Creates a new {@code AppModel} with the specified components.
      *
-     * @param list the message queue; must not be {@code null}.
-     * @param state the initial system state; must not be {@code null}.
+     * @param list   the message queue; must not be {@code null}.
+     * @param state  the initial system state; must not be {@code null}.
      * @param device the device associated with the model; must not be {@code null}.
      */
     public AppModel(final Queue<String> list, final SystemState state, final Device device) {
@@ -99,6 +99,14 @@ public class AppModel implements Model {
      * {@inheritDoc}
      */
     @Override
+    public void handle(final String msg) {
+        this.state.handle(this, msg);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isRunning() {
         return this.running;
     }
@@ -118,4 +126,5 @@ public class AppModel implements Model {
     public SystemState getAppState() {
         return this.state;
     }
+
 }

@@ -47,6 +47,15 @@ public interface Model {
     void changeState(SystemState newState);
 
     /**
+     * Handle an incoming message destined for this model.
+     * 
+     * @param msg the message to handle; implementations should handle null values
+     *            gracefully (e.g. by ignoring, logging, or throwing an explicit
+     *            IllegalArgumentException), according to the model's contract
+     */
+    void handle(String msg);
+
+    /**
      * Checks whether the model is currently running.
      *
      * @return {@code true} if the model is running, {@code false} otherwise.

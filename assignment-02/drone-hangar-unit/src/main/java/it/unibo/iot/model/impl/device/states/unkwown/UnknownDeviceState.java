@@ -16,4 +16,5 @@ public class UnknownDeviceState extends AbstractDeviceState {
     public String toString() {
         return "UNKNOWN";
     }
+
 }

@@ -16,4 +16,5 @@ public class RestDeviceState extends AbstractDeviceState {
     public String toString() {
         return "REST";
     }
+
 }

@@ -71,7 +71,10 @@ public class AppController implements Controller {
     @Override
     public void update() {
         if (this.isConnected()) {
-            this.connection.receive().ifPresent(str -> this.model.addMsg("received: " + str));
+            this.connection.receive().ifPresent(str -> {
+                this.model.addMsg("received: " + str);
+                this.model.handle(str);
+            });
         }
     }
 

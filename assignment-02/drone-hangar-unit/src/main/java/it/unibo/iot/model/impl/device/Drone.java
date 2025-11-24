@@ -35,8 +35,8 @@ public class Drone implements Device {
      * {@inheritDoc}
      */
     @Override
-    public DeviceState getDeviceState() {
-        return this.state;
+    public void update() {
+        this.state.update(this);
     }
 
     /**
@@ -50,4 +50,13 @@ public class Drone implements Device {
         this.state = newState;
         this.state.onEnter(this);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DeviceState getDeviceState() {
+        return this.state;
+    }
+
 }

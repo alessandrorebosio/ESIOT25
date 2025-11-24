@@ -15,7 +15,7 @@ public abstract class AbstractDeviceState implements DeviceState {
      * {@inheritDoc}
      */
     @Override
-    public void onEnter(final Device t) {
+    public void onEnter(final Device device) {
         // Default: do nothing
     }
 
@@ -23,7 +23,7 @@ public abstract class AbstractDeviceState implements DeviceState {
      * {@inheritDoc}
      */
     @Override
-    public void onExit(final Device t) {
+    public void onExit(final Device device) {
         // Default: do nothing
     }
 
@@ -31,7 +31,7 @@ public abstract class AbstractDeviceState implements DeviceState {
      * {@inheritDoc}
      */
     @Override
-    public void update(final Device t) {
+    public void update(final Device device) {
         // Default: do nothing
     }
 

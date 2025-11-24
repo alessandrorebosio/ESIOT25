@@ -16,4 +16,5 @@ public class TakeoffDeviceState extends AbstractDeviceState {
     public String toString() {
         return "TAKEOFF";
     }
+
 }

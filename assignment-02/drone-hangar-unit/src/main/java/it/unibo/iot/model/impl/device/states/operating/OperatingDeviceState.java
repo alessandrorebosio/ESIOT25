@@ -16,4 +16,5 @@ public class OperatingDeviceState extends AbstractDeviceState {
     public String toString() {
         return "OPERATING";
     }
+
 }

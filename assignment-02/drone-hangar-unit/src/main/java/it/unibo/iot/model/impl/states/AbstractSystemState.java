@@ -1,5 +1,7 @@
 package it.unibo.iot.model.impl.states;
 
+import java.util.Objects;
+
 import it.unibo.iot.model.api.Model;
 import it.unibo.iot.model.api.states.SystemState;
 
@@ -16,7 +18,7 @@ public abstract class AbstractSystemState implements SystemState {
      * {@inheritDoc}
      */
     @Override
-    public void onEnter(final Model t) {
+    public void onEnter(final Model model) {
         // Default: do nothing
     }
 
@@ -24,7 +26,7 @@ public abstract class AbstractSystemState implements SystemState {
      * {@inheritDoc}
      */
     @Override
-    public void onExit(final Model t) {
+    public void onExit(final Model model) {
         // Default: do nothing
     }
 
@@ -32,8 +34,17 @@ public abstract class AbstractSystemState implements SystemState {
      * {@inheritDoc}
      */
     @Override
-    public void update(final Model t) {
+    public void update(final Model model) {
         // Default: do nothing
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void handle(final Model model, final String msg) {
+        Objects.requireNonNull(model, "The model cannot be null.");
+        Objects.requireNonNull(msg, "The msg cannot be null.");
     }
 
     /**
@@ -43,4 +54,5 @@ public abstract class AbstractSystemState implements SystemState {
      */
     @Override
     public abstract String toString();
+
 }
