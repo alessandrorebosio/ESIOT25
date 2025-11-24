@@ -9,8 +9,9 @@ import it.unibo.iot.model.api.Model;
 import it.unibo.iot.model.api.device.Device;
 import it.unibo.iot.model.api.device.states.DeviceState;
 import it.unibo.iot.model.api.states.SystemState;
+
 import it.unibo.iot.model.impl.device.Drone;
-import it.unibo.iot.model.impl.states.unkwown.UnknownSystemState;
+import it.unibo.iot.model.impl.states.unknown.UnknownSystemState;
 
 /**
  * Simple implementation of the Model interface that maintains a running state.
@@ -27,21 +28,38 @@ public class AppModel implements Model {
 
     private volatile boolean running;
 
+    /**
+     * Creates a new {@code AppModel} with default components:
+     * an empty message queue, an {@link UnknownSystemState}, and a {@link Drone}.
+     */
     public AppModel() {
         this(new ConcurrentLinkedQueue<>(), new UnknownSystemState(), new Drone());
     }
 
+    /**
+     * Creates a new {@code AppModel} with the specified components.
+     *
+     * @param list the message queue; must not be {@code null}.
+     * @param state the initial system state; must not be {@code null}.
+     * @param device the device associated with the model; must not be {@code null}.
+     */
     public AppModel(final Queue<String> list, final SystemState state, final Device device) {
         this.list = Objects.requireNonNull(list, "The list cannot be null.");
-        this.changeState(Objects.requireNonNull(state, "The state cannot be null."));
+        this.state = Objects.requireNonNull(state, "The state cannot be null.");
         this.device = Objects.requireNonNull(device, "The device cannot be null.");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addMsg(final String msg) {
         this.list.add(msg + "\n");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<String> take() {
         return Optional.ofNullable(this.list.poll());
@@ -65,6 +83,9 @@ public class AppModel implements Model {
         this.running = false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void changeState(final SystemState newState) {
         if (this.state != null) {
@@ -82,11 +103,17 @@ public class AppModel implements Model {
         return this.running;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DeviceState getDeviceState() {
         return this.device.getDeviceState();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SystemState getAppState() {
         return this.state;

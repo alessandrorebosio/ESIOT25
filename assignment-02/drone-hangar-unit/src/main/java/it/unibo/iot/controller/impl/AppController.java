@@ -140,6 +140,9 @@ public class AppController implements Controller {
         return this.model.getAppState();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<String> message() {
         return this.model.take();

@@ -14,31 +14,56 @@ import it.unibo.iot.model.api.states.SystemState;
  */
 public interface Model {
 
+    /**
+     * Adds a message to the model’s internal message queue.
+     *
+     * @param msg the message to add; must not be {@code null}.
+     */
     void addMsg(String msg);
 
+    /**
+     * Retrieves and removes the next available message from the queue.
+     *
+     * @return an {@link Optional} containing the next message,
+     *         or an empty {@code Optional} if no messages are available.
+     */
     Optional<String> take();
 
     /**
-     * Starts the model and sets it to running state.
+     * Starts the model and sets its running state to {@code true}.
      */
     void start();
 
     /**
-     * Stops the model and sets it to not running state.
+     * Stops the model and sets its running state to {@code false}.
      */
     void stop();
 
+    /**
+     * Changes the current {@link SystemState} of the model.
+     *
+     * @param newState the new system state; must not be {@code null}.
+     */
     void changeState(SystemState newState);
 
     /**
-     * Checks if the model is currently running.
+     * Checks whether the model is currently running.
      *
-     * @return true if the model is running, false otherwise
+     * @return {@code true} if the model is running, {@code false} otherwise.
      */
     boolean isRunning();
 
+    /**
+     * Returns the current {@link DeviceState} of the associated device.
+     *
+     * @return the device state.
+     */
     DeviceState getDeviceState();
 
+    /**
+     * Returns the current {@link SystemState} of the application.
+     *
+     * @return the application (system) state.
+     */
     SystemState getAppState();
-
 }
