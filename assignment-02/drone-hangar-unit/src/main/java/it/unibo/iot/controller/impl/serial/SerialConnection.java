@@ -7,6 +7,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
@@ -104,17 +106,18 @@ public class SerialConnection implements Connection {
      * @param message the message to send
      * @return true if the message was sent successfully, false otherwise
      */
-    @Override
     public boolean send(final String message) {
-        if (!this.isConnected()) {
+        if (!this.isConnected() || message == null) {
             return false;
         }
 
-        final String messageToSend = message.endsWith("\n") ? message : message + "\n";
-        final byte[] data = messageToSend.getBytes(StandardCharsets.UTF_8);
-
-        final int bytesWritten = this.port.writeBytes(data, data.length);
-        return bytesWritten == data.length;
+        try (OutputStream os = this.port.getOutputStream()) {
+            os.write(message.getBytes(StandardCharsets.UTF_8));
+            os.flush();
+            return true;
+        } catch (final IOException e) {
+            return false;
+        }
     }
 
     /**

@@ -2,16 +2,21 @@
 
 #include <Arduino.h>
 
-class MsgSerivce final {
+class MsgService final {
   private:
+    String msg;
     unsigned short baud;
 
   public:
-    MsgSerivce(unsigned short baud);
+    MsgService(unsigned short baud);
 
     void begin();
 
     bool isMsgAvailable();
+
+    void read();
+
+    void clear();
 
     String getMsg();
 

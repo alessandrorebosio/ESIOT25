@@ -9,15 +9,15 @@
 class DistanceMeasuringTask : public Task {
   private:
     ProximitySensor *sonar;
-    MsgSerivce *msg;
+    MsgService *msg;
     Context *context;
 
     enum State { IDLE, MEASURING } state;
 
   public:
-    explicit DistanceMeasuringTask(ProximitySensor *sonar, MsgSerivce *msg,
+    explicit DistanceMeasuringTask(ProximitySensor *sonar, MsgService *msg,
                                    Context *context);
-    explicit DistanceMeasuringTask(ProximitySensor *sonar, MsgSerivce *msg,
+    explicit DistanceMeasuringTask(ProximitySensor *sonar, MsgService *msg,
                                    Context *context, int period);
 
     void init(int period);

@@ -2,13 +2,13 @@
 #include "config.h"
 
 DistanceMeasuringTask::DistanceMeasuringTask(ProximitySensor *sonar,
-                                             MsgSerivce *msg, Context *context)
+                                             MsgService *msg, Context *context)
     : sonar(sonar), msg(msg), context(context) {
     this->state = IDLE;
 }
 
 DistanceMeasuringTask::DistanceMeasuringTask(ProximitySensor *sonar,
-                                             MsgSerivce *msg, Context *context,
+                                             MsgService *msg, Context *context,
                                              int period)
     : DistanceMeasuringTask(sonar, msg, context) {
     this->init(period);

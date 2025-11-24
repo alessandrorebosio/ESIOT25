@@ -5,12 +5,12 @@
 #define LANDING_MSG "landing"
 #define TAKEOFF_MSG "takeoff"
 
-HangarControlTask::HangarControlTask(HWPlatform *hw, MsgSerivce *msg,
+HangarControlTask::HangarControlTask(HWPlatform *hw, MsgService *msg,
                                      Context *context)
-    : hw(hw), msg(msg), context(context) {
+    : hw(hw), serial(msg), context(context) {
 }
 
-HangarControlTask::HangarControlTask(HWPlatform *hw, MsgSerivce *msg,
+HangarControlTask::HangarControlTask(HWPlatform *hw, MsgService *msg,
                                      Context *context, int period)
     : HangarControlTask(hw, msg, context) {
     this->init(period);
@@ -24,67 +24,46 @@ void HangarControlTask::init(int period) {
 void HangarControlTask::tick() {
     switch (this->state) {
         case NORMAL:
-            // TODO: led offs + closeDoor
+            this->serial->sendMsg("normal");
+            // this->serial->sendMsg("normal");
 
-            if (this->msg->isMsgAvailable()) {
-                String msg = this->msg->getMsg();
-                if (msg == TAKEOFF_MSG ||
-                    (msg == LANDING_MSG && this->hw->isDetected())) {
-                    this->setState(OPERATING);
-                }
+            if (this->serial->isMsgAvailable()) {
+                this->serial->read();
+            }
+
+            if (this->serial->getMsg().equals(TAKEOFF_MSG)) {
+                this->hw->printOnLcd(this->serial->getMsg());
+                this->serial->sendMsg("DRONE: " + this->serial->getMsg());
+                this->serial->clear();
+                this->state = OPERATING;
             }
 
             if (this->hw->isOverTemperature(TEMP1)) {
-                this->setState(PREALARM);
+                this->serial->sendMsg("prealarm");
+                this->state = PREALARM;
             }
             break;
 
         case OPERATING:
-            // TODO: openDoor + blinking
-
-            if (this->hw->isOverDistance(D1) || !this->hw->isOverDistance(D2)) {
-                this->setState(WAITING); // can we have problem
-            }
             break;
 
         case WAITING:
-            if (this->elapsedTime(T1) && this->hw->isOverDistance(D1)) {
-                this->hw->printOnLcd("OUTSIDE");
-                this->state = NORMAL;
-            } else if (this->elapsedTime(T2) && !this->hw->isOverDistance(D2)) {
-                this->hw->printOnLcd("INSIDE");
-                this->state = NORMAL;
-            } else {
-                this->setState(OPERATING);
-            }
-
             break;
 
         case PREALARM:
-            if (this->elapsedTime(T4) && this->hw->isOverTemperature(TEMP2)) {
-                this->setState(ALARM);
-            } else {
-                this->setState(NORMAL);
-            }
+            this->serial->sendMsg(String(freeRAM()));
             break;
 
         case ALARM:
-            // TODO: doorClose + L3 ON
             if (this->hw->isPressed()) {
-                this->setState(NORMAL);
-                this->hw->turnLedOffs();
+                this->serial->sendMsg("ok");
             }
             break;
     }
 }
 
-void HangarControlTask::setState(State s) {
-    this->hw->printOnLcd(toString(s));
-    this->msg->sendMsg(toString(s));
-    this->state = s;
-    this->stateStartTime = millis();
-}
-
-inline bool HangarControlTask::elapsedTime(unsigned long time) {
-    return (unsigned long)(millis() - this->stateStartTime) > time;
+int HangarControlTask::freeRAM() {
+    extern int __heap_start, *__brkval;
+    int v;
+    return (int)&v - ((__brkval == 0) ? (int)&__heap_start : (int)__brkval);
 }

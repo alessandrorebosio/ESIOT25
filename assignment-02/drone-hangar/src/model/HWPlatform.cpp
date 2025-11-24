@@ -43,12 +43,12 @@ bool HWPlatform::isDetected() {
     return this->pir->isDetected();
 }
 
-bool HWPlatform::isOverTemperature(int temp) {
-    return this->tempSensor->getTemperature() > temp;
+bool HWPlatform::isOverTemperature(int temperature) {
+    return temperature > this->tempSensor->getTemperature();
 }
 
 bool HWPlatform::isOverDistance(int distance) {
-    return this->sonar->getDistance() > distance;
+    return distance > this->sonar->getDistance();
 }
 
 Light *HWPlatform::getL2() {

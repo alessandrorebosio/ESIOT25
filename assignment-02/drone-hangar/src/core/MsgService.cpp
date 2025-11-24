@@ -1,25 +1,31 @@
 #include "core/MsgService.h"
 
-MsgSerivce::MsgSerivce(const unsigned short baud) : baud(baud) {
+MsgService::MsgService(const unsigned short baud) : baud(baud) {
     this->begin();
 }
 
-void MsgSerivce::begin() {
+void MsgService::begin() {
     Serial.begin(this->baud);
 }
 
-void MsgSerivce::sendMsg(const String text) {
+void MsgService::sendMsg(const String text) {
     Serial.println(text);
 }
 
-bool MsgSerivce::isMsgAvailable() {
+bool MsgService::isMsgAvailable() {
     return Serial.available() > 0;
 }
 
-String MsgSerivce::getMsg() {
-    String msg = "";
+void MsgService::read() {
     while (this->isMsgAvailable()) {
-        msg += Serial.read();
+        this->msg += (char)Serial.read();
     }
-    return msg;
+}
+
+void MsgService::clear() {
+    this->msg = "";
+}
+
+String MsgService::getMsg() {
+    return this->msg;
 }
