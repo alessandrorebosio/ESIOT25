@@ -82,7 +82,6 @@ public class SerialConnection implements Connection {
     public boolean disconnect() {
         if (this.isConnected()) {
             this.port.removeDataListener();
-            this.receivedQueue.clear();
 
             return this.port.closePort();
         }

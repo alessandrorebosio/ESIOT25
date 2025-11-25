@@ -47,6 +47,8 @@ public class AppModel implements Model {
         this.serial = Objects.requireNonNull(list, "The list cannot be null.");
         this.state = Objects.requireNonNull(state, "The state cannot be null.");
         this.device = Objects.requireNonNull(device, "The device cannot be null.");
+
+        this.running = true;
     }
 
     /**

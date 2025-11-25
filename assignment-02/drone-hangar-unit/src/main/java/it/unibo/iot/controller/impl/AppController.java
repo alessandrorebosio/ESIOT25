@@ -11,8 +11,6 @@ import it.unibo.iot.model.api.Model;
 import it.unibo.iot.model.api.device.states.DeviceState;
 import it.unibo.iot.model.api.states.SystemState;
 import it.unibo.iot.model.impl.AppModel;
-import it.unibo.iot.model.impl.device.states.unknown.UnknownDeviceState;
-import it.unibo.iot.model.impl.states.unknown.UnknownSystemState;
 
 /**
  * Implementation of the Controller interface that manages the application state
@@ -24,11 +22,8 @@ import it.unibo.iot.model.impl.states.unknown.UnknownSystemState;
  */
 public class AppController implements Controller {
 
-    /** The serial connection handler for communication with external devices. */
     private final Connection connection;
-
-    /** The application model managing business logic and state. */
-    private final Model model;
+    private Model model;
 
     /**
      * Constructs an AppController with a default model.
@@ -107,8 +102,7 @@ public class AppController implements Controller {
      */
     @Override
     public boolean disconnect() {
-        this.model.getDevice().changeState(new UnknownDeviceState());
-        this.model.changeState(new UnknownSystemState());
+        this.model = new AppModel();
         return this.connection.disconnect();
     }
 
