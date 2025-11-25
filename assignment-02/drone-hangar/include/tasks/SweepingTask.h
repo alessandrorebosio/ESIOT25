@@ -9,9 +9,8 @@ class SweepingTask : public Task {
   private:
     Motor *motor;
     Context *context;
-    enum State { CLOSE, OPENING, OPEN, CLOSING } state;
+    enum State { OPEN, CLOSE, OPENING, CLOSING } state;
 
-    int currentPos;
     long stateStartTime;
 
     void setState(State s);
@@ -22,5 +21,6 @@ class SweepingTask : public Task {
     explicit SweepingTask(Motor *motor, Context *context, int period);
 
     void init(int period);
+    void reset();
     void tick();
 };

@@ -25,8 +25,14 @@ void HangarControlTask::init(int period) {
 void HangarControlTask::tick() {
     switch (this->state) {
         case NORMAL:
-            this->serial->sendMsg(this->serial->getMsg());
-            this->serial->sendMsg("rest");
+            // this->serial->sendMsg(this->serial->getMsg());
+            // this->serial->sendMsg("rest");
+            this->context->startBlinking();
+            // if(this->hw->getButton()->isPressed()){
+            //     this->context->stopOpening();
+            // } else {
+            //     this->context->startOpening();
+            // }
             break;
 
         case OPERATING:

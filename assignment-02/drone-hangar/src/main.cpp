@@ -24,6 +24,7 @@ void setup() {
 
     scheduler.addTask(new HangarControlTask(hw, msg, context, BASEPERIOD * 10));
     scheduler.addTask(new BlinkingTask(hw->getL2(), context, BASEPERIOD * 5));
+    scheduler.addTask(new SweepingTask(hw->getMotor(), context, BASEPERIOD / 5));
 }
 
 void loop() {

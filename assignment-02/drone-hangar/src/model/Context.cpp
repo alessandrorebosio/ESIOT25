@@ -30,5 +30,5 @@ bool Context::isBlinking() {
 
 void Context::reset() {
     this->stopOpening();
-    this->stopOpening();
+    this->stopBlinking();
 }

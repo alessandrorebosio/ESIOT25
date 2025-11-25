@@ -1,12 +1,12 @@
 #include "tasks/SweepingTask.h"
 
-#define OPEN_TIME 2000
-#define CLOSE_TIME 2000
+#define SWP_TIME 2000
 #define OPEN_POS 180
 #define CLOSE_POS 0
 
 SweepingTask::SweepingTask(Motor *motor, Context *context)
     : motor(motor), context(context) {
+    this->reset();
 }
 
 SweepingTask::SweepingTask(Motor *motor, Context *context, int period)
@@ -16,53 +16,72 @@ SweepingTask::SweepingTask(Motor *motor, Context *context, int period)
 
 void SweepingTask::init(int period) {
     Task::init(period);
-
-    this->currentPos = CLOSE_POS;
-    this->motor->setPosition(CLOSE_POS);
-    this->motor->off();
-    this->state = CLOSE;
+    this->reset();
 }
 
 void SweepingTask::tick() {
-    // switch (this->state) {
-    //     case CLOSE:
-    //         if (this->context->isOpening()) {
-    //             this->setState(OPENING);
-    //             this->motor->on();
-    //         }
-    //         break;
+    bool contextName = this->context->isOpening();
+    long dt = this->elapsedTime();
 
-    //     case OPENING:
-    //         long dt = elapsedTime();
-    //         this->motor->setPosition(((float)dt / OPEN_TIME) * OPEN_POS);
+    switch (this->state) {
+        case CLOSE:
+            if (contextName) {
+                this->setState(OPENING);
+                this->motor->on();
+            }
+            break;
 
-    //         if (dt >= OPEN_TIME) {
-    //             this->motor->setPosition(OPEN_POS);
-    //             this->motor->off();
-    //             this->setState(OPEN);
-    //         }
-    //         break;
+        case OPENING: {
+            if (!contextName) {
+                this->setState(CLOSING);
+                this->motor->on();
+                return;
+            }
 
-    //     case OPEN:
-    //         if (!this->context->isOpening()) {
-    //             this->setState(CLOSING);
-    //             this->motor->on();
-    //         }
-    //         break;
+            this->motor->setPosition(CLOSE_POS + 
+                                        (float)dt / SWP_TIME* (OPEN_POS - CLOSE_POS));
 
-    //     case CLOSING: {
-    //         long dt = elapsedTime();
-    //         this->motor->setPosition(OPEN_POS -
-    //                                  ((float)dt / CLOSE_TIME) * OPEN_POS);
+            if (dt >= SWP_TIME) {
+                this->motor->setPosition(OPEN_POS);
+                this->motor->off();
+                this->setState(OPEN);
+            }
+            break;
+        }
 
-    //         if (dt >= CLOSE_TIME) {
-    //             this->motor->setPosition(CLOSE_POS);
-    //             this->motor->off();
-    //             this->setState(CLOSE);
-    //         }
-    //         break;
-    //     }
-    // }
+        case OPEN:
+            if (!contextName) {
+                this->setState(CLOSING);
+                this->motor->on();
+            }
+            break;
+
+        case CLOSING: {
+            if (contextName) {
+                this->setState(OPENING);
+                this->motor->on();
+                return;
+            }
+
+            this->motor->setPosition(OPEN_POS - 
+                                        (float)dt / SWP_TIME * (OPEN_POS - CLOSE_POS));
+
+            if (dt >= SWP_TIME) {
+                this->motor->setPosition(CLOSE_POS);
+                this->motor->off();
+                this->setState(CLOSE);
+            }
+            break;
+        }
+    }
+}
+
+void SweepingTask::reset() {
+    this->motor->setPosition(CLOSE_POS);
+    this->motor->off();
+
+    this->state = CLOSE;
+    this->stateStartTime = millis();
 }
 
 void SweepingTask::setState(State s) {
