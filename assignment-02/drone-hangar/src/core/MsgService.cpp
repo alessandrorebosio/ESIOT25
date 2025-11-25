@@ -18,7 +18,7 @@ bool MsgService::isMsgAvailable() {
 
 void MsgService::read() {
     while (this->isMsgAvailable()) {
-        this->msg += (char)Serial.read();
+        msg += (char)Serial.read();
     }
 }
 

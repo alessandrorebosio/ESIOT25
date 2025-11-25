@@ -32,8 +32,7 @@ void Scheduler::schedule() {
     timerFlag = false;
 
     for (int i = 0; i < nTasks; i++) {
-        if (this->taskList[i]->isActive() &&
-            this->taskList[i]->updateAndCheckTime(this->basePeriod)) {
+        if (this->taskList[i]->shouldRun(this->basePeriod)) {
             this->taskList[i]->tick();
         }
     }

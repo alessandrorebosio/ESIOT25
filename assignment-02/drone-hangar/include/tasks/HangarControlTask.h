@@ -12,13 +12,12 @@ class HangarControlTask final : public Task {
     MsgService *serial;
     Context *context;
     enum State { NORMAL, OPERATING, WAITING, PREALARM, ALARM } state;
-    int freeRAM();
 
   public:
-    explicit HangarControlTask(HWPlatform *hw, MsgService *msg,
+    explicit HangarControlTask(HWPlatform *hw, MsgService *serial,
                                Context *context);
 
-    explicit HangarControlTask(HWPlatform *hw, MsgService *msg,
+    explicit HangarControlTask(HWPlatform *hw, MsgService *serial,
                                Context *context, int period);
 
     void init(int period);

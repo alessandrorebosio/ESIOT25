@@ -22,16 +22,16 @@ void DistanceMeasuringTask::init(int period) {
 void DistanceMeasuringTask::tick() {
     switch (state) {
         case IDLE:
-            if (this->context->isStarted()) {
-                this->state = MEASURING;
-            }
+            // if (this->context->isStarted()) {
+            //     this->state = MEASURING;
+            // }
             break;
 
         case MEASURING:
-            if (this->context->isStopped()) {
-                this->state = IDLE;
-                break;
-            }
+            // if (this->context->isStopped()) {
+            //     this->state = IDLE;
+            //     break;
+            // }
 
             this->msg->sendMsg("distance:" + String(sonar->getDistance()));
             break;

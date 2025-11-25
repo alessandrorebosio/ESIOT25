@@ -16,4 +16,17 @@ import it.unibo.iot.model.api.device.Device;
  * @author Grazia Bochdanovits de Kavna
  */
 public interface DeviceState extends State<Device> {
+
+    /**
+     * Processes an incoming message in the context of the current device state.
+     *
+     * @param device the device instance to be operated on; must not be {@code null}
+     * @param msg    the incoming message to process; interpretation is
+     *               implementation-dependent but should not be {@code null} or
+     *               empty
+     * @throws NullPointerException if {@code device} or {@code msg} is
+     *                              {@code null}
+     */
+    void handle(Device device, String msg);
+
 }

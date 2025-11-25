@@ -22,11 +22,8 @@ import it.unibo.iot.model.impl.AppModel;
  */
 public class AppController implements Controller {
 
-    /** The serial connection handler for communication with external devices. */
     private final Connection connection;
-
-    /** The application model managing business logic and state. */
-    private final Model model;
+    private Model model;
 
     /**
      * Constructs an AppController with a default model.
@@ -66,16 +63,20 @@ public class AppController implements Controller {
 
     /**
      * {@inheritDoc}
-     * Receives data from the serial connection if connected.
+     */
+    @Override
+    public void handle() {
+        this.connection.receive().ifPresent(str -> {
+            this.model.handle(str);
+        });
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void update() {
-        if (this.isConnected()) {
-            this.connection.receive().ifPresent(str -> {
-                this.model.addMsg("received: " + str);
-                this.model.handle(str);
-            });
-        }
+        this.model.update();
     }
 
     /**
@@ -83,8 +84,9 @@ public class AppController implements Controller {
      */
     @Override
     public void sendMsg(final String msg) {
-        this.connection.send(msg);
-        this.model.addMsg("send: " + msg);
+        if (this.connection.send(msg)) {
+            this.model.addMsg("send: " + msg);
+        }
     }
 
     /**
@@ -100,6 +102,7 @@ public class AppController implements Controller {
      */
     @Override
     public boolean disconnect() {
+        this.model = new AppModel();
         return this.connection.disconnect();
     }
 

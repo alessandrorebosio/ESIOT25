@@ -2,6 +2,7 @@ package it.unibo.iot.model.api;
 
 import java.util.Optional;
 
+import it.unibo.iot.model.api.device.Device;
 import it.unibo.iot.model.api.device.states.DeviceState;
 import it.unibo.iot.model.api.states.SystemState;
 
@@ -40,6 +41,18 @@ public interface Model {
     void stop();
 
     /**
+     * Handle an incoming message destined for this model.
+     * 
+     * @param msg the message to handle.
+     */
+    void handle(String msg);
+
+    /**
+     * Performs a model update cycle.
+     */
+    void update();
+
+    /**
      * Changes the current {@link SystemState} of the model.
      *
      * @param newState the new system state; must not be {@code null}.
@@ -47,20 +60,18 @@ public interface Model {
     void changeState(SystemState newState);
 
     /**
-     * Handle an incoming message destined for this model.
-     * 
-     * @param msg the message to handle; implementations should handle null values
-     *            gracefully (e.g. by ignoring, logging, or throwing an explicit
-     *            IllegalArgumentException), according to the model's contract
-     */
-    void handle(String msg);
-
-    /**
      * Checks whether the model is currently running.
      *
      * @return {@code true} if the model is running, {@code false} otherwise.
      */
     boolean isRunning();
+
+    /**
+     * Retrieves the device associated with this model.
+     * 
+     * @return the device
+     */
+    Device getDevice();
 
     /**
      * Returns the current {@link DeviceState} of the associated device.
@@ -75,4 +86,5 @@ public interface Model {
      * @return the application (system) state.
      */
     SystemState getAppState();
+
 }

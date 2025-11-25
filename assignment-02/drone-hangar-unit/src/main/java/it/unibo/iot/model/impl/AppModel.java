@@ -22,7 +22,7 @@ import it.unibo.iot.model.impl.states.unknown.UnknownSystemState;
  */
 public class AppModel implements Model {
 
-    private final Queue<String> list;
+    private final Queue<String> serial;
     private SystemState state;
     private final Device device;
 
@@ -44,9 +44,11 @@ public class AppModel implements Model {
      * @param device the device associated with the model; must not be {@code null}.
      */
     public AppModel(final Queue<String> list, final SystemState state, final Device device) {
-        this.list = Objects.requireNonNull(list, "The list cannot be null.");
+        this.serial = Objects.requireNonNull(list, "The list cannot be null.");
         this.state = Objects.requireNonNull(state, "The state cannot be null.");
         this.device = Objects.requireNonNull(device, "The device cannot be null.");
+
+        this.running = true;
     }
 
     /**
@@ -54,7 +56,7 @@ public class AppModel implements Model {
      */
     @Override
     public void addMsg(final String msg) {
-        this.list.add(msg + "\n");
+        this.serial.add(msg + "\n");
     }
 
     /**
@@ -62,7 +64,7 @@ public class AppModel implements Model {
      */
     @Override
     public Optional<String> take() {
-        return Optional.ofNullable(this.list.poll());
+        return Optional.ofNullable(this.serial.poll());
     }
 
     /**
@@ -87,6 +89,23 @@ public class AppModel implements Model {
      * {@inheritDoc}
      */
     @Override
+    public void handle(final String msg) {
+        this.state.handle(this, msg);
+        this.addMsg("received: " + msg);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update() {
+        this.state.update(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void changeState(final SystemState newState) {
         if (this.state != null) {
             this.state.onExit(this);
@@ -99,16 +118,16 @@ public class AppModel implements Model {
      * {@inheritDoc}
      */
     @Override
-    public void handle(final String msg) {
-        this.state.handle(this, msg);
+    public boolean isRunning() {
+        return this.running;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isRunning() {
-        return this.running;
+    public Device getDevice() {
+        return this.device;
     }
 
     /**

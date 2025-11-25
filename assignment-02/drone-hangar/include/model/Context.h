@@ -2,19 +2,23 @@
 
 class Context {
   private:
-    bool started;
-    bool stopped;
+    bool opening;
+    bool blinking;
 
   public:
     Context();
 
-    void setStarted();
+    void startOpening();
 
-    void setStopped();
+    void startBlinking();
 
-    bool isStarted();
+    void stopOpening();
 
-    bool isStopped();
+    void stopBlinking();
+
+    bool isOpening();
+
+    bool isBlinking();
 
     void reset();
 };

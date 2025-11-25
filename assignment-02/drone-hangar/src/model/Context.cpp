@@ -1,29 +1,34 @@
 #include "model/Context.h"
 
 Context::Context() {
-    started = false;
-    stopped = false;
+    this->reset();
 }
 
-bool Context::isStarted() {
-    return started;
+void Context::startOpening() {
+    this->opening = true;
 }
 
-bool Context::isStopped() {
-    return stopped;
+void Context::startBlinking() {
+    this->blinking = true;
 }
 
-void Context::setStarted() {
-    started = true;
-    stopped = false;
+void Context::stopOpening() {
+    this->opening = false;
 }
 
-void Context::setStopped() {
-    stopped = true;
-    started = false;
+void Context::stopBlinking() {
+    this->blinking = false;
+}
+
+bool Context::isOpening() {
+    return this->opening;
+}
+
+bool Context::isBlinking() {
+    return this->blinking;
 }
 
 void Context::reset() {
-    started = false;
-    stopped = false;
+    this->stopOpening();
+    this->stopOpening();
 }

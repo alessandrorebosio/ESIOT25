@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import it.unibo.iot.controller.api.Controller;
 import it.unibo.iot.model.impl.device.states.operating.OperatingDeviceState;
 import it.unibo.iot.model.impl.device.states.rest.RestDeviceState;
+import it.unibo.iot.model.impl.device.states.unknown.UnknownDeviceState;
 import it.unibo.iot.model.impl.states.normal.NormalSystemState;
 import it.unibo.iot.view.impl.panel.AbstractPanel;
 
@@ -40,8 +41,8 @@ public final class ControlPanel extends AbstractPanel {
 
         super.setLayout(new GridLayout(2, 1));
 
-        this.takeoff.addActionListener(l -> controller.sendMsg(takeoff.getText().toLowerCase(Locale.ROOT)));
-        this.landing.addActionListener(l -> controller.sendMsg(landing.getText().toLowerCase(Locale.ROOT)));
+        this.takeoff.addActionListener(l -> controller.sendMsg(this.takeoff.getText().toLowerCase(Locale.ROOT)));
+        this.landing.addActionListener(l -> controller.sendMsg(this.landing.getText().toLowerCase(Locale.ROOT)));
 
         super.add(this.takeoff);
         super.add(this.landing);
@@ -55,11 +56,13 @@ public final class ControlPanel extends AbstractPanel {
      */
     @Override
     protected void update(final Controller controller) {
-        final boolean base = controller.isConnected()
+        final boolean connectedAndNormal = controller.isConnected()
                 && controller.getSystemState() instanceof NormalSystemState;
 
-        this.takeoff.setEnabled(base && controller.getDeviceState() instanceof RestDeviceState);
-        this.landing.setEnabled(base && controller.getDeviceState() instanceof OperatingDeviceState);
+        this.takeoff.setEnabled(connectedAndNormal && (controller.getDeviceState() instanceof UnknownDeviceState
+                || controller.getDeviceState() instanceof RestDeviceState));
+        this.landing.setEnabled(connectedAndNormal && (controller.getDeviceState() instanceof UnknownDeviceState
+                || controller.getDeviceState() instanceof OperatingDeviceState));
     }
 
 }
