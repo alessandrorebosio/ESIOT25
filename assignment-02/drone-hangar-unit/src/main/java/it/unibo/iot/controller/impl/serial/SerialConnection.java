@@ -63,7 +63,9 @@ public class SerialConnection implements Connection {
         }
 
         if (this.port.openPort()) {
+            this.port.removeDataListener();
             this.port.addDataListener(new SerialDataListener());
+            this.receivedQueue.clear();
             return true;
         }
 
@@ -206,6 +208,7 @@ public class SerialConnection implements Connection {
                 }
             }
         }
+
     }
 
 }

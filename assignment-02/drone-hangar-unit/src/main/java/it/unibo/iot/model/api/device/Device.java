@@ -10,16 +10,23 @@ import it.unibo.iot.model.api.device.states.DeviceState;
 public interface Device {
 
     /**
-     * Refreshes the device's internal state.
-     */
-    void update();
-
-    /**
      * Changes the current state of the device.
      *
      * @param newState the new {@link DeviceState} to set.
      */
     void changeState(DeviceState newState);
+
+    /**
+     * Refreshes the device's internal state.
+     */
+    void update();
+
+    /**
+     * Handles an incoming message for device processing.
+     * 
+     * @param msg the message to handle.
+     */
+    void handle(String msg);
 
     /**
      * Returns the current state of the device.

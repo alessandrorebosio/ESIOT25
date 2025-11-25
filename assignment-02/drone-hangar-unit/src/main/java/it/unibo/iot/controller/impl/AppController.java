@@ -11,6 +11,8 @@ import it.unibo.iot.model.api.Model;
 import it.unibo.iot.model.api.device.states.DeviceState;
 import it.unibo.iot.model.api.states.SystemState;
 import it.unibo.iot.model.impl.AppModel;
+import it.unibo.iot.model.impl.device.states.unknown.UnknownDeviceState;
+import it.unibo.iot.model.impl.states.unknown.UnknownSystemState;
 
 /**
  * Implementation of the Controller interface that manages the application state
@@ -66,16 +68,20 @@ public class AppController implements Controller {
 
     /**
      * {@inheritDoc}
-     * Receives data from the serial connection if connected.
+     */
+    @Override
+    public void handle() {
+        this.connection.receive().ifPresent(str -> {
+            this.model.handle(str);
+        });
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void update() {
-        if (this.isConnected()) {
-            this.connection.receive().ifPresent(str -> {
-                this.model.addMsg("received: " + str);
-                this.model.handle(str);
-            });
-        }
+        this.model.update();
     }
 
     /**
@@ -83,8 +89,9 @@ public class AppController implements Controller {
      */
     @Override
     public void sendMsg(final String msg) {
-        this.connection.send(msg);
-        this.model.addMsg("send: " + msg);
+        if (this.connection.send(msg)) {
+            this.model.addMsg("send: " + msg);
+        }
     }
 
     /**
@@ -100,6 +107,8 @@ public class AppController implements Controller {
      */
     @Override
     public boolean disconnect() {
+        this.model.getDevice().changeState(new UnknownDeviceState());
+        this.model.changeState(new UnknownSystemState());
         return this.connection.disconnect();
     }
 

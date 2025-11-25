@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import it.unibo.iot.model.api.device.Device;
 import it.unibo.iot.model.api.device.states.DeviceState;
-import it.unibo.iot.model.impl.device.states.unkwown.UnknownDeviceState;
+import it.unibo.iot.model.impl.device.states.unknown.UnknownDeviceState;
 
 /**
  * Represents a drone device capable of changing and tracking its state.
@@ -28,19 +28,13 @@ public class Drone implements Device {
      * @param state the initial {@link DeviceState}; must not be {@code null}.
      */
     public Drone(final DeviceState state) {
-        this.state = Objects.requireNonNull(state, "The device initial state cannot be null.");
+        this.state = Objects.requireNonNull(state, "The initial device state cannot be null.");
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void update() {
-        this.state.update(this);
-    }
-
-    /**
-     * {@inheritDoc}
+     * Change the current device state invoking lifecycle callbacks.
+     *
+     * @param newState the new device state; must not be {@code null}
      */
     @Override
     public void changeState(final DeviceState newState) {
@@ -52,7 +46,27 @@ public class Drone implements Device {
     }
 
     /**
-     * {@inheritDoc}
+     * Invokes the update lifecycle on the underlying state.
+     */
+    @Override
+    public void update() {
+        this.state.update(this);
+    }
+
+    /**
+     * Forwards an input message to the current device state handler.
+     *
+     * @param msg the message to handle; must not be null
+     */
+    @Override
+    public void handle(final String msg) {
+        this.state.handle(this, msg);
+    }
+
+    /**
+     * Returns the current DeviceState instance.
+     *
+     * @return the current device state
      */
     @Override
     public DeviceState getDeviceState() {

@@ -27,6 +27,11 @@ public interface Controller {
     void stop();
 
     /**
+     * Handles incoming messages from the serial monitor.
+     */
+    void handle();
+
+    /**
      * Perform a single update cycle of the controller.
      */
     void update();

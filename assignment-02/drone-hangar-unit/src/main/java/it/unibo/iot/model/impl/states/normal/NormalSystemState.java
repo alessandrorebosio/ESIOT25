@@ -29,7 +29,7 @@ public class NormalSystemState extends AbstractSystemState {
      */
     @Override
     public String toString() {
-        return "NORMAL";
+        return "NORMAL STATE";
     }
 
 }

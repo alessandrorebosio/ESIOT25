@@ -31,7 +31,7 @@ public class PreAlarmSystemState extends AbstractSystemState {
      */
     @Override
     public String toString() {
-        return "PREALARM";
+        return "PREALARM STATE";
     }
 
 }

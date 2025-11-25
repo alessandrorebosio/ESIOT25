@@ -33,7 +33,7 @@ public class UnknownSystemState extends AbstractSystemState {
      */
     @Override
     public String toString() {
-        return "UNKNOWN";
+        return "UNKNOWN STATE";
     }
 
 }

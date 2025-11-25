@@ -19,7 +19,7 @@ bool MsgSerivce::isMsgAvailable() {
 String MsgSerivce::getMsg() {
     String msg = "";
     while (this->isMsgAvailable()) {
-        msg += Serial.read();
+        msg += (char)Serial.read();
     }
     return msg;
 }

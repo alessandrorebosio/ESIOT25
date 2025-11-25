@@ -23,10 +23,6 @@ void setup() {
     scheduler.init(BASEPERIOD);
 
     scheduler.addTask(new HangarControlTask(hw, msg, context, BASEPERIOD * 10));
-    scheduler.addTask(new BlinkingTask(hw->getL2(), BASEPERIOD * 5));
-    scheduler.addTask(new SweepingTask(hw->getMotor(), context, BASEPERIOD));
-    scheduler.addTask(
-        new DistanceMeasuringTask(hw->getSonar(), msg, context, BASEPERIOD));
 }
 
 void loop() {

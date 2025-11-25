@@ -29,7 +29,7 @@ public class AlarmSystemState extends AbstractSystemState {
      */
     @Override
     public String toString() {
-        return "ALARM";
+        return "ALARM STATE";
     }
 
 }

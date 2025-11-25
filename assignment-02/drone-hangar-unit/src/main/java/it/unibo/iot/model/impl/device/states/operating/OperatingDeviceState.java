@@ -1,6 +1,8 @@
 package it.unibo.iot.model.impl.device.states.operating;
 
+import it.unibo.iot.model.api.device.Device;
 import it.unibo.iot.model.impl.device.states.AbstractDeviceState;
+import it.unibo.iot.model.impl.device.states.landing.LandingDeviceState;
 
 /**
  * Represents the device state when it is operating.
@@ -10,11 +12,30 @@ import it.unibo.iot.model.impl.device.states.AbstractDeviceState;
 public class OperatingDeviceState extends AbstractDeviceState {
 
     /**
-     * {@inheritDoc}
+     * Handles an incoming message while the device is operating.
+     * Typical transition: "landing" -> LandingDeviceState.
+     *
+     * @param device the device instance receiving the message
+     * @param msg    the received message; must not be null
+     */
+    @Override
+    public void handle(final Device device, final String msg) {
+        super.handle(device, msg);
+        switch (msg) {
+            case "landing" -> device.changeState(new LandingDeviceState());
+            default -> {
+            }
+        }
+    }
+
+    /**
+     * Returns the textual representation of this state.
+     *
+     * @return "OPERATING STATE"
      */
     @Override
     public String toString() {
-        return "OPERATING";
+        return "OPERATING STATE";
     }
 
 }
