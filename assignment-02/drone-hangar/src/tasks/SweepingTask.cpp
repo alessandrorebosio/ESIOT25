@@ -7,7 +7,6 @@
 
 SweepingTask::SweepingTask(Motor *motor, Context *context)
     : motor(motor), context(context) {
-    this->state = CLOSE;
 }
 
 SweepingTask::SweepingTask(Motor *motor, Context *context, int period)
@@ -17,6 +16,7 @@ SweepingTask::SweepingTask(Motor *motor, Context *context, int period)
 
 void SweepingTask::init(int period) {
     Task::init(period);
+
     this->currentPos = CLOSE_POS;
     this->motor->setPosition(CLOSE_POS);
     this->motor->off();
@@ -26,28 +26,25 @@ void SweepingTask::init(int period) {
 void SweepingTask::tick() {
     switch (this->state) {
         case CLOSE:
-            if (this->context->isStarted()) {
-                if (this->state == CLOSE) {
-                    this->setState(OPENING);
-                    this->motor->on();
-                }
+            if (this->context->isOpening()) {
+                this->setState(OPENING);
+                this->motor->on();
             }
             break;
 
-        case OPENING: {
+        case OPENING:
             long dt = elapsedTime();
-            this->currentPos = ((float)dt / OPEN_TIME) * OPEN_POS;
-            this->motor->setPosition(currentPos);
+            this->motor->setPosition(((float)dt / OPEN_TIME) * OPEN_POS);
 
             if (dt >= OPEN_TIME) {
                 this->motor->setPosition(OPEN_POS);
+                this->motor->off();
                 this->setState(OPEN);
             }
             break;
-        }
 
         case OPEN:
-            if (this->context->isStopped()) {
+            if (!this->context->isOpening()) {
                 if (this->state == OPEN) {
                     this->setState(CLOSING);
                     this->motor->on();
@@ -57,8 +54,8 @@ void SweepingTask::tick() {
 
         case CLOSING: {
             long dt = elapsedTime();
-            this->currentPos = OPEN_POS - ((float)dt / CLOSE_TIME) * OPEN_POS;
-            this->motor->setPosition(currentPos);
+            this->motor->setPosition(OPEN_POS -
+                                     ((float)dt / CLOSE_TIME) * OPEN_POS);
 
             if (dt >= CLOSE_TIME) {
                 this->motor->setPosition(CLOSE_POS);

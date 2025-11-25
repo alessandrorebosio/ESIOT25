@@ -1,29 +1,21 @@
 #include "model/Context.h"
 
 Context::Context() {
-    started = false;
-    stopped = false;
+    this->reset();
 }
 
-bool Context::isStarted() {
-    return started;
+void Context::startOpening() {
+    this->opening = true;
 }
 
-bool Context::isStopped() {
-    return stopped;
+void Context::stopOpening() {
+    this->opening = false;
 }
 
-void Context::setStarted() {
-    started = true;
-    stopped = false;
-}
-
-void Context::setStopped() {
-    stopped = true;
-    started = false;
+bool Context::isOpening() {
+    return this->opening;
 }
 
 void Context::reset() {
-    started = false;
-    stopped = false;
+    this->stopOpening();
 }
