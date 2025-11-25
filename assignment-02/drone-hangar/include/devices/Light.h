@@ -10,4 +10,6 @@ class Light : public Device {
     virtual void on() = 0;
 
     virtual void off() = 0;
+
+    virtual ~Light() = default;
 };

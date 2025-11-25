@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 
+#include "core/MsgService.h"
+
 #include "devices/Light.h"
 #include "devices/Motor.h"
 #include "devices/PresenceSensor.h"
@@ -22,26 +24,16 @@ class HWPlatform {
     ProximitySensor *sonar;
     TempSensor *tempSensor;
 
+    MsgService *msg;
+
   public:
-    HWPlatform();
+    HWPlatform(MsgService *msg);
+
+    MsgService *serial();
 
     void init();
 
     bool isPressed();
 
-    void printOnLcd(String text);
-
-    void turnLedOffs();
-
-    bool isDetected();
-
-    bool isOverTemperature(int temperature);
-
-    bool isOverDistance(int distance);
-
-    Light *getL2();
-
-    Motor *getMotor();
-
-    ProximitySensor *getSonar();
+    bool isOverTemperature(unsigned short temperature);
 };

@@ -8,4 +8,6 @@ class TempSensor : public Device {
     }
 
     virtual float getTemperature() = 0;
+
+    virtual ~TempSensor() = default;
 };

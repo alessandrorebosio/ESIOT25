@@ -1,6 +1,6 @@
-#include <TimerOne.h>
-
 #include "core/Scheduler.h"
+
+#include <TimerOne.h>
 
 volatile bool timerFlag;
 
@@ -21,9 +21,8 @@ bool Scheduler::addTask(Task *task) {
         this->taskList[nTasks] = task;
         this->nTasks++;
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 void Scheduler::schedule() {

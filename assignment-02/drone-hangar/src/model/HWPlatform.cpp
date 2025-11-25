@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-HWPlatform::HWPlatform() {
+HWPlatform::HWPlatform(MsgService *msg) : msg(msg) {
     this->init();
 }
 
@@ -25,40 +25,14 @@ void HWPlatform::init() {
     this->tempSensor = new TempSensorTMP36(TEMPERATURE_PIN);
 }
 
+MsgService *HWPlatform::serial() {
+    return this->msg;
+}
+
 bool HWPlatform::isPressed() {
     return this->button->isPressed();
 }
 
-void HWPlatform::printOnLcd(const String text) {
-    this->lcd->print(text);
-}
-
-void HWPlatform::turnLedOffs() {
-    this->led1->off();
-    this->led2->off();
-    this->led3->off();
-}
-
-bool HWPlatform::isDetected() {
-    return this->pir->isDetected();
-}
-
-bool HWPlatform::isOverTemperature(int temperature) {
-    return temperature > this->tempSensor->getTemperature();
-}
-
-bool HWPlatform::isOverDistance(int distance) {
-    return distance > this->sonar->getDistance();
-}
-
-Light *HWPlatform::getL2() {
-    return this->led2;
-}
-
-Motor *HWPlatform::getMotor() {
-    return this->motor;
-}
-
-ProximitySensor *HWPlatform::getSonar() {
-    return this->sonar;
+bool HWPlatform::isOverTemperature(unsigned short temperature) {
+    return temperature >= this->tempSensor->getTemperature();
 }

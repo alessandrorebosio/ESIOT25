@@ -12,4 +12,6 @@ class Motor : public Device {
     virtual void off() = 0;
 
     virtual void setPosition(short angle) = 0;
+
+    virtual ~Motor() = default;
 };

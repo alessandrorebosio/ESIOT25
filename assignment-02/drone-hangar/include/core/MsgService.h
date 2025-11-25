@@ -21,4 +21,6 @@ class MsgService final {
     String getMsg();
 
     void sendMsg(String text);
+
+    ~MsgService() = default;
 };

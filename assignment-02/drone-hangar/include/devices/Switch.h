@@ -8,4 +8,6 @@ class Switch : public Device {
     }
 
     virtual bool isPressed() = 0;
+
+    virtual ~Switch() = default;
 };

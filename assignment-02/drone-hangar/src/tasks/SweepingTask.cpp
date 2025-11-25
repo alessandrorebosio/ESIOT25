@@ -38,8 +38,8 @@ void SweepingTask::tick() {
                 return;
             }
 
-            this->motor->setPosition(CLOSE_POS + 
-                                        (float)dt / SWP_TIME* (OPEN_POS - CLOSE_POS));
+            this->motor->setPosition(CLOSE_POS + (float)dt / SWP_TIME *
+                                                     (OPEN_POS - CLOSE_POS));
 
             if (dt >= SWP_TIME) {
                 this->motor->setPosition(OPEN_POS);
@@ -63,8 +63,8 @@ void SweepingTask::tick() {
                 return;
             }
 
-            this->motor->setPosition(OPEN_POS - 
-                                        (float)dt / SWP_TIME * (OPEN_POS - CLOSE_POS));
+            this->motor->setPosition(OPEN_POS - (float)dt / SWP_TIME *
+                                                    (OPEN_POS - CLOSE_POS));
 
             if (dt >= SWP_TIME) {
                 this->motor->setPosition(CLOSE_POS);
