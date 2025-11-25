@@ -66,9 +66,7 @@ public class AppController implements Controller {
      */
     @Override
     public void handle() {
-        this.connection.receive().ifPresent(str -> {
-            this.model.handle(str);
-        });
+        this.connection.receive().ifPresent(this.model::handle);
     }
 
     /**
