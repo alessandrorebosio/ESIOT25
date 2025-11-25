@@ -18,7 +18,7 @@ class BlinkingTask final : public Task {
 
     void init(int period);
 
-    void init();
+    void reset();
 
     void tick();
 };

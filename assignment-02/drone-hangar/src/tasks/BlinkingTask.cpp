@@ -2,6 +2,7 @@
 
 BlinkingTask::BlinkingTask(Light *led, Context *context)
     : led(led), context(context) {
+    this->reset();
 }
 
 BlinkingTask::BlinkingTask(Light *led, Context *context, int period)
@@ -11,12 +12,11 @@ BlinkingTask::BlinkingTask(Light *led, Context *context, int period)
 
 void BlinkingTask::init(const int period) {
     Task::init(period);
-    this->init();
 }
 
 void BlinkingTask::tick() {
     if (!this->context->isBlinking()) {
-        this->init();
+        this->reset();
         return;
     }
 
@@ -28,7 +28,7 @@ void BlinkingTask::tick() {
     }
 }
 
-void BlinkingTask::init() {
+void BlinkingTask::reset() {
     this->isOn = false;
     this->led->off();
 }
