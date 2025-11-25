@@ -2,13 +2,13 @@
 
 #include <Arduino.h>
 
-#include "model/HWPlatform.h"
-
 class State {
   public:
-    void onEnter(HWPlatform *hw);
+    void onEnter();
 
-    void onExit(HWPlatform *hw);
+    void onExit();
 
-    void execute(HWPlatform *hw);
+    void thick();
+
+    virtual ~State() = default;
 };

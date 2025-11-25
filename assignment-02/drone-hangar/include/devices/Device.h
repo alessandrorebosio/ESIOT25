@@ -25,4 +25,6 @@ class Device {
     uint8_t getPin() const {
         return this->pin;
     }
+
+    virtual ~Device() = default;
 };

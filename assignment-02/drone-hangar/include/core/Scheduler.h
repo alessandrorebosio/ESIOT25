@@ -17,4 +17,6 @@ class Scheduler final {
     virtual bool addTask(Task *task);
 
     virtual void schedule();
+
+    ~Scheduler() = default;
 };

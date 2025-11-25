@@ -21,4 +21,6 @@ class Context {
     bool isBlinking();
 
     void reset();
+
+    virtual ~Context() = default;
 };

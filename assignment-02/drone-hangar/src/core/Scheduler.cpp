@@ -1,6 +1,6 @@
-#include <TimerOne.h>
-
 #include "core/Scheduler.h"
+
+#include <TimerOne.h>
 
 volatile bool timerFlag;
 

@@ -10,4 +10,7 @@ class PresenceSensor : public Device {
     virtual bool isDetected() = 0;
 
     virtual void calibrate();
+
+    virtual ~PresenceSensor() = default;
+    
 };

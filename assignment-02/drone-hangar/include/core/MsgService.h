@@ -16,4 +16,6 @@ class MsgSerivce final {
     String getMsg();
 
     void sendMsg(String text);
+
+    ~MsgSerivce() = default;
 };
