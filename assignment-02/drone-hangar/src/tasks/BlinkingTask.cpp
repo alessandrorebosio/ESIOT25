@@ -1,23 +1,34 @@
 #include "tasks/BlinkingTask.h"
 
-BlinkingTask::BlinkingTask(Light *led) : led(led) {
+BlinkingTask::BlinkingTask(Light *led, Context *context)
+    : led(led), context(context) {
 }
 
-BlinkingTask::BlinkingTask(Light *led, int period) : BlinkingTask(led) {
+BlinkingTask::BlinkingTask(Light *led, Context *context, int period)
+    : BlinkingTask(led, context) {
     this->init(period);
 }
 
 void BlinkingTask::init(const int period) {
     Task::init(period);
-    this->isOn = false;
+    this->init();
 }
 
 void BlinkingTask::tick() {
+    if (!this->context->isBlinking()) {
+        this->init();
+        return;
+    }
+
+    this->isOn = !this->isOn;
     if (this->isOn) {
         this->led->off();
-        this->isOn = false;
     } else {
         this->led->on();
-        this->isOn = true;
     }
+}
+
+void BlinkingTask::init() {
+    this->isOn = false;
+    this->led->off();
 }
