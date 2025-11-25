@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-HWPlatform::HWPlatform() {
+HWPlatform::HWPlatform(MsgSerivce *msg) : msg(msg) {
     this->init();
 }
 
@@ -23,4 +23,16 @@ void HWPlatform::init() {
     this->motor = new ServoMotor(SERVO_PIN);
     this->sonar = new Sonar(SONAR_TRIG_PIN, SONAR_ECHO_PIN, MAXTIME);
     this->tempSensor = new TempSensorTMP36(TEMPERATURE_PIN);
+}
+
+MsgSerivce *HWPlatform::serial() {
+    return this->msg;
+}
+
+bool HWPlatform::isPressed() {
+    return this->button->isPressed();
+}
+
+bool HWPlatform::isOverTemperature(unsigned short temperature) {
+    return temperature >= this->tempSensor->getTemperature();
 }

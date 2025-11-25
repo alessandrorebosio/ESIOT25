@@ -1,5 +1,7 @@
 #include <Arduino.h>
 
+#include <Led.h>
+
 #include "core/MsgService.h"
 #include "core/Scheduler.h"
 
@@ -7,19 +9,20 @@
 #include "model/HWPlatform.h"
 
 #include "tasks/BlinkingTask.h"
-#include "tasks/HangarControlTask.h"
+#include "tasks/SystemTask.h"
 
 #include "config.h"
 
-Scheduler scheduler;
+static Scheduler scheduler;
 
 void setup() {
+    HWPlatform *hw = new HWPlatform(new MsgSerivce(BAUD));
     Context *context = new Context();
-    MsgSerivce *msg = new MsgSerivce(BAUD);
-
     scheduler.init(BASEPERIOD);
 
-    scheduler.addTask(new HangarControlTask(msg, context, BASEPERIOD * 10));
+    scheduler.addTask(new SystemTask(hw, context, BASEPERIOD * 10));
+    scheduler.addTask(
+        new BlinkingTask(new Led(LED_BUILTIN), context, BASEPERIOD * 5));
 }
 
 void loop() {

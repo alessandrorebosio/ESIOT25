@@ -7,9 +7,9 @@
 class Scheduler final {
   private:
     Task *taskList[MAX_TASKS];
-
     int basePeriod;
     int nTasks;
+    unsigned long lastExecutionTime;
 
   public:
     void init(int basePeriod);
