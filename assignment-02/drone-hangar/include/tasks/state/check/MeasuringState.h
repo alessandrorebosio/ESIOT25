@@ -2,9 +2,9 @@
 
 #include "tasks/state/check/CheckState.h"
 
-class InsideState : public CheckState {
+class MeasuringState : public CheckState {
   public:
-    InsideState();
+    MeasuringState();
 
     void onEnter(CheckTask *chk, HWPlatform *hw, Context *cxt);
 
@@ -12,5 +12,5 @@ class InsideState : public CheckState {
 
     void tick(CheckTask *chk, HWPlatform *hw, Context *cxt);
 
-    ~InsideState() = default;
+    ~MeasuringState() = default;
 };

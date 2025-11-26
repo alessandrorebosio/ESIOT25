@@ -59,6 +59,14 @@ class HWPlatform {
         return expired(time, T2);
     }
 
+    inline long expiredT3(unsigned long time) {
+        return expired(time, T3);
+    }
+
+    inline long expiredT4(unsigned long time) {
+        return expired(time, T4);
+    }
+
     inline long expired(unsigned long time, unsigned timeout) {
         return millis() - time >= timeout;
     }

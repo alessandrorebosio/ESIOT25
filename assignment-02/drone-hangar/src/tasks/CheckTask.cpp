@@ -4,7 +4,7 @@
 
 CheckTask::CheckTask(HWPlatform *hw, Context *context) 
     : hw(hw), context(context), state(nullptr) {
-    // this->changeState(new ::IdleState);
+    this->changeState(new ::IdleState);
 }
 
 CheckTask::CheckTask(HWPlatform *hw, Context *context, int period)
