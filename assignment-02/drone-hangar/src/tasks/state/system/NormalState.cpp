@@ -2,12 +2,16 @@
 #include "tasks/SystemTask.h"
 #include "tasks/state/system/PreAlarmState.h"
 
+static unsigned long timer = 0;
+
 NormalState::NormalState() {
 }
 
 void NormalState::onEnter(SystemTask *sys, HWPlatform *hw, Context *ctx) {
     hw->serial()->sendMsg("normal");
     ctx->startBlinking();
+    hw->turnOnL1();
+    timer = millis();
 }
 
 void NormalState::onExit(SystemTask *sys, HWPlatform *hw, Context *ctx) {
@@ -15,5 +19,11 @@ void NormalState::onExit(SystemTask *sys, HWPlatform *hw, Context *ctx) {
 }
 
 void NormalState::tick(SystemTask *sys, HWPlatform *hw, Context *ctx) {
-    sys->changeState(new ::PreAlarmState);
+    if (hw->isOverTemperature1()) {
+        if (hw->expiredT1(timer)) {
+            sys->changeState(new ::PreAlarmState);
+        }
+    } else {
+        timer = millis();
+    }
 }

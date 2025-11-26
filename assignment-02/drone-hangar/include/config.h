@@ -4,10 +4,10 @@
 
 #define BAUD 9600
 
-#define TEMP1 10
-#define TIME1 1000
-#define TEMP2 10
-#define TIME2 1000
+#define TEMP1 50
+#define T1 10000
+#define TEMP2 50
+#define T2 10000
 
 #define TEMPERATURE_PIN A0
 #define BUTTON_PIN 2
