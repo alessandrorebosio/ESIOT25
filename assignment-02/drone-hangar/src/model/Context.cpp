@@ -4,31 +4,44 @@ Context::Context() {
     this->reset();
 }
 
-void Context::startOpening() {
-    this->opening = true;
+void Context::allowFlightOperation() {
+    this->flightOperation = true;
 }
 
-void Context::startBlinking() {
+void Context::blockFlightOperation() {
+    this->flightOperation = false;
+}
+
+void Context::startBlink() {
     this->blinking = true;
 }
 
-void Context::stopOpening() {
-    this->opening = false;
-}
-
-void Context::stopBlinking() {
+void Context::stopBlink() {
     this->blinking = false;
 }
 
-bool Context::shouldOpen() {
+void Context::open() {
+    this->opening = true;
+}
+
+void Context::close() {
+    this->opening = false;
+}
+
+bool Context::isFlightOperationAllowed() const {
+    return this->flightOperation;
+}
+
+bool Context::shouldOpen() const {
     return this->opening;
 }
 
-bool Context::shouldBlink() {
+bool Context::shouldBlink() const {
     return this->blinking;
 }
 
 void Context::reset() {
-    this->stopOpening();
-    this->stopBlinking();
+    this->blockFlightOperation();
+    this->stopBlink();
+    this->close();
 }

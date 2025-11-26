@@ -2,23 +2,25 @@
 
 class Context {
   private:
-    bool opening;
+    bool flightOperation;
     bool blinking;
+    bool opening;
 
   public:
     Context();
 
-    void startOpening();
+    void allowFlightOperation();
+    void blockFlightOperation();
 
-    void startBlinking();
+    void startBlink();
+    void stopBlink();
 
-    void stopOpening();
+    void open();
+    void close();
 
-    void stopBlinking();
-
-    bool shouldOpen();
-
-    bool shouldBlink();
+    bool isFlightOperationAllowed() const;
+    bool shouldBlink() const;
+    bool shouldOpen() const;
 
     void reset();
 

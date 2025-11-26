@@ -9,13 +9,13 @@ NormalState::NormalState() {
 
 void NormalState::onEnter(SystemTask *sys, HWPlatform *hw, Context *ctx) {
     hw->serial()->sendMsg("normal");
-    ctx->startBlinking();
+    ctx->startBlink();
     hw->turnOnL1();
     timer = millis();
 }
 
 void NormalState::onExit(SystemTask *sys, HWPlatform *hw, Context *ctx) {
-    ctx->stopBlinking();
+    ctx->stopBlink();
 }
 
 void NormalState::tick(SystemTask *sys, HWPlatform *hw, Context *ctx) {
