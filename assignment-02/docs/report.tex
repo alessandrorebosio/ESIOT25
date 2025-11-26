@@ -254,7 +254,15 @@ remains off when blinking is not allowed.
 \end{figure}
 
 \section{Gate Task}
+The Gate Task controls the gate with four states: \texttt{CLOSED},
+\texttt{OPENING}, \texttt{OPEN}, and \texttt{CLOSING}. At startup the gate is
+\texttt{CLOSED}. On the \texttt{open} command it transitions to \texttt{OPENING}
+and then to \texttt{OPEN} when the opening is completed. On the
+\texttt{close} command it transitions to \texttt{CLOSING} and then to
+\texttt{CLOSED} once closed.
 
+If an opposite command arrives while the gate is moving, the
+direction is reversed immediately.
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{./pdf/GateTask.pdf}
