@@ -13,5 +13,7 @@ void OffState::onExit(BlinkingTask *bln, HWPlatform *hw, Context *ctx) {
 }
 
 void OffState::tick(BlinkingTask *bln, HWPlatform *hw, Context *ctx) {
-    bln->changeState(new ::OnState);
+    if(ctx->shouldBlink()) {
+        bln->changeState(new ::OnState);
+    }
 }

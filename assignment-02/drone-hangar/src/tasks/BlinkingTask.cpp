@@ -17,10 +17,5 @@ void BlinkingTask::init(const int period) {
 }
 
 void BlinkingTask::tick() {
-    if (!this->context->shouldBlink()) {
-        this->changeState(new ::OffState);
-        return;
-    }
-
     this->state->tick(this, this->hw, this->context);
 }
