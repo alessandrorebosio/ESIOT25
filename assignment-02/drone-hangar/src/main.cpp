@@ -22,7 +22,7 @@ void setup() {
 
     scheduler.addTask(new SystemTask(hw, context, BASEPERIOD * 10));
     scheduler.addTask(
-        new BlinkingTask(new Led(LED_BUILTIN), context, BASEPERIOD * 5));
+        new BlinkingTask(hw, context, BASEPERIOD * 5));
 }
 
 void loop() {
