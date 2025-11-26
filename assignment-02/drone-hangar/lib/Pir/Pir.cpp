@@ -1,6 +1,6 @@
 #include "Pir.h"
 
-#define CALIBRATION_TIME 100000
+#define CALIBRATION_TIME 10000
 
 Pir::Pir(const uint8_t pin) : PresenceSensor(pin) {
     Device::begin(INPUT);

@@ -10,7 +10,7 @@ float TempSensorTMP36::getTemperature() {
     float min = 100;
 
     for (int i = 0; i < 5; i++) {
-        int value = analogRead(pin);
+        int value = Device::read();
         /* this is the formula for the TMP36*/
         float valueInCelsius = ((value * 0.00488) - 0.5) / 0.01;
         values[i] = valueInCelsius;
