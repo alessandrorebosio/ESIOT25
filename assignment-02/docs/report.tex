@@ -195,7 +195,7 @@ the hangar door is closed if open, \texttt{L3} is turned on, and the
 LCD displays \texttt{ALARM}. If the drone is outside when the alarm
 triggers, an alarm message is sent via \texttt{DRU}. All operations
 remain suspended in \texttt{ALARM} until the \texttt{RESET} button is
-pressed, which returns the system to \texttt{NORMAL}. 
+pressed, which returns the system to \texttt{NORMAL}.
 
 \begin{figure}[H]
   \centering
@@ -203,6 +203,9 @@ pressed, which returns the system to \texttt{NORMAL}.
   \caption{System Task state diagram.}
   \label{fig:SystemTask}
 \end{figure}
+\noindent Note: when the entry action \texttt{/AllowFlight} is
+executed, a boolean flag is set to \texttt{true}; when the exit
+action \texttt{/BlockFlight} is executed, the flag is set to \texttt{false}.
 
 \section{Flight Task}
 
