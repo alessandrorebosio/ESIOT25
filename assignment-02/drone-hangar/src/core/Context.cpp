@@ -58,6 +58,7 @@ bool Context::shouldBlink() const {
 
 void Context::reset() {
     this->blockFlightOperation();
+    this->startMeasuring();
     this->stopBlink();
     this->closeGate();
 }

@@ -20,7 +20,7 @@ void MeasuringState::onExit(CheckTask *chk, HWPlatform *hw, Context *cxt) {
 }
 
 void MeasuringState::tick(CheckTask *chk, HWPlatform *hw, Context *cxt) {
-    if (hw->isOverDistance1()) {
+    if (hw->isOverDistance1() && hw->msgIsEqual("landing")) {
         if (hw->expiredT3(timerOutside)) {
             hw->serial()->sendMsg("outside");
             chk->changeState(new ::IdleState);

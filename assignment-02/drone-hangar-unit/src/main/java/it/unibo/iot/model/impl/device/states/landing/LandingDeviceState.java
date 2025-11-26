@@ -22,7 +22,7 @@ public class LandingDeviceState extends AbstractDeviceState {
     public void handle(final Device device, final String msg) {
         super.handle(device, msg);
         switch (msg) {
-            case "rest" -> device.changeState(new RestDeviceState());
+            case "inside" -> device.changeState(new RestDeviceState());
             default -> {
             }
         }

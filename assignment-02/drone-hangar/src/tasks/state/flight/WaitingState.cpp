@@ -22,7 +22,7 @@ void WaitingState::tick(FlightTask *fl, HWPlatform *hw, Context *cxt) {
         hw->serial()->read();
     }
 
-    if ((hw->msgIsEqual(TAKEOFF) && hw->isOverDistance1()) ||
+    if ((hw->msgIsEqual(TAKEOFF) && !hw->isOverDistance1()) ||
         (hw->msgIsEqual(LANDING) && hw->isDetected())) {
         fl->changeState(new ::OperatingState);
     }

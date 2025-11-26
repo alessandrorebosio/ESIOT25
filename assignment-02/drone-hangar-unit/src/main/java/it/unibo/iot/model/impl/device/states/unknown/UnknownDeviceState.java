@@ -25,7 +25,7 @@ public class UnknownDeviceState extends AbstractDeviceState {
     public void handle(final Device device, final String msg) {
         super.handle(device, msg);
         switch (msg) {
-            case "rest" -> device.changeState(new RestDeviceState());
+            case "inside" -> device.changeState(new RestDeviceState());
             case "takeoff" -> device.changeState(new TakeoffDeviceState());
             case "operating" -> device.changeState(new OperatingDeviceState());
             case "landing" -> device.changeState(new LandingDeviceState());
