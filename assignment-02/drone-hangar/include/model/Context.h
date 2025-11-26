@@ -5,6 +5,7 @@ class Context {
     bool flightOperation;
     bool blinking;
     bool opening;
+    bool inside;
 
   public:
     Context();
@@ -18,7 +19,11 @@ class Context {
     void open();
     void close();
 
+    void droneInside();
+    void droneOutside();
+
     bool isFlightOperationAllowed() const;
+    bool isInside();
     bool shouldBlink() const;
     bool shouldOpen() const;
 

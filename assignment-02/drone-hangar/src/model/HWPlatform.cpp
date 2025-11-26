@@ -64,3 +64,16 @@ bool HWPlatform::isOverTemperature2() {
 bool HWPlatform::isOverTemperature(unsigned short temperature) {
     return this->tempSensor->getTemperature() >= temperature;
 }
+
+bool HWPlatform::isOverDistance1() {
+    return this->isOverDistance(D1);
+}
+
+bool HWPlatform::isOverDistance2() {
+    return this->isOverDistance(D2);
+}
+
+bool HWPlatform::isOverDistance(unsigned short distance) {
+    return this->sonar->getDistance() >= distance;
+}
+
