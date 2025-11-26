@@ -10,6 +10,7 @@
 
 #include "tasks/BlinkingTask.h"
 #include "tasks/SystemTask.h"
+#include "tasks/CheckTask.h"
 
 #include "config.h"
 
@@ -23,6 +24,7 @@ void setup() {
     scheduler.addTask(new SystemTask(hw, context, BASEPERIOD * 10));
     scheduler.addTask(
         new BlinkingTask(hw, context, BASEPERIOD * 5));
+    scheduler.addTask(new CheckTask(hw, context, BASEPERIOD * 5));
 }
 
 void loop() {

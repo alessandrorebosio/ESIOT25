@@ -1,5 +1,6 @@
 #include "tasks/state/blinking/OffState.h"
 #include "tasks/state/blinking/OnState.h"
+
 #include "tasks/BlinkingTask.h"
 
 OffState::OffState() {
