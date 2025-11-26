@@ -44,6 +44,10 @@ bool Context::isMeasured() const {
     return !this->measuring;
 }
 
+bool Context::shouldMeasure() const {
+    return this->measuring;
+}
+
 bool Context::shouldOpen() const {
     return this->opening;
 }

@@ -17,6 +17,7 @@ void IdleState::tick(CheckTask *chk, HWPlatform *hw, Context *cxt) {
     // if (cxt->shouldMeasure()) {
     //     chk->changeState(new ::MeasuringState);
     // }
+    if (true) {
         chk->changeState(new ::MeasuringState);
-
+    }
 }

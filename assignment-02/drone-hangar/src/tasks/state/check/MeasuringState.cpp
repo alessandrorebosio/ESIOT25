@@ -14,14 +14,14 @@ void MeasuringState::onEnter(CheckTask *chk, HWPlatform *hw, Context *cxt) {
 }
 
 void MeasuringState::onExit(CheckTask *chk, HWPlatform *hw, Context *cxt) {
-    // cxt->stopMeasuring();
+    cxt->stopMeasuring();
 }
 
 void MeasuringState::tick(CheckTask *chk, HWPlatform *hw, Context *cxt) {
     if(hw->isOverDistance1()){
         if(hw->expiredT3(timer)){
-            timer = millis();
             hw->serial()->sendMsg("outside");
+            timer = millis();
             chk->changeState(new ::IdleState);
         }
     } else {
@@ -30,8 +30,8 @@ void MeasuringState::tick(CheckTask *chk, HWPlatform *hw, Context *cxt) {
 
     if(!hw->isOverDistance2()){
         if(hw->expiredT4(timer)){
-            timer = millis();
             hw->serial()->sendMsg("outside");
+            timer = millis();
             chk->changeState(new ::IdleState);
         }
     } else {

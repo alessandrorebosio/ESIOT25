@@ -24,6 +24,7 @@ class Context {
 
     bool isFlightOperationAllowed() const;
     bool isMeasured() const;
+    bool shouldMeasure() const;
     bool shouldBlink() const;
     bool shouldOpen() const;
 
