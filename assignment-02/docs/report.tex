@@ -203,11 +203,17 @@ pressed, which returns the system to \texttt{NORMAL}.
   \caption{System Task state diagram.}
   \label{fig:SystemTask}
 \end{figure}
-\noindent Note: when the entry action \texttt{/AllowFlight} is
+Note: when the entry action \texttt{/AllowFlight} is
 executed, a boolean flag is set to \texttt{true}; when the exit
 action \texttt{/BlockFlight} is executed, the flag is set to \texttt{false}.
 
 \section{Flight Task}
+The Flight Task consists of two states: \texttt{WAITING} and \texttt{OPERATING}. In
+\texttt{WAITING} the task waits for a command from the drone (take-off or
+landing). When a request is accepted, the task transitions to
+\texttt{OPERATING}, where it waits for the operation to complete
+(exit detection for take-off, or touchdown detection for landing). Once
+the operation completes the task returns to \texttt{WAITING}.
 
 \begin{figure}[H]
   \centering
@@ -215,7 +221,11 @@ action \texttt{/BlockFlight} is executed, the flag is set to \texttt{false}.
   \caption{Flight Task state diagram.}
   \label{fig:FlightTask}
 \end{figure}
+Note: the actions \texttt{/close} and \texttt{/stopBlink} stop the Gate
+and Blink tasks respectively; the actions \texttt{/startBlink} and
+\texttt{/open} start those tasks.
 
+\newpage
 \section{Check Task}
 
 \begin{figure}[H]
