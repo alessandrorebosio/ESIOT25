@@ -14,7 +14,7 @@ void MeasuringState::onEnter(CheckTask *chk, HWPlatform *hw, Context *cxt) {
 }
 
 void MeasuringState::onExit(CheckTask *chk, HWPlatform *hw, Context *cxt) {
-    cxt->stopMeasuring();
+    // cxt->stopMeasuring();
 }
 
 void MeasuringState::tick(CheckTask *chk, HWPlatform *hw, Context *cxt) {
