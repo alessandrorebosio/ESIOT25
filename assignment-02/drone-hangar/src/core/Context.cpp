@@ -12,6 +12,14 @@ void Context::blockFlightOperation() {
     this->flightOperation = false;
 }
 
+void Context::startMeasuring() {
+    this->measuring = true;
+}
+
+void Context::stopMeasuring() {
+    this->measuring = false;
+}
+
 void Context::startBlink() {
     this->blinking = true;
 }
@@ -20,16 +28,20 @@ void Context::stopBlink() {
     this->blinking = false;
 }
 
-void Context::open() {
+void Context::openGate() {
     this->opening = true;
 }
 
-void Context::close() {
+void Context::closeGate() {
     this->opening = false;
 }
 
 bool Context::isFlightOperationAllowed() const {
     return this->flightOperation;
+}
+
+bool Context::isMeasured() const {
+    return !this->measuring;
 }
 
 bool Context::shouldOpen() const {
@@ -43,5 +55,5 @@ bool Context::shouldBlink() const {
 void Context::reset() {
     this->blockFlightOperation();
     this->stopBlink();
-    this->close();
+    this->closeGate();
 }

@@ -1,8 +1,10 @@
 #include "tasks/FlightTask.h"
 
+#include "tasks/state/flight/WaitingState.h"
+
 FlightTask::FlightTask(HWPlatform *hw, Context *context)
     : hw(hw), context(context), state(nullptr) {
-    this->changeState(nullptr);
+    this->changeState(new ::WaitingState);
 }
 
 FlightTask::FlightTask(HWPlatform *hw, Context *context, int period)
