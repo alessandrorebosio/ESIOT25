@@ -16,9 +16,9 @@ class Context {
 
     void stopBlinking();
 
-    bool isOpening();
+    bool shouldOpen();
 
-    bool isBlinking();
+    bool shouldBlink();
 
     void reset();
 

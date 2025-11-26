@@ -4,7 +4,7 @@
 
 BlinkingTask::BlinkingTask(HWPlatform *hw, Context *context)
     : hw(hw), context(context), state(nullptr) {
-    this->changeState(new::OffState);
+    this->changeState(new ::OffState);
 }
 
 BlinkingTask::BlinkingTask(HWPlatform *hw, Context *context, int period)
@@ -17,8 +17,8 @@ void BlinkingTask::init(const int period) {
 }
 
 void BlinkingTask::tick() {
-    if (!this->context->isBlinking()) {
-        this->changeState(new:: OffState);
+    if (!this->context->shouldBlink()) {
+        this->changeState(new ::OffState);
         return;
     }
 

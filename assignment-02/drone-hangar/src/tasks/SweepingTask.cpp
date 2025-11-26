@@ -20,7 +20,7 @@ void SweepingTask::init(int period) {
 }
 
 void SweepingTask::tick() {
-    bool contextName = this->context->isOpening();
+    bool contextName = this->context->shouldOpen();
     long dt = this->elapsedTime();
 
     switch (this->state) {

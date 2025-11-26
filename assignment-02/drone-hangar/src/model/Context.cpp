@@ -20,11 +20,11 @@ void Context::stopBlinking() {
     this->blinking = false;
 }
 
-bool Context::isOpening() {
+bool Context::shouldOpen() {
     return this->opening;
 }
 
-bool Context::isBlinking() {
+bool Context::shouldBlink() {
     return this->blinking;
 }
 

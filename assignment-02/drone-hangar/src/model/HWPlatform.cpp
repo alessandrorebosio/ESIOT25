@@ -37,6 +37,14 @@ void HWPlatform::turnOnL1() {
     this->led1->on();
 }
 
+void HWPlatform::turnOnL2() {
+    this->led2->on();
+}
+
+void HWPlatform::turnOffL2() {
+    this->led2->off();
+}
+
 void HWPlatform::turnOnL3() {
     this->led3->on();
 }

@@ -6,7 +6,7 @@ OnState::OnState() {
 }
 
 void OnState::onEnter(BlinkingTask *bln, HWPlatform *hw, Context *ctx) {
-    //led on
+    hw->turnOnL2();
 }
 
 void OnState::onExit(BlinkingTask *bln, HWPlatform *hw, Context *ctx) {

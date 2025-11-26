@@ -39,6 +39,10 @@ class HWPlatform {
 
     void turnOnL1();
 
+    void turnOnL2();
+
+    void turnOffL2();
+
     void turnOnL3();
 
     void turnOffL3();

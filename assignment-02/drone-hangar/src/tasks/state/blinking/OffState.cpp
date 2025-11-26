@@ -6,7 +6,7 @@ OffState::OffState() {
 }
 
 void OffState::onEnter(BlinkingTask *bln, HWPlatform *hw, Context *ctx) {
-    // led off
+    hw->turnOffL2();
 }
 
 void OffState::onExit(BlinkingTask *bln, HWPlatform *hw, Context *ctx) {
