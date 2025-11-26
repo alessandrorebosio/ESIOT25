@@ -181,34 +181,66 @@ The implementation is organized into multiple tasks, each responsible
 for a specific function of the project. A simple scheduler was
 implemented to run these tasks concurrently. The main tasks are described below.
 
-\section{Blinking Task}
+\section{System Task}
+The system defines three main states: \texttt{NORMAL},
+\texttt{PREALARM}, and \texttt{ALARM}. In the \texttt{NORMAL} state
+take-offs and landings are allowed. If the internal temperature
+remains greater than or equal to \texttt{Temp1} for more than
+\texttt{T3}, the system transitions to \texttt{PREALARM}, where new
+take-off and landing requests are suspended while in-progress
+operations may complete. If the temperature then remains greater than
+or equal to \texttt{Temp2} (with \texttt{Temp2} $>$ \texttt{Temp1}) for
+more than \texttt{T4}, the system enters the \texttt{ALARM} state:
+the hangar door is closed if open, \texttt{L3} is turned on, and the
+LCD displays \texttt{ALARM}. If the drone is outside when the alarm
+triggers, an alarm message is sent via \texttt{DRU}. All operations
+remain suspended in \texttt{ALARM} until the \texttt{RESET} button is
+pressed, which returns the system to \texttt{NORMAL}. 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./pdf/SystemTask.pdf}
+  \caption{System Task state diagram.}
+  \label{fig:SystemTask}
+\end{figure}
+
+\section{Flight Task}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./pdf/FlightTask.pdf}
+  \caption{Flight Task state diagram.}
+  \label{fig:FlightTask}
+\end{figure}
+
+\section{Check Task}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./pdf/CheckTask.pdf}
+  \caption{Check Task state diagram.}
+  \label{fig:CheckTask}
+\end{figure}
+
+\section{Blink Task}
 The blinking task controls the LED used for activity indication. It
 implements two states, On and Off. On each invocation the task
 toggles its state and updates the LED output accordingly.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{./pdf/BlinkingTask.pdf}
+  \includegraphics[width=\textwidth]{./pdf/BlinkTask.pdf}
   \caption{Blinking Task state diagram.}
   \label{fig:BlinkingTask}
 \end{figure}
 
-\newpage
-\section{Hangar Control Task}
-The state diagram shows the main operating modes of the system:
-\texttt{NORMAL}, \texttt{MANAGE}, \texttt{PRE-ALARM}, and
-\texttt{ALARM}. Transitions are triggered by commands from the
-\texttt{DRU}, sensor events (\texttt{DDD}, \texttt{DPD}), temperature
-thresholds being exceeded, and by pressing the \texttt{RESET} button.
-Temporal conditions and the configurable parameters (\texttt{D1},
-  \texttt{D2}, \texttt{T1}, \texttt{T2}, \texttt{T3}, \texttt{T4},
-\texttt{Temp1}, \texttt{Temp2}) are shown on the transition edges.
+\section{Gate Task}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{./pdf/HangarControlTask.pdf}
-  \caption{Hangar Control Task state diagram.}
-  \label{fig:HangarControlTask}
+  \includegraphics[width=\textwidth]{./pdf/GateTask.pdf}
+  \caption{Gate Task state diagram.}
+  \label{fig:GateTask}
 \end{figure}
 
 \chapter{Diagrams}
