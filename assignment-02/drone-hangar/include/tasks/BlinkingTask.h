@@ -2,7 +2,7 @@
 
 #include "tasks/state/blinking/BlinkingState.h"
 
-#include "model/Context.h"
+#include "core/Context.h"
 #include "model/HWPlatform.h"
 
 #include "Task.h"

@@ -8,6 +8,14 @@ void timerHandler(void) {
     timerFlag = true;
 }
 
+Scheduler::Scheduler()
+    : context(nullptr), basePeriod(0), nTasks(0), lastExecutionTime(0) {
+}
+
+Scheduler::Scheduler(Context *context)
+    : context(context), basePeriod(0), nTasks(0), lastExecutionTime(0) {
+}
+
 void Scheduler::init(int basePeriod) {
     this->basePeriod = basePeriod;
     timerFlag = false;
@@ -17,7 +25,7 @@ void Scheduler::init(int basePeriod) {
 }
 
 bool Scheduler::addTask(Task *task) {
-    if (this->nTasks < MAX_TASKS - 1) {
+    if (this->nTasks < MAX_TASKS) {
         this->taskList[nTasks] = task;
         this->nTasks++;
         return true;
@@ -35,4 +43,8 @@ void Scheduler::schedule() {
             this->taskList[i]->tick();
         }
     }
+}
+
+Context *Scheduler::getContext() {
+    return this->context;
 }
