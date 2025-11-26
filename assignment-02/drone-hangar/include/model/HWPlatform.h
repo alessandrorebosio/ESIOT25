@@ -4,6 +4,8 @@
 
 #include "core/MsgService.h"
 
+#include "config.h"
+
 #include "devices/Light.h"
 #include "devices/Motor.h"
 #include "devices/PresenceSensor.h"
@@ -34,6 +36,28 @@ class HWPlatform {
     void init();
 
     bool isPressed();
+
+    void turnOnL1();
+
+    void turnOnL3();
+
+    void turnOffL3();
+
+    inline long expired(unsigned long time, unsigned timeout) {
+        return millis() - time >= timeout;
+    }
+
+    inline long expiredT1(unsigned long time) {
+        return expired(time, T1);
+    }
+
+    inline long expiredT2(unsigned long time) {
+        return expired(time, T2);
+    }
+
+    bool isOverTemperature1();
+
+    bool isOverTemperature2();
 
     bool isOverTemperature(unsigned short temperature);
 };

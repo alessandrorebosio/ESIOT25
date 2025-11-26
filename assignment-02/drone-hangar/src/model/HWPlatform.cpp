@@ -33,6 +33,26 @@ bool HWPlatform::isPressed() {
     return this->button->isPressed();
 }
 
+void HWPlatform::turnOnL1() {
+    this->led1->on();
+}
+
+void HWPlatform::turnOnL3() {
+    this->led3->on();
+}
+
+void HWPlatform::turnOffL3() {
+    this->led3->off();
+}
+
+bool HWPlatform::isOverTemperature1() {
+    return this->isOverTemperature(TEMP1);
+}
+
+bool HWPlatform::isOverTemperature2() {
+    return this->isOverTemperature(TEMP2);
+}
+
 bool HWPlatform::isOverTemperature(unsigned short temperature) {
-    return temperature >= this->tempSensor->getTemperature();
+    return this->tempSensor->getTemperature() >= temperature;
 }
