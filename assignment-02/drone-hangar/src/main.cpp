@@ -4,6 +4,7 @@
 #include "core/Scheduler.h"
 
 #include "tasks/BlinkingTask.h"
+#include "tasks/FlightTask.h"
 #include "tasks/SystemTask.h"
 
 #include "model/HWPlatform.h"
@@ -18,6 +19,8 @@ void setup() {
         new SystemTask(hw, scheduler.getContext(), BASEPERIOD * 10));
     scheduler.addTask(
         new BlinkingTask(hw, scheduler.getContext(), BASEPERIOD * 5));
+    scheduler.addTask(
+        new FlightTask(hw, scheduler.getContext(), BASEPERIOD * 1));
 }
 
 void loop() {
