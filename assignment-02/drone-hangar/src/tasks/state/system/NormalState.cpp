@@ -1,6 +1,7 @@
 #include "tasks/state/system/NormalState.h"
-#include "tasks/SystemTask.h"
 #include "tasks/state/system/PreAlarmState.h"
+
+#include "tasks/SystemTask.h"
 
 static unsigned long timer = 0;
 

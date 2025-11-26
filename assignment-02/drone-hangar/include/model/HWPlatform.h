@@ -64,4 +64,10 @@ class HWPlatform {
     bool isOverTemperature2();
 
     bool isOverTemperature(unsigned short temperature);
+
+    bool isOverDistance1();
+
+    bool isOverDistance2();
+
+    bool isOverDistance(unsigned short distance);
 };

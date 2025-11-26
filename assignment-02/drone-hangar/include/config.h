@@ -23,8 +23,8 @@
 #define LCD_COLS 16
 #define LCD_ROWS 2
 
-// #define D1 15
-// #define D2 15
+#define D1 15
+#define D2 15
 // #define T1 10000
 // #define T2 10000
 // #define T3 10000

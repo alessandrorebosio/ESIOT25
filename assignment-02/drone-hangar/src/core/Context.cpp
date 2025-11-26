@@ -28,8 +28,20 @@ void Context::close() {
     this->opening = false;
 }
 
+void Context::droneInside() {
+    this->inside = true;
+}
+
+void Context::droneOutside() {
+    this->inside = false;
+}
+
 bool Context::isFlightOperationAllowed() const {
     return this->flightOperation;
+}
+
+bool Context::isInside() {
+    return this->inside;
 }
 
 bool Context::shouldOpen() const {
