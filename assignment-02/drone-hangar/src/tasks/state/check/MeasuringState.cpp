@@ -3,14 +3,16 @@
 
 #include "tasks/CheckTask.h"
 
-static unsigned long timer = 0;
+static unsigned long timerInside = 0;
+static unsigned long timerOutside = 0;
 
-MeasuringState::MeasuringState(){
+MeasuringState::MeasuringState() {
 }
 
 void MeasuringState::onEnter(CheckTask *chk, HWPlatform *hw, Context *cxt) {
     hw->serial()->sendMsg("measuring");
-    timer = millis();
+    timerInside = millis();
+    timerOutside = millis();
 }
 
 void MeasuringState::onExit(CheckTask *chk, HWPlatform *hw, Context *cxt) {
@@ -18,23 +20,22 @@ void MeasuringState::onExit(CheckTask *chk, HWPlatform *hw, Context *cxt) {
 }
 
 void MeasuringState::tick(CheckTask *chk, HWPlatform *hw, Context *cxt) {
-    if(hw->isOverDistance1()){
-        if(hw->expiredT3(timer)){
+    if (hw->isOverDistance1()) {
+        if (hw->expiredT3(timerOutside)) {
             hw->serial()->sendMsg("outside");
-            timer = millis();
             chk->changeState(new ::IdleState);
         }
     } else {
-        timer = millis();
+        timerOutside = millis();
     }
 
-    if(!hw->isOverDistance2()){
-        if(hw->expiredT4(timer)){
-            hw->serial()->sendMsg("outside");
-            timer = millis();
+    if (!hw->isOverDistance2()) {
+        if (hw->expiredT4(timerInside)) {
+            hw->serial()->sendMsg("inside");
             chk->changeState(new ::IdleState);
+            return;
         }
     } else {
-        timer = millis();
+        timerInside = millis();
     }
 }

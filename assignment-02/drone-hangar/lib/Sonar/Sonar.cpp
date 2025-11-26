@@ -25,17 +25,18 @@ float Sonar::getSoundSpeed() {
 
 float Sonar::getDistance() {
     trig.write(LOW);
-    delayMicroseconds(DELAY1);
+    delayMicroseconds(2);
     trig.write(HIGH);
-    delayMicroseconds(DELAY2);
+    delayMicroseconds(10);
     trig.write(LOW);
 
-    float tUS = pulseIn(this->echo.getPin(), HIGH, this->timeOut);
-    if (tUS == 0) {
+    unsigned long tUS = pulseIn(this->echo.getPin(), HIGH, this->timeOut);
+    if (tUS == 0UL) {
         return NO_OBJ_DETECTED;
-    } else {
-        float t = tUS * 1e-6f / 2.0f;
-        float d = t * getSoundSpeed();
-        return d;
     }
+
+    // Convert microseconds to seconds, divide by 2 (round-trip), multiply by speed (m/s) and convert to cm
+    const float secondsPerMicro = 1e-6f;
+    float distanceCm = tUS * secondsPerMicro * 0.5f * this->getSoundSpeed() * 100.0f;
+    return distanceCm;
 }

@@ -21,7 +21,7 @@ void setup() {
     scheduler.addTask(
         new FlightTask(hw, scheduler.getContext(), BASEPERIOD * 5));
     scheduler.addTask(
-        new CheckTask(hw, scheduler.getContext(), BASEPERIOD * 1));
+        new CheckTask(hw, scheduler.getContext(), BASEPERIOD * 10));
     scheduler.addTask(
         new BlinkingTask(hw, scheduler.getContext(), BASEPERIOD * 5));
 }

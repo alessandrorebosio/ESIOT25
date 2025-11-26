@@ -54,7 +54,7 @@ void HWPlatform::turnOffL3() {
 }
 
 bool HWPlatform::msgIsEqual(String str) {
-    return this->msg->getMsg().equals(str);
+    return this->msg->getMsg() == str;
 }
 
 bool HWPlatform::isDetected() {
