@@ -47,9 +47,9 @@ class HWPlatform {
 
     void turnOffL3();
 
-    inline long expired(unsigned long time, unsigned timeout) {
-        return millis() - time >= timeout;
-    }
+    bool msgIsEqual(String str);
+
+    bool isDetected();
 
     inline long expiredT1(unsigned long time) {
         return expired(time, T1);
@@ -57,6 +57,10 @@ class HWPlatform {
 
     inline long expiredT2(unsigned long time) {
         return expired(time, T2);
+    }
+
+    inline long expired(unsigned long time, unsigned timeout) {
+        return millis() - time >= timeout;
     }
 
     bool isOverTemperature1();

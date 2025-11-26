@@ -53,6 +53,14 @@ void HWPlatform::turnOffL3() {
     this->led3->off();
 }
 
+bool HWPlatform::msgIsEqual(String str) {
+    return this->msg->getMsg().equals(str);
+}
+
+bool HWPlatform::isDetected() {
+    return this->pir->isDetected();
+}
+
 bool HWPlatform::isOverTemperature1() {
     return this->isOverTemperature(TEMP1);
 }
@@ -76,4 +84,3 @@ bool HWPlatform::isOverDistance2() {
 bool HWPlatform::isOverDistance(unsigned short distance) {
     return this->sonar->getDistance() >= distance;
 }
-

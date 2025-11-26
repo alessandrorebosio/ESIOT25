@@ -14,7 +14,4 @@ void OutsideState::onExit(CheckTask *chk, HWPlatform *hw, Context *cxt) {
 }
 
 void OutsideState::tick(CheckTask *chk, HWPlatform *hw, Context *cxt) {
-    if (cxt->isInside()) {
-        chk->changeState(new ::InsideState);
-    }
 }
