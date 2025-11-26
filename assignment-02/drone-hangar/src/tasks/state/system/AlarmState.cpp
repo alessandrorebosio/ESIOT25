@@ -1,6 +1,7 @@
 #include "tasks/state/system/AlarmState.h"
-#include "tasks/SystemTask.h"
 #include "tasks/state/system/NormalState.h"
+
+#include "tasks/SystemTask.h"
 
 AlarmState::AlarmState() {
 }
