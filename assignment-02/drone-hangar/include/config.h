@@ -4,11 +4,6 @@
 
 #define BAUD 9600
 
-#define TEMP1 50
-#define T1 10000
-#define TEMP2 50
-#define T2 10000
-
 #define TEMPERATURE_PIN A0
 #define BUTTON_PIN 2
 #define LED3_PIN 3
@@ -23,13 +18,13 @@
 #define LCD_COLS 16
 #define LCD_ROWS 2
 
-#define D1 15
-#define D2 15
-// #define T1 10000
-// #define T2 10000
-// #define T3 10000
-// #define T4 10000
-// #define TEMP1 50
-// #define TEMP2 50
+#define D1 1
+#define D2 1
+#define T1 10000
+#define T2 10000
+#define T3 10000
+#define T4 10000
+#define TEMP1 50
+#define TEMP2 50
 
 #define MAXTIME 5000
