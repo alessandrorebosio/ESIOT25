@@ -230,7 +230,7 @@ and Blink tasks respectively; the actions \texttt{/startBlink} and
 The Check Task is responsible for monitoring and maintaining the
 drone state. At startup it reads the presence/distance sensors and
 sets the initial state to \texttt{DRONE\_INSIDE} if the drone is
-detected, or to \texttt{DRONE\_OUTSIDE} otherwise. 
+detected, or to \texttt{DRONE\_OUTSIDE} otherwise.
 
 \begin{figure}[H]
   \centering
@@ -240,9 +240,11 @@ detected, or to \texttt{DRONE\_OUTSIDE} otherwise.
 \end{figure}
 
 \section{Blink Task}
-The blinking task controls the LED used for activity indication. It
-implements two states, On and Off. On each invocation the task
-toggles its state and updates the LED output accordingly. 
+It implements two states: \texttt{ON} and \texttt{OFF}. On each
+invocation the task toggles its state and updates the LED output
+accordingly. A guard condition prevents the transition from
+\texttt{OFF} to \texttt{ON} when blinking is disabled, so the LED
+remains off when blinking is not allowed.
 
 \begin{figure}[H]
   \centering
