@@ -6,7 +6,7 @@
 
 SystemTask::SystemTask(HWPlatform *hw, Context *context)
     : hw(hw), context(context), state(nullptr) {
-    this->changeState(new NormalState());
+    this->changeState(new ::NormalState);
 }
 
 SystemTask::SystemTask(HWPlatform *hw, Context *context, int period)
@@ -21,4 +21,3 @@ void SystemTask::init(int period) {
 void SystemTask::tick() {
     this->state->tick(this, this->hw, this->context);
 }
-    
