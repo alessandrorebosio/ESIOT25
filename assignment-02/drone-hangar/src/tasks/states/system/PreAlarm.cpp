@@ -1,4 +1,5 @@
 #include "tasks/states/system/PreAlarm.h"
+#include "tasks/states/system/Alarm.h"
 
 #include "tasks/SystemTask.h"
 
@@ -17,7 +18,7 @@ void PreAlarm::onExit(SystemTask &task, HWSystem &hw, Context &cxt) {
 void PreAlarm::tick(SystemTask &task, HWSystem &hw, Context &cxt) {
     if (hw.temperature() > TEMP2) {
         if (millis() - timer >= T2) {
-            task.changeState(new ::PreAlarm);
+            task.changeState(new ::Alarm);
         }
     } else {
         timer = millis();
