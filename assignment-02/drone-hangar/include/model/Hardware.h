@@ -14,18 +14,22 @@
 
 class Hardware final {
   private:
-	Button button;
-	Led led1;
-	Led led2;
-	Led led3;
-	Motor motor;
-	Pir pir;
-	Sonar sonar;
-	TMP36 tempSensor;
-	Lcd lcd;
+    Button button;
+    Led led1;
+    Led led2;
+    Led led3;
+    Motor motor;
+    Pir pir;
+    Sonar sonar;
+    TMP36 tempSensor;
+    Lcd lcd;
 
   public:
-	Hardware();
+    Hardware();
 
-	~Hardware() = default;
+    void init();
+
+    Led &getLed3();
+
+    ~Hardware() = default;
 };

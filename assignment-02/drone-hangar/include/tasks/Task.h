@@ -2,14 +2,14 @@
 
 #include <Arduino.h>
 
-class Task final {
+class Task {
   protected:
 	unsigned long period;
 	unsigned long lastRun;
 
   public:
 	void init(unsigned long periodMs) {
-		this->period = periodMs;
+		this->period = periodMs * 1000UL;
 		this->lastRun = 0;
 	}
 

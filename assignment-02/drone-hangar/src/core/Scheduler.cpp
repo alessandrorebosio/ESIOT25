@@ -2,19 +2,19 @@
 
 #include <TimerOne.h>
 
-volatile bool timerFlag;
+volatile bool timerFlag = false;
 
 void timerHandler() {
 	timerFlag = true;
 }
 
-Scheduler::Scheduler(unsigned long periodMs) : nTasks(0) {
+Scheduler::Scheduler(unsigned long periodMs) {
 	this->init(periodMs);
 }
 
 void Scheduler::init(unsigned long periodMs) {
 	timerFlag = false;
-	Timer1.initialize(periodMs * 1000l);
+	Timer1.initialize(periodMs * 1000UL);
 	Timer1.attachInterrupt(timerHandler);
 }
 
