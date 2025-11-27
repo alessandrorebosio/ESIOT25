@@ -1,31 +1,22 @@
 #pragma once
 
-#include "core/Context.h"
 #include "tasks/Task.h"
 
 #define MAX_TASKS 50
 
 class Scheduler {
   private:
-    Task *taskList[MAX_TASKS];
-    Context *context;
-
-    int basePeriod;
-    int nTasks;
-    unsigned long lastExecutionTime;
+	Task *taskList[MAX_TASKS];
+	int nTasks;
 
   public:
-    explicit Scheduler();
+	Scheduler(unsigned long periodMs);
 
-    explicit Scheduler(Context *context);
+	void init(unsigned long periodMs);
 
-    void init(int basePeriod);
+	bool addTask(Task *task);
 
-    virtual bool addTask(Task *task);
+	void schedule(void);
 
-    virtual void schedule();
-
-    Context *getContext();
-
-    ~Scheduler() = default;
+	~Scheduler() = default;
 };

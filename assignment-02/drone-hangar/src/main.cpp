@@ -1,29 +1,13 @@
 #include <Arduino.h>
 
-#include "core/MsgService.h"
 #include "core/Scheduler.h"
+#include "core/Context.h"
 
-#include "tasks/BlinkingTask.h"
-#include "tasks/CheckTask.h"
-#include "tasks/FlightTask.h"
-#include "tasks/SystemTask.h"
-
-#include "model/HWPlatform.h"
-
-static Scheduler scheduler(new Context());
+static Scheduler scheduler(100);
+static Context context;
 
 void setup() {
-    HWPlatform *hw = new HWPlatform(new MsgService(BAUD));
-    scheduler.init(BASEPERIOD);
-
-    scheduler.addTask(
-        new SystemTask(hw, scheduler.getContext(), BASEPERIOD * 10));
-    scheduler.addTask(
-        new FlightTask(hw, scheduler.getContext(), BASEPERIOD * 5));
-    scheduler.addTask(
-        new CheckTask(hw, scheduler.getContext(), BASEPERIOD * 10));
-    scheduler.addTask(
-        new BlinkingTask(hw, scheduler.getContext(), BASEPERIOD * 5));
+    scheduler.addTask(nullptr);
 }
 
 void loop() {
