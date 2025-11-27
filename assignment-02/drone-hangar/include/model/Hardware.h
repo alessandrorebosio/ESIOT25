@@ -12,7 +12,7 @@
 
 #include "config.h"
 
-class Hardware {
+class Hardware final {
   private:
 	Button button;
 	Led led1;

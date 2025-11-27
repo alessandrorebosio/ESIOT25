@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-class Task {
+class Task final {
   protected:
 	unsigned long period;
 	unsigned long lastRun;
