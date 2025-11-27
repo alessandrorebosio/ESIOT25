@@ -20,12 +20,24 @@ void Context::stopBlink() {
     this->blinking = false;
 }
 
+void Context::openGate() {
+    this->opening = true;
+}
+
+void Context::closeGate() {
+    this->opening = false;
+}
+
 const bool &Context::isFlightAllowed() const {
     return this->flightAllowed;
 }
 
 const bool &Context::shouldBlink() const {
     return this->blinking;
+}
+
+const bool &Context::shouldOpen() const {
+    return this->opening;
 }
 
 void Context::reset() {
