@@ -1,12 +1,17 @@
 #pragma once
 
-#include "devices/Light.h"
+#include <Arduino.h>
 
-class Led final : public Light {
+class Led final {
+  private:
+	uint8_t pin;
+
   public:
-    explicit Led(uint8_t pin);
+	explicit Led(uint8_t pin);
 
-    void on() override;
+	void on();
 
-    void off() override;
+	void off();
+
+	~Led() = default;
 };

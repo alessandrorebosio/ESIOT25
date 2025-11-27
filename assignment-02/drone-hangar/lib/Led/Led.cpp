@@ -1,13 +1,13 @@
 #include "Led.h"
 
-Led::Led(const uint8_t pin) : Light(pin) {
-    Device::begin(OUTPUT);
+Led::Led(const uint8_t pin) : pin(pin) {
+	pinMode(this->pin, OUTPUT);
 }
 
 void Led::on() {
-    this->write(HIGH);
+	digitalWrite(this->pin, HIGH);
 }
 
 void Led::off() {
-    this->write(LOW);
+	digitalWrite(this->pin, LOW);
 }

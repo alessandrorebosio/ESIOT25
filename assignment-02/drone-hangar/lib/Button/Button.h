@@ -1,15 +1,15 @@
 #pragma once
 
-#include "devices/Switch.h"
+#include <Arduino.h>
 
-class Button final : public Switch {
+class Button final {
   private:
-    unsigned long lastTime = 0;
-    uint8_t lastReading = LOW;
-    uint8_t rawReading = LOW;
+	uint8_t pin;
 
   public:
-    explicit Button(const uint8_t pin);
+	explicit Button(uint8_t pin, uint8_t mode);
 
-    bool isPressed() override;
+	bool isPressed();
+
+	~Button() = default;
 };

@@ -1,22 +1,19 @@
 #pragma once
 
-#include "devices/Device.h"
-#include "devices/ProximitySensor.h"
+#include <Arduino.h>
 
-class Sonar final: public ProximitySensor {
+class Sonar final {
   private:
-    Device trig, echo;
+    uint8_t trigPin, echoPin;
     float temperature;
     long timeOut;
 
     float getSoundSpeed();
 
   public:
-    Sonar(uint8_t trigPin, uint8_t echoPin, long maxTime);
+    Sonar(uint8_t trigPin, uint8_t echoPin, unsigned long maxTime);
 
-    void begin() override;
+    void setTemperature(float temperature);
 
-    void setTemperature(const float temperature) override;
-
-    float getDistance() override;
+    float readDistance();
 };

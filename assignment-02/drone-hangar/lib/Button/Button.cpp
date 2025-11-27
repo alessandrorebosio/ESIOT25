@@ -1,11 +1,9 @@
 #include "Button.h"
 
-#define DEBOUNCE_TIME 50
-
-Button::Button(const uint8_t pin) : Switch(pin) {
-    Device::begin(INPUT);
+Button::Button(const uint8_t pin, const uint8_t mode) : pin(pin) {
+    pinMode(this->pin, mode);
 }
 
 bool Button::isPressed() {
-    return Device::read();
+    return digitalRead(pin);
 }

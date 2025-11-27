@@ -1,12 +1,17 @@
 #pragma once
 
-#include "devices/PresenceSensor.h"
+#include <Arduino.h>
 
-class Pir final : public PresenceSensor {
+class Pir final {
+  private:
+	uint8_t pin;
+
   public:
-    explicit Pir(const uint8_t pin);
+	explicit Pir(uint8_t pin);
 
-    bool isDetected() override;
+	bool isDetected();
 
-    void calibrate() override;
+	void calibrate();
+
+	~Pir() = default;
 };
