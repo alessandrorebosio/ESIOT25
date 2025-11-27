@@ -8,6 +8,7 @@
 
 #include "tasks/BlinkTask.h"
 #include "tasks/SystemTask.h"
+#include "tasks/GateTask.h"
 
 static Scheduler scheduler;
 static Context context;
@@ -19,6 +20,7 @@ void setup() {
 
     scheduler.addTask(new SystemTask(hw.getButton(), hw.getLed1(), hw.getTempSensor(), context, 1000));
     scheduler.addTask(new BlinkTask(hw.getLed3(), context.shouldBlink(), 500));
+    scheduler.addTask(new GateTask(hw.getMotor(), context.shouldOpen(), 20));
 }
 
 void loop() {
