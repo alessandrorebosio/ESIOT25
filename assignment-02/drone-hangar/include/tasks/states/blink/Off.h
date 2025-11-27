@@ -2,15 +2,13 @@
 
 #include "tasks/states/blink/BlinkState.h"
 
-class Off : public BlinkState {
+class Off final : public BlinkState {
   public:
-	Off();
+	void onEnter(BlinkTask &task, Led &led, const bool &enabled);
 
-	void onEnter(BlinkTask &task, Led &led, bool &enabled);
+	void onExit(BlinkTask &task, Led &led, const bool &enabled);
 
-	void onExit(BlinkTask &task, Led &led, bool &enabled);
-
-	void tick(BlinkTask &task, Led &led, bool &enabled);
+	void tick(BlinkTask &task, Led &led, const bool &enabled);
 
 	~Off() = default;
 };

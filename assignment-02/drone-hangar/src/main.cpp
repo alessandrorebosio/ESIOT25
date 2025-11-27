@@ -4,17 +4,21 @@
 #include "core/Scheduler.h"
 
 #include "model/Hardware.h"
+#include "model/system/HWSystem.h"
 
 #include "tasks/BlinkTask.h"
+#include "tasks/SystemTask.h"
 
-#include <Led.h>
-
-static Scheduler scheduler(100);
+static Scheduler scheduler;
 static Context context;
+static Hardware hw;
 
 void setup() {
-    Hardware hw;
-    scheduler.addTask(new BlinkTask(hw.getLed3(), context.shouldBlink(), 100));
+    scheduler.init(100);
+    hw.init();
+
+    scheduler.addTask(new SystemTask(hw.getButton(), hw.getLed1(), hw.getTempSensor(), context, 1000));
+    scheduler.addTask(new BlinkTask(hw.getLed3(), context.shouldBlink(), 500));
 }
 
 void loop() {

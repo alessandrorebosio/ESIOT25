@@ -1,23 +1,24 @@
 #include "tasks/SystemTask.h"
 
-#include "tasks/state/system/NormalState.h"
+#include "tasks/states/system/Normal.h"
 
-#include "config.h"
-
-SystemTask::SystemTask(HWPlatform *hw, Context *context)
-    : hw(hw), context(context), state(nullptr) {
-    this->changeState(new ::NormalState);
-}
-
-SystemTask::SystemTask(HWPlatform *hw, Context *context, int period)
-    : SystemTask(hw, context) {
-    this->init(period);
-}
-
-void SystemTask::init(int period) {
+SystemTask::SystemTask(Button &btn, Led &led, TMP36 &sensor, Context &cxt, int period)
+    : hardware(btn, led, sensor), context(cxt), state(nullptr) {
     Task::init(period);
+    this->changeState(new ::Normal);
 }
 
 void SystemTask::tick() {
-    this->state->tick(this, this->hw, this->context);
+    this->state->tick(*this, this->hardware, this->context);
+}
+
+void SystemTask::changeState(SystemState *newState) {
+    if (this->state != nullptr) {
+        this->state->onExit(*this, this->hardware, this->context);
+        delete this->state;
+    }
+    this->state = newState;
+    if (this->state != nullptr) {
+        this->state->onEnter(*this, this->hardware, this->context);
+    }
 }

@@ -3,16 +3,13 @@
 
 #include "tasks/BlinkTask.h"
 
-On::On() {
+void On::onEnter(BlinkTask &task, Led &led, const bool &enabled) {
+    led.on();
 }
 
-void On::onEnter(BlinkTask &task, Led &led, bool &enabled) {
-	led.on();
+void On::onExit(BlinkTask &task, Led &led, const bool &enabled) {
 }
 
-void On::onExit(BlinkTask &task, Led &led, bool &enabled) {
-}
-
-void On::tick(BlinkTask &task, Led &led, bool &enabled) {
-	task.changeState(new ::Off);
+void On::tick(BlinkTask &task, Led &led, const bool &enabled) {
+    task.changeState(new ::Off);
 }

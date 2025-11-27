@@ -1,35 +1,23 @@
 #pragma once
 
 #include "core/Context.h"
-#include "model/HWPlatform.h"
-
-#include "tasks/state/system/SystemState.h"
+#include "model/system/HWSystem.h"
+#include "tasks/states/system/SystemState.h"
 
 #include "Task.h"
 
 class SystemTask final : public Task {
   private:
-    HWPlatform *hw;
-    Context *context;
+    HWSystem hardware;
+    Context &context;
     SystemState *state;
 
   public:
-    explicit SystemTask(HWPlatform *hw, Context *context);
+    explicit SystemTask(Button &btn, Led &led, TMP36 &sensor, Context &cxt, int period);
 
-    explicit SystemTask(HWPlatform *hw, Context *context, int period);
+    void tick() override;
 
-    void init(int period);
+    void changeState(SystemState *newState);
 
-    void tick();
-
-    void changeState(SystemState *state) {
-        if (this->state) {
-            this->state->onExit(this, hw, context);
-            delete this->state;
-        }
-        this->state = state;
-        if (this->state) {
-            this->state->onEnter(this, hw, context);
-        }
-    }
+    ~SystemTask() = default;
 };

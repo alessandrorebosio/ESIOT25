@@ -10,8 +10,6 @@ class Scheduler final {
 	int nTasks;
 
   public:
-	Scheduler(unsigned long periodMs);
-
 	void init(unsigned long periodMs);
 
 	bool addTask(Task *task);

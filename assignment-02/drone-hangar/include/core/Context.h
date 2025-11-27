@@ -2,17 +2,22 @@
 
 class Context final {
   private:
-	bool blinking;
+    bool flightAllowed;
+    bool blinking;
 
   public:
-	Context();
+    Context();
 
-	void startBlink();
-	void stopBlink();
+    void allowFlight();
+    void blockFlight();
 
-	bool &shouldBlink();
+    void startBlink();
+    void stopBlink();
 
-	void reset();
+    const bool &isFlightAllowed() const;
+    const bool &shouldBlink() const;
 
-	virtual ~Context() = default;
+    void reset();
+
+    virtual ~Context() = default;
 };

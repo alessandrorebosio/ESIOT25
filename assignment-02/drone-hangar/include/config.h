@@ -1,7 +1,5 @@
 #pragma once
 
-#define BASEPERIOD 100
-
 #define BAUD 9600
 
 #define TEMPERATURE_PIN A0
@@ -17,14 +15,5 @@
 #define LCD_ADDR 0x27
 #define LCD_COLS 16
 #define LCD_ROWS 2
-
-#define D1 10
-#define D2 20
-#define T1 10000
-#define T2 10000
-#define T3 10000
-#define T4 10000
-#define TEMP1 50
-#define TEMP2 50
 
 #define MAXTIME 5000

@@ -8,10 +8,6 @@ void timerHandler() {
 	timerFlag = true;
 }
 
-Scheduler::Scheduler(unsigned long periodMs) {
-	this->init(periodMs);
-}
-
 void Scheduler::init(unsigned long periodMs) {
 	timerFlag = false;
 	Timer1.initialize(periodMs * 1000UL);
