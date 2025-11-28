@@ -5,6 +5,9 @@ class Context final {
     bool flightAllowed;
     bool blinking;
 
+    bool takeOff;
+    bool landing;
+
   public:
     Context();
 
@@ -14,8 +17,15 @@ class Context final {
     void startBlink();
     void stopBlink();
 
+    void dotTakeOff();
+    void doLanding();
+
     const bool &isFlightAllowed() const;
     const bool &shouldBlink() const;
+
+    bool isOperationDone() const;
+    bool isTakeOff() const;
+    bool isLanding() const;
 
     void reset();
 

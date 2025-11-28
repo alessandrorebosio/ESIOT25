@@ -1,35 +1,27 @@
 #pragma once
 
 #include "core/Context.h"
-#include "model/HWPlatform.h"
+#include "core/MsgService.h"
 
-#include "tasks/state/flight/FlightState.h"
+#include "model/flight/HWFlight.h"
+#include "tasks/states/flight/FlightState.h"
 
 #include "Task.h"
 
 class FlightTask final : public Task {
   private:
-    HWPlatform *hw;
-    Context *context;
+    HWFlight hardware;
+    Context &context;
+    MsgService &msg;
+    const bool &enabled;
     FlightState *state;
 
   public:
-    explicit FlightTask(HWPlatform *hw, Context *context);
+    explicit FlightTask(Pir &pir, Sonar &sonar, TMP36 &temp, Context &cxt, MsgService &msg, const bool &enabled, int period);
 
-    explicit FlightTask(HWPlatform *hw, Context *context, int period);
+    void tick() override;
 
-    void init(int period);
+    void changeState(FlightState *newState);
 
-    void tick();
-
-    void changeState(FlightState *state) {
-        if (this->state) {
-            this->state->onExit(this, hw, context);
-            delete this->state;
-        }
-        this->state = state;
-        if (this->state) {
-            this->state->onEnter(this, hw, context);
-        }
-    }
+    ~FlightTask();
 };
