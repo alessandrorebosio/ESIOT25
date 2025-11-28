@@ -9,6 +9,7 @@
 #include "Task.h"
 
 namespace Flight {
+  
 class FlightTask final : public Task {
   private:
     HWFlight hardware;
@@ -26,4 +27,5 @@ class FlightTask final : public Task {
 
     ~FlightTask();
 };
+
 } // namespace Flight

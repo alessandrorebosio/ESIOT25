@@ -9,6 +9,7 @@
 #include "Task.h"
 
 namespace Check {
+  
 class CheckTask final : public Task {
   private:
     HWCheck hardware;
