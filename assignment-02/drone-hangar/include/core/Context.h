@@ -8,6 +8,8 @@ class Context final {
     bool takeOff;
     bool landing;
 
+    bool measuring;
+
   public:
     Context();
 
@@ -19,13 +21,19 @@ class Context final {
 
     void dotTakeOff();
     void doLanding();
+    void startMeasuring();
+
+    void takeOffDone();
+    void landingDone();
+    void stopMeasuring();
 
     const bool &isFlightAllowed() const;
     const bool &shouldBlink() const;
+    const bool &shouldMeasure() const;
+    const bool &isTakeOff() const;
+    const bool &isLanding() const;
 
     bool isOperationDone() const;
-    bool isTakeOff() const;
-    bool isLanding() const;
 
     void reset();
 

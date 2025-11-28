@@ -6,9 +6,12 @@
 #define TEMP2 30
 #define T2 10000
 
-#define D1 5
+#define D1 10
+#define T3 10000
+#define D2 5
+#define T4 10000
 
-#define T3 1000
+#define T5 1000
 
 #define NORMAL_STATE_MSG "normal"
 #define PREALARM_STATE_MSG "prealarm"
@@ -16,3 +19,5 @@
 
 #define TAKEOFF_MSG "takeoff"
 #define LANDING_MSG "landing"
+#define INSIDE_MSG "inside"
+#define OUTSIDE_MSG "outside"

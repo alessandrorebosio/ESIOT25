@@ -8,6 +8,7 @@
 #include "model/system/HWSystem.h"
 
 #include "tasks/BlinkTask.h"
+#include "tasks/CheckTask.h"
 #include "tasks/FlightTask.h"
 #include "tasks/SystemTask.h"
 
@@ -24,7 +25,8 @@ void setup() {
     hw.init();
 
     scheduler.addTask(new SystemTask(hw.getButton(), hw.getLed1(), hw.getTempSensor(), context, msg, 1000));
-    scheduler.addTask(new FlightTask(hw.getPir(), hw.getSonar(), hw.getTempSensor(), context, msg, context.isFlightAllowed(), 200));
+    scheduler.addTask(new FlightTask(hw.getPir(), hw.getSonar(), hw.getTempSensor(), context, msg, false, 200));
+    scheduler.addTask(new CheckTask(hw.getSonar(), hw.getTempSensor(), context, msg, false, 500));
     scheduler.addTask(new BlinkTask(hw.getLed3(), context.shouldBlink(), 500));
 }
 

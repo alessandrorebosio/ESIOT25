@@ -1,38 +1,27 @@
 #pragma once
 
 #include "core/Context.h"
-#include "model/HWPlatform.h"
-#include "tasks/state/check/CheckState.h"
+#include "core/MsgService.h"
+
+#include "model/check/HWCheck.h"
+#include "tasks/states/check/CheckState.h"
 
 #include "Task.h"
 
 class CheckTask final : public Task {
-private:
-  HWPlatform *hw;
-  Context *context;
-  CheckState *state;
+  private:
+    HWCheck hardware;
+    Context &context;
+    MsgService &msg;
+    const bool &enabled;
+    CheckState *state;
 
-public:
+  public:
+    explicit CheckTask(Sonar &sonar, TMP36 &temp, Context &ctx, MsgService &msg, const bool &enabled, int period);
 
-  explicit CheckTask(HWPlatform *hw, Context *context);
+    void tick();
 
-  explicit CheckTask(HWPlatform *hw, Context *context, int period);
+    void changeState(CheckState *state);
 
-  void init(int period);
-
-  void tick();
-
-  void changeState(CheckState *state) {
-      if (this->state) {
-          this->state->onExit(this, hw, context);
-          delete this->state;
-      }
-      this->state = state;
-      if (this->state) {
-          this->state->onEnter(this, hw, context);
-      }
-  }
-
-  virtual ~CheckTask() = default;
-
+    ~CheckTask();
 };

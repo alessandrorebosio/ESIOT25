@@ -1,21 +1,28 @@
 #include "tasks/CheckTask.h"
 
-#include "tasks/state/check/IdleState.h"
+#include "tasks/states/check/Idle.h"
 
-CheckTask::CheckTask(HWPlatform *hw, Context *context) 
-    : hw(hw), context(context), state(nullptr) {
-    this->changeState(new ::IdleState);
-}
-
-CheckTask::CheckTask(HWPlatform *hw, Context *context, int period)
-    : CheckTask(hw, context) {
-    this->init(period);
-}
-
-void CheckTask::init(int period) {
+CheckTask::CheckTask(Sonar &sonar, TMP36 &temp, Context &ctx, MsgService &msg, const bool &enabled, int period)
+    : hardware(sonar, temp), context(ctx), msg(msg), enabled(enabled), state(nullptr) {
     Task::init(period);
+    this->changeState(new ::Idle);
 }
 
 void CheckTask::tick() {
-    this->state->tick(this, this->hw, this->context);
+    this->state->tick(*this, this->hardware, this->context, this->msg, this->enabled);
+}
+
+void CheckTask::changeState(CheckState *newState) {
+    if (this->state != nullptr) {
+        this->state->onExit(*this, this->hardware, this->context, this->msg, this->enabled);
+        delete this->state;
+    }
+    this->state = newState;
+    if (this->state != nullptr) {
+        this->state->onEnter(*this, this->hardware, this->context, this->msg, this->enabled);
+    }
+}
+
+CheckTask::~CheckTask() {
+    delete this->state;
 }

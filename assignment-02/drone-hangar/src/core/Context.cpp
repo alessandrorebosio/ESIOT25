@@ -23,10 +23,30 @@ void Context::stopBlink() {
 void Context::dotTakeOff() {
     this->takeOff = true;
     this->landing = false;
+    this->measuring = false;
 }
 void Context::doLanding() {
     this->landing = true;
     this->takeOff = false;
+    this->measuring = false;
+}
+
+void Context::startMeasuring() {
+    this->measuring = true;
+    this->takeOff = false;
+    this->landing = false;
+}
+
+void Context::takeOffDone() {
+    this->takeOff = false;
+}
+
+void Context::landingDone() {
+    this->landing = false;
+}
+
+void Context::stopMeasuring() {
+    this->measuring = false;
 }
 
 const bool &Context::isFlightAllowed() const {
@@ -37,18 +57,26 @@ const bool &Context::shouldBlink() const {
     return this->blinking;
 }
 
+const bool &Context::shouldMeasure() const {
+    return this->measuring;
+}
+
 bool Context::isOperationDone() const {
     return !(this->landing || this->takeOff);
 }
 
-bool Context::isTakeOff() const {
+const bool &Context::isTakeOff() const {
     return this->takeOff;
 }
-bool Context::isLanding() const {
+
+const bool &Context::isLanding() const {
     return this->landing;
 }
 
 void Context::reset() {
+    this->startMeasuring();
     this->stopBlink();
     this->blockFlight();
+    this->landing = false;
+    this->takeOff = false;
 }
