@@ -23,7 +23,7 @@ void Idle::tick(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, c
                 ctx.dotTakeOff();
             }
         } else {
-            // TODO: startMeasuring
+           ctx.startMeasuring();
         }
 
         if (received.equals(LANDING_MSG)) {

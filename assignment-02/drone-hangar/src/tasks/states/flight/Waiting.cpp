@@ -16,7 +16,7 @@ void Waiting::onExit(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &m
 }
 
 void Waiting::tick(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
-    if (millis() - timer <= T3) {
+    if (millis() - timer <= T5) {
         if (hw.isDetected()) {
             task.changeState(new ::Operating);
             ctx.doLanding();
