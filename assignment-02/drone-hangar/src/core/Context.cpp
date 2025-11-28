@@ -20,11 +20,20 @@ void Context::stopBlink() {
     this->blinking = false;
 }
 
-void Context::dotTakeOff() {
+void Context::openGate() {
+    this->opening = true;
+}
+
+void Context::closeGate() {
+    this->opening = false;
+    }
+
+void Context::doTakeOff() {
     this->takeOff = true;
     this->landing = false;
     this->measuring = false;
 }
+
 void Context::doLanding() {
     this->landing = true;
     this->takeOff = false;
@@ -59,6 +68,10 @@ const bool &Context::shouldBlink() const {
 
 const bool &Context::shouldMeasure() const {
     return this->measuring;
+}
+
+const bool &Context::shouldOpen() const {
+    return this->opening;
 }
 
 bool Context::isOperationDone() const {

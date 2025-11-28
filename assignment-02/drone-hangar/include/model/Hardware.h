@@ -39,5 +39,7 @@ class Hardware final {
 
     TMP36 &getTempSensor();
 
+    Motor &getMotor();
+
     ~Hardware();
 };

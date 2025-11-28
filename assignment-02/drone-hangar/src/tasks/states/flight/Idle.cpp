@@ -22,7 +22,7 @@ void Idle::tick(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, c
         if (received.equals(TAKEOFF_MSG)) {
             if (hw.distance() < D1) {
                 task.changeState(new Operating);
-                ctx.dotTakeOff();
+                ctx.doTakeOff();
             }
         } else {
             ctx.startMeasuring();

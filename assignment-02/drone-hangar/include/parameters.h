@@ -13,6 +13,12 @@
 
 #define T5 1000
 
+#define CLOSE_TIME 2000
+#define OPEN_TIME 2000
+
+#define OPEN_POS 180
+#define CLOSE_POS 0
+
 #define NORMAL_STATE_MSG "normal"
 #define PREALARM_STATE_MSG "prealarm"
 #define ALARM_STATE_MSG "alarm"

@@ -42,6 +42,10 @@ TMP36 &Hardware::getTempSensor() {
     return *this->tempSensor;
 }
 
+Motor &Hardware::getMotor() {
+    return *this->motor;
+}
+
 Hardware::~Hardware() {
     delete this->button;
     delete this->led1;

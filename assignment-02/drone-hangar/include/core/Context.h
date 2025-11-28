@@ -4,6 +4,7 @@ class Context final {
   private:
     bool flightAllowed;
     bool blinking;
+    bool opening;
 
     bool takeOff;
     bool landing;
@@ -19,7 +20,10 @@ class Context final {
     void startBlink();
     void stopBlink();
 
-    void dotTakeOff();
+    void openGate();
+    void closeGate();
+
+    void doTakeOff();
     void doLanding();
     void startMeasuring();
 
@@ -32,6 +36,7 @@ class Context final {
     const bool &shouldMeasure() const;
     const bool &isTakeOff() const;
     const bool &isLanding() const;
+    const bool &shouldOpen() const;
 
     bool isOperationDone() const;
 
