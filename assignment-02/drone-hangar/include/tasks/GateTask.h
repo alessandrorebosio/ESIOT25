@@ -14,7 +14,6 @@ class GateTask final : public Task {
   private:
     HWGate *hardware;
     const bool &enabled;
-    int currentAngle;
     GateState *state;
 
   public:

@@ -1,9 +1,9 @@
 #pragma once
 
-#define TEMP1 25
+#define TEMP1 15
 #define T1 10000
 
-#define TEMP2 30
+#define TEMP2 20
 #define T2 10000
 
 #define D1 10
@@ -16,7 +16,7 @@
 #define CLOSE_TIME 2000
 #define OPEN_TIME 2000
 
-#define OPEN_POS 180
+#define OPEN_POS 93
 #define CLOSE_POS 0
 
 #define NORMAL_STATE_MSG "normal"

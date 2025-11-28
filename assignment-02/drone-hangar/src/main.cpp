@@ -25,8 +25,8 @@ void setup() {
     hw.init();
 
     scheduler.addTask(new System::SystemTask(new HWSystem(hw.getButton(), hw.getLed1(), hw.getTempSensor()), context, msg, 1000));
-    scheduler.addTask(new Flight::FlightTask(new HWFlight(hw.getPir(), hw.getSonar(), hw.getTempSensor(), hw.getLcd()), context, msg, false, 200));
-    scheduler.addTask(new Check::CheckTask(new HWCheck(hw.getSonar(), hw.getTempSensor(), hw.getLcd()), context, msg, false, 500));
+    // scheduler.addTask(new Flight::FlightTask(new HWFlight(hw.getPir(), hw.getSonar(), hw.getTempSensor(), hw.getLcd()), context, msg, false, 200));
+    // scheduler.addTask(new Check::CheckTask(new HWCheck(hw.getSonar(), hw.getTempSensor(), hw.getLcd()), context, msg, false, 500));
     scheduler.addTask(new Blink::BlinkTask(new HWBlink(hw.getLed3()), context.shouldBlink(), 500));
     scheduler.addTask(new Gate::GateTask(new HWGate(hw.getMotor()), context.shouldOpen(), 20));
 }

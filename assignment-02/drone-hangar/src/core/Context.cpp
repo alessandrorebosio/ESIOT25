@@ -91,6 +91,6 @@ void Context::reset() {
     this->stopBlink();
     this->closeGate();
     this->blockFlight();
-    this->landing = false;
-    this->takeOff = false;
+    this->takeOff();
+    this->takeOffDone();
 }
