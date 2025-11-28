@@ -5,14 +5,14 @@
 
 namespace Blink {
 
-void On::onEnter(BlinkTask &task, Led &led, const bool &enabled) {
-    led.on();
+void On::onEnter(BlinkTask &task, HWBlink &hw, const bool &enabled) {
+    hw.turnOn();
 }
 
-void On::onExit(BlinkTask &task, Led &led, const bool &enabled) {
+void On::onExit(BlinkTask &task, HWBlink &hw, const bool &enabled) {
 }
 
-void On::tick(BlinkTask &task, Led &led, const bool &enabled) {
+void On::tick(BlinkTask &task, HWBlink &hw, const bool &enabled) {
     task.changeState(new Off);
 }
 

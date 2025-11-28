@@ -10,14 +10,14 @@ static unsigned long timer;
 
 namespace Gate {
 
-void Closing::onEnter(GateTask &task, Motor &motor, const bool &enabled) {
+void Closing::onEnter(GateTask &task, HWGate &hw, const bool &enabled) {
     timer = millis();
 }
 
-void Closing::onExit(GateTask &task, Motor &motor, const bool &enabled) {
+void Closing::onExit(GateTask &task, HWGate &hw, const bool &enabled) {
 }
 
-void Closing::tick(GateTask &task, Motor &motor, const bool &enabled) {
+void Closing::tick(GateTask &task, HWGate &hw, const bool &enabled) {
     if (enabled) {
         task.changeState(new Opening);
     }
@@ -25,10 +25,10 @@ void Closing::tick(GateTask &task, Motor &motor, const bool &enabled) {
     unsigned long dt = millis() - timer;
     short pos = OPEN_POS - ((float)dt / CLOSE_TIME) * OPEN_POS;
 
-    motor.setPosition(pos);
+    hw.setPosition(pos);
 
     if (dt >= CLOSE_TIME) {
-        motor.setPosition(CLOSE_POS);
+        hw.setPosition(CLOSE_POS);
         task.changeState(new Close);
     }
 }

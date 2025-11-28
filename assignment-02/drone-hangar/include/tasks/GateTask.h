@@ -2,6 +2,8 @@
 
 #include <Motor.h>
 
+#include "model/gate/HWGate.h"
+
 #include "tasks/states/gate/GateState.h"
 
 #include "Task.h"
@@ -10,13 +12,13 @@ namespace Gate {
 
 class GateTask final : public Task {
   private:
-    Motor &motor;
+    HWGate *hardware;
     const bool &enabled;
     int currentAngle;
     GateState *state;
 
   public:
-    explicit GateTask(Motor &motor, const bool &enabled, int period);
+    explicit GateTask(HWGate *hw, const bool &enabled, int period);
 
     void tick() override;
 

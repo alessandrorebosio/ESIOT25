@@ -4,22 +4,23 @@
 #include "core/MsgService.h"
 
 #include "model/flight/HWFlight.h"
+
 #include "tasks/states/flight/FlightState.h"
 
 #include "Task.h"
 
 namespace Flight {
-  
+
 class FlightTask final : public Task {
   private:
-    HWFlight hardware;
+    HWFlight *hardware;
     Context &context;
     MsgService &msg;
     const bool &enabled;
     FlightState *state;
 
   public:
-    explicit FlightTask(Pir &pir, Sonar &sonar, TMP36 &temp, Lcd &lcd, Context &ctx, MsgService &msg, const bool &enabled, int period);
+    explicit FlightTask(HWFlight *hw, Context &ctx, MsgService &msg, const bool &enabled, int period);
 
     void tick() override;
 

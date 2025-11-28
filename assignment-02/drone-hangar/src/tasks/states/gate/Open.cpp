@@ -5,15 +5,15 @@
 
 namespace Gate {
 
-void Open::onEnter(GateTask &task, Motor &motor, const bool &enabled) {
-    motor.off();
+void Open::onEnter(GateTask &task, HWGate &hw, const bool &enabled) {
+    hw.motorOff();
 }
 
-void Open::onExit(GateTask &task, Motor &motor, const bool &enabled) {
-    motor.on();
+void Open::onExit(GateTask &task, HWGate &hw, const bool &enabled) {
+    hw.motorOn();
 }
 
-void Open::tick(GateTask &task, Motor &motor, const bool &enabled) {
+void Open::tick(GateTask &task, HWGate &hw, const bool &enabled) {
     if (!enabled) {
         task.changeState(new Closing);
     }

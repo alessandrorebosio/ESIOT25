@@ -4,6 +4,7 @@
 #include "core/MsgService.h"
 
 #include "model/system/HWSystem.h"
+
 #include "tasks/states/system/SystemState.h"
 
 #include "Task.h"
@@ -12,13 +13,13 @@ namespace System {
 
 class SystemTask final : public Task {
   private:
-    HWSystem hardware;
+    HWSystem *hardware;
     Context &context;
     MsgService &msg;
     SystemState *state;
 
   public:
-    explicit SystemTask(Button &btn, Led &led, TMP36 &temp, Context &ctx, MsgService &msg, int period);
+    explicit SystemTask(HWSystem *hw, Context &ctx, MsgService &msg, int period);
 
     void tick() override;
 
