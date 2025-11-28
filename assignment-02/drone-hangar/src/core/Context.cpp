@@ -89,6 +89,7 @@ const bool &Context::isLanding() const {
 void Context::reset() {
     this->startMeasuring();
     this->stopBlink();
+    this->closeGate();
     this->blockFlight();
     this->landing = false;
     this->takeOff = false;
