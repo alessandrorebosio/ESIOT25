@@ -3,24 +3,14 @@
 #include <Arduino.h>
 
 class MsgService final {
-  private:
-    String msg;
-    unsigned short baud;
-
   public:
-    MsgService(unsigned short baud);
-
-    void begin();
+    void init(unsigned int baud);
 
     bool isMsgAvailable();
 
-    void read();
+    String receive();
 
-    void clear();
-
-    String getMsg();
-
-    void sendMsg(String text);
+    void send(String text);
 
     ~MsgService() = default;
 };

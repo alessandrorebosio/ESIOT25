@@ -1,14 +1,10 @@
 #include "core/MsgService.h"
 
-MsgService::MsgService(const unsigned short baud) : baud(baud) {
-    this->begin();
+void MsgService::init(unsigned int baud) {
+    Serial.begin(baud);
 }
 
-void MsgService::begin() {
-    Serial.begin(this->baud);
-}
-
-void MsgService::sendMsg(const String text) {
+void MsgService::send(const String text) {
     Serial.println(text);
 }
 
@@ -16,16 +12,10 @@ bool MsgService::isMsgAvailable() {
     return Serial.available() > 0;
 }
 
-void MsgService::read() {
+String MsgService::receive() {
+    String msg = "";
     while (this->isMsgAvailable()) {
         msg += (char)Serial.read();
     }
-}
-
-void MsgService::clear() {
-    this->msg = "";
-}
-
-String MsgService::getMsg() {
-    return this->msg;
+    return msg;
 }
