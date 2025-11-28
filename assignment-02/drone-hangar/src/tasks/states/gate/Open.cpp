@@ -8,6 +8,7 @@ void Open::onEnter(GateTask &task, Motor &motor, const bool &enabled) {
 }
 
 void Open::onExit(GateTask &task, Motor &motor, const bool &enabled) {
+    motor.on();
 }
 
 void Open::tick(GateTask &task, Motor &motor, const bool &enabled) {
