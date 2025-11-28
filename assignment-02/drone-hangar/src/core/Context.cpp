@@ -26,7 +26,7 @@ void Context::openGate() {
 
 void Context::closeGate() {
     this->opening = false;
-    }
+}
 
 void Context::doTakeOff() {
     this->takeOff = true;
