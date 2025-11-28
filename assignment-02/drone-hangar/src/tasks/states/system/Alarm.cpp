@@ -5,16 +5,16 @@
 
 #include "parameters.h"
 
-void Alarm::onEnter(SystemTask &task, HWSystem &hw, Context &cxt, MsgService &msg) {
+void Alarm::onEnter(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
     msg.send(ALARM_STATE_MSG);
-    cxt.startBlink();
+    ctx.startBlink();
 }
 
-void Alarm::onExit(SystemTask &task, HWSystem &hw, Context &cxt, MsgService &msg) {
-    cxt.stopBlink();
+void Alarm::onExit(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
+    ctx.stopBlink();
 }
 
-void Alarm::tick(SystemTask &task, HWSystem &hw, Context &cxt, MsgService &msg) {
+void Alarm::tick(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
     if (hw.isPressed()) {
         task.changeState(new ::Normal);
     }

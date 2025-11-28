@@ -16,7 +16,7 @@ class SystemTask final : public Task {
     SystemState *state;
 
   public:
-    explicit SystemTask(Button &btn, Led &led, TMP36 &temp, Context &cxt, MsgService &msg, int period);
+    explicit SystemTask(Button &btn, Led &led, TMP36 &temp, Context &ctx, MsgService &msg, int period);
 
     void tick() override;
 

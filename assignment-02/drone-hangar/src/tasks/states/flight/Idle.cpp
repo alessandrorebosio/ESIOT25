@@ -6,21 +6,21 @@
 
 #include "parameters.h"
 
-void Idle::onEnter(FlightTask &task, HWFlight &hw, Context &cxt, MsgService &msg, const bool &enabled) {
-    cxt.stopBlink();
-    // TODO: cxt.close()
+void Idle::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
+    ctx.stopBlink();
+    // TODO: ctx.close()
 }
 
-void Idle::onExit(FlightTask &task, HWFlight &hw, Context &cxt, MsgService &msg, const bool &enabled) {
+void Idle::onExit(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
 }
 
-void Idle::tick(FlightTask &task, HWFlight &hw, Context &cxt, MsgService &msg, const bool &enabled) {
+void Idle::tick(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
     if (enabled && msg.isMsgAvailable()) {
         const String received = msg.receive();
         if (received.equals(TAKEOFF_MSG)) {
             if (hw.distance() < D1) {
                 task.changeState(new ::Operating);
-                cxt.dotTakeOff();
+                ctx.dotTakeOff();
             }
         } else {
             // TODO: startMeasuring

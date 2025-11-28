@@ -9,17 +9,17 @@ static unsigned long timerOutside = 0;
 MeasuringState::MeasuringState() {
 }
 
-void MeasuringState::onEnter(CheckTask *chk, HWPlatform *hw, Context *cxt) {
+void MeasuringState::onEnter(CheckTask *chk, HWPlatform *hw, Context *ctx) {
     hw->serial()->sendMsg("measuring");
     timerInside = millis();
     timerOutside = millis();
 }
 
-void MeasuringState::onExit(CheckTask *chk, HWPlatform *hw, Context *cxt) {
-    cxt->stopMeasuring();
+void MeasuringState::onExit(CheckTask *chk, HWPlatform *hw, Context *ctx) {
+    ctx->stopMeasuring();
 }
 
-void MeasuringState::tick(CheckTask *chk, HWPlatform *hw, Context *cxt) {
+void MeasuringState::tick(CheckTask *chk, HWPlatform *hw, Context *ctx) {
     if (hw->isOverDistance1() && hw->msgIsEqual("landing")) {
         if (hw->expiredT3(timerOutside)) {
             hw->serial()->sendMsg("outside");

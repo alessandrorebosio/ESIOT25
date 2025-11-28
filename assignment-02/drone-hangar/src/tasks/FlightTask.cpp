@@ -2,8 +2,8 @@
 
 #include "tasks/states/flight/Idle.h"
 
-FlightTask::FlightTask(Pir &pir, Sonar &sonar, TMP36 &temp, Context &cxt, MsgService &msg, const bool &enabled, int period)
-    : hardware(pir, sonar, temp), context(cxt), msg(msg), enabled(enabled), state(nullptr) {
+FlightTask::FlightTask(Pir &pir, Sonar &sonar, TMP36 &temp, Context &ctx, MsgService &msg, const bool &enabled, int period)
+    : hardware(pir, sonar, temp), context(ctx), msg(msg), enabled(enabled), state(nullptr) {
     Task::init(period);
     this->changeState(new ::Idle);
 }

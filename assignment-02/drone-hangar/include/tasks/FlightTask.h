@@ -17,7 +17,7 @@ class FlightTask final : public Task {
     FlightState *state;
 
   public:
-    explicit FlightTask(Pir &pir, Sonar &sonar, TMP36 &temp, Context &cxt, MsgService &msg, const bool &enabled, int period);
+    explicit FlightTask(Pir &pir, Sonar &sonar, TMP36 &temp, Context &ctx, MsgService &msg, const bool &enabled, int period);
 
     void tick() override;
 

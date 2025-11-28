@@ -5,17 +5,17 @@
 
 #include "parameters.h"
 
-void Operating::onEnter(FlightTask &task, HWFlight &hw, Context &cxt, MsgService &msg, const bool &enabled) {
-    msg.send(cxt.isTakeOff() ? TAKEOFF_MSG : cxt.isLanding() ? LANDING_MSG : "");
-    cxt.startBlink();
-    // TODO: cxt.open()
+void Operating::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
+    msg.send(ctx.isTakeOff() ? TAKEOFF_MSG : ctx.isLanding() ? LANDING_MSG : "");
+    ctx.startBlink();
+    // TODO: ctx.open()
 }
 
-void Operating::onExit(FlightTask &task, HWFlight &hw, Context &cxt, MsgService &msg, const bool &enabled) {
+void Operating::onExit(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
 }
 
-void Operating::tick(FlightTask &task, HWFlight &hw, Context &cxt, MsgService &msg, const bool &enabled) {
-    if (cxt.isOperationDone()) {
+void Operating::tick(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
+    if (ctx.isOperationDone()) {
         task.changeState(new ::Idle);
     }
 }

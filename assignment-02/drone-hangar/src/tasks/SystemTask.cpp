@@ -2,8 +2,8 @@
 
 #include "tasks/states/system/Normal.h"
 
-SystemTask::SystemTask(Button &btn, Led &led, TMP36 &sensor, Context &cxt, MsgService&msg, int period)
-    : hardware(btn, led, sensor), context(cxt), msg(msg),state(nullptr) {
+SystemTask::SystemTask(Button &btn, Led &led, TMP36 &sensor, Context &ctx, MsgService &msg, int period)
+    : hardware(btn, led, sensor), context(ctx), msg(msg), state(nullptr) {
     Task::init(period);
     this->changeState(new ::Normal);
 }

@@ -6,15 +6,15 @@
 IdleState::IdleState() {
 }
 
-void IdleState::onEnter(CheckTask *chk, HWPlatform *hw, Context *cxt) {
+void IdleState::onEnter(CheckTask *chk, HWPlatform *hw, Context *ctx) {
     hw->serial()->sendMsg("idle");
 }
 
-void IdleState::onExit(CheckTask *chk, HWPlatform *hw, Context *cxt) {
+void IdleState::onExit(CheckTask *chk, HWPlatform *hw, Context *ctx) {
 }
 
-void IdleState::tick(CheckTask *chk, HWPlatform *hw, Context *cxt) {
-    if (cxt->shouldMeasure()) {
+void IdleState::tick(CheckTask *chk, HWPlatform *hw, Context *ctx) {
+    if (ctx->shouldMeasure()) {
         chk->changeState(new ::MeasuringState);
     }
 }

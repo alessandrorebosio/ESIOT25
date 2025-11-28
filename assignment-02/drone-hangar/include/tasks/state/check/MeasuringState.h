@@ -6,11 +6,11 @@ class MeasuringState : public CheckState {
   public:
     MeasuringState();
 
-    void onEnter(CheckTask *chk, HWPlatform *hw, Context *cxt);
+    void onEnter(CheckTask *chk, HWPlatform *hw, Context *ctx);
 
-    void onExit(CheckTask *chk, HWPlatform *hw, Context *cxt);
+    void onExit(CheckTask *chk, HWPlatform *hw, Context *ctx);
 
-    void tick(CheckTask *chk, HWPlatform *hw, Context *cxt);
+    void tick(CheckTask *chk, HWPlatform *hw, Context *ctx);
 
     ~MeasuringState() = default;
 };
