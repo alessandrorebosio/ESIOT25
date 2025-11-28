@@ -21,3 +21,7 @@ void Blink::BlinkTask::changeState(BlinkState *newState) {
         this->state->onEnter(*this, this->led, this->enabled);
     }
 }
+
+Blink::BlinkTask::~BlinkTask() {
+    delete this->state;
+}

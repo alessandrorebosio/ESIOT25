@@ -21,7 +21,7 @@ class BlinkTask final : public Task {
 
     void changeState(BlinkState *newState);
 
-    ~BlinkTask() = default;
+    ~BlinkTask();
 };
 
 } // namespace Blink

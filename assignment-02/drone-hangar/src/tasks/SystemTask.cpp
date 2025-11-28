@@ -22,3 +22,7 @@ void System::SystemTask::changeState(SystemState *newState) {
         this->state->onEnter(*this, this->hardware, this->context, this->msg);
     }
 }
+
+System::SystemTask::~SystemTask() {
+    delete this->state;
+}

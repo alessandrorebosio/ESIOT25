@@ -16,5 +16,5 @@ class Scheduler final {
 
 	void schedule(void);
 
-	~Scheduler() = default;
+	~Scheduler();
 };

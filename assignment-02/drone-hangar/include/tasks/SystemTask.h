@@ -24,7 +24,7 @@ class SystemTask final : public Task {
 
     void changeState(SystemState *newState);
 
-    ~SystemTask() = default;
+    ~SystemTask();
 };
 
 } // namespace System
