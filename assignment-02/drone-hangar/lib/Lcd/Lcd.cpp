@@ -52,13 +52,3 @@ void Lcd::clear() {
     this->lcd->clear();
 }
 
-/**
- * @brief Destructor that deallocates the LiquidCrystal_I2C instance.
- *
- * This destructor is required to prevent memory leaks since the constructor
- * uses dynamic memory allocation (new) to create the LiquidCrystal_I2C object.
- * Without this explicit destructor, the dynamically allocated memory would not be freed.
- */
-Lcd::~Lcd() {
-    delete this->lcd;
-}
