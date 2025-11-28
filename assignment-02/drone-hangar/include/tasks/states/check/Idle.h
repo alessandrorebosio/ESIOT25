@@ -2,6 +2,8 @@
 
 #include "tasks/states/check/CheckState.h"
 
+namespace Check {
+
 class Idle : public CheckState {
   public:
     void onEnter(CheckTask &task, HWCheck &hw, Context &ctx, MsgService &msg, const bool &enabled);
@@ -12,3 +14,5 @@ class Idle : public CheckState {
 
     ~Idle() = default;
 };
+
+} // namespace Check

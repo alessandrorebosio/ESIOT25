@@ -8,6 +8,8 @@
 
 static unsigned long timer = 0;
 
+namespace Flight {
+
 void Waiting::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
     timer = millis();
 }
@@ -18,10 +20,12 @@ void Waiting::onExit(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &m
 void Waiting::tick(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
     if (millis() - timer <= T5) {
         if (hw.isDetected()) {
-            task.changeState(new ::Operating);
+            task.changeState(new Operating);
             ctx.doLanding();
         }
     } else {
-        task.changeState(new ::Idle);
+        task.changeState(new Idle);
     }
 }
+
+} // namespace Flight

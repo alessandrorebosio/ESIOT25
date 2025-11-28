@@ -1,9 +1,14 @@
 #pragma once
 
+namespace Flight {
 class FlightTask;
+}
+
 class HWFlight;
 class Context;
 class MsgService;
+
+namespace Flight {
 
 class FlightState {
   public:
@@ -15,3 +20,5 @@ class FlightState {
 
     virtual ~FlightState() = default;
 };
+
+} // namespace Flight

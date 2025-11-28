@@ -1,9 +1,14 @@
 #pragma once
 
+namespace System {
 class SystemTask;
+}
+
 class HWSystem;
 class Context;
 class MsgService;
+
+namespace System {
 
 class SystemState {
   public:
@@ -15,3 +20,5 @@ class SystemState {
 
     virtual ~SystemState() = default;
 };
+
+} // namespace System

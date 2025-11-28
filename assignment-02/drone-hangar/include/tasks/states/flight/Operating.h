@@ -2,6 +2,8 @@
 
 #include "tasks/states/flight/FlightState.h"
 
+namespace Flight {
+
 class Operating final : public FlightState {
   public:
     void onEnter(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled);
@@ -12,3 +14,5 @@ class Operating final : public FlightState {
 
     ~Operating() = default;
 };
+
+} // namespace Flight

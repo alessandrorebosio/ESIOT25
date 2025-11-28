@@ -8,6 +8,8 @@
 
 #include "Task.h"
 
+namespace System {
+
 class SystemTask final : public Task {
   private:
     HWSystem hardware;
@@ -24,3 +26,5 @@ class SystemTask final : public Task {
 
     ~SystemTask() = default;
 };
+
+} // namespace System

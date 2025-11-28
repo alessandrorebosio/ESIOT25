@@ -5,6 +5,8 @@
 
 #include "parameters.h"
 
+namespace System {
+
 void Alarm::onEnter(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
     msg.send(ALARM_STATE_MSG);
     ctx.startBlink();
@@ -16,6 +18,8 @@ void Alarm::onExit(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg
 
 void Alarm::tick(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
     if (hw.isPressed()) {
-        task.changeState(new ::Normal);
+        task.changeState(new Normal);
     }
 }
+
+} // namespace System

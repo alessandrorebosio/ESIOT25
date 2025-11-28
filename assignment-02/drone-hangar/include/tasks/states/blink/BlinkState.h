@@ -1,7 +1,12 @@
 #pragma once
 
+namespace Blink {
 class BlinkTask;
+}
+
 class Led;
+
+namespace Blink {
 
 class BlinkState {
   public:
@@ -13,3 +18,5 @@ class BlinkState {
 
     virtual ~BlinkState() = default;
 };
+
+} // namespace Blink

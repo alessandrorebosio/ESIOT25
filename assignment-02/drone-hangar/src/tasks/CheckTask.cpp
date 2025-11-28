@@ -2,17 +2,17 @@
 
 #include "tasks/states/check/Idle.h"
 
-CheckTask::CheckTask(Sonar &sonar, TMP36 &temp, Context &ctx, MsgService &msg, const bool &enabled, int period)
+Check::CheckTask::CheckTask(Sonar &sonar, TMP36 &temp, Context &ctx, MsgService &msg, const bool &enabled, int period)
     : hardware(sonar, temp), context(ctx), msg(msg), enabled(enabled), state(nullptr) {
     Task::init(period);
-    this->changeState(new ::Idle);
+    this->changeState(new ::Check::Idle);
 }
 
-void CheckTask::tick() {
+void Check::CheckTask::tick() {
     this->state->tick(*this, this->hardware, this->context, this->msg, this->enabled);
 }
 
-void CheckTask::changeState(CheckState *newState) {
+void Check::CheckTask::changeState(CheckState *newState) {
     if (this->state != nullptr) {
         this->state->onExit(*this, this->hardware, this->context, this->msg, this->enabled);
         delete this->state;
@@ -23,6 +23,6 @@ void CheckTask::changeState(CheckState *newState) {
     }
 }
 
-CheckTask::~CheckTask() {
+Check::CheckTask::~CheckTask() {
     delete this->state;
 }

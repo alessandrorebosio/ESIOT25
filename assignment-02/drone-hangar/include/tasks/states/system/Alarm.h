@@ -2,6 +2,8 @@
 
 #include "tasks/states/system/SystemState.h"
 
+namespace System {
+
 class Alarm final : public SystemState {
   public:
     void onEnter(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg);
@@ -12,3 +14,5 @@ class Alarm final : public SystemState {
 
     ~Alarm() = default;
 };
+
+} // namespace System

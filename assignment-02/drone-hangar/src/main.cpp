@@ -5,7 +5,6 @@
 #include "core/Scheduler.h"
 
 #include "model/Hardware.h"
-#include "model/system/HWSystem.h"
 
 #include "tasks/BlinkTask.h"
 #include "tasks/CheckTask.h"
@@ -24,10 +23,10 @@ void setup() {
     msg.init(BAUD);
     hw.init();
 
-    scheduler.addTask(new SystemTask(hw.getButton(), hw.getLed1(), hw.getTempSensor(), context, msg, 1000));
-    scheduler.addTask(new FlightTask(hw.getPir(), hw.getSonar(), hw.getTempSensor(), context, msg, false, 200));
-    scheduler.addTask(new CheckTask(hw.getSonar(), hw.getTempSensor(), context, msg, false, 500));
-    scheduler.addTask(new BlinkTask(hw.getLed3(), context.shouldBlink(), 500));
+    scheduler.addTask(new System::SystemTask(hw.getButton(), hw.getLed1(), hw.getTempSensor(), context, msg, 1000));
+    scheduler.addTask(new Flight::FlightTask(hw.getPir(), hw.getSonar(), hw.getTempSensor(), context, msg, false, 200));
+    scheduler.addTask(new Check::CheckTask(hw.getSonar(), hw.getTempSensor(), context, msg, false, 500));
+    scheduler.addTask(new Blink::BlinkTask(hw.getLed3(), context.shouldBlink(), 500));
 }
 
 void loop() {

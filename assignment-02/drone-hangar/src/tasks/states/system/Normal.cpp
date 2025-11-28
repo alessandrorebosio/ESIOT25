@@ -7,6 +7,8 @@
 
 static unsigned long timer;
 
+namespace System {
+
 void Normal::onEnter(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
     msg.send(NORMAL_STATE_MSG);
     hw.turnOnLed();
@@ -21,9 +23,11 @@ void Normal::onExit(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &ms
 void Normal::tick(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
     if (hw.temperature() > TEMP1) {
         if (millis() - timer >= T1) {
-            task.changeState(new ::PreAlarm);
+            task.changeState(new PreAlarm);
         }
     } else {
         timer = millis();
     }
 }
+
+} // namespace System

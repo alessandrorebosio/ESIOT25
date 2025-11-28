@@ -2,6 +2,8 @@
 
 #include "tasks/states/system/SystemState.h"
 
+namespace System {
+
 class Normal final : public SystemState {
   public:
     void onEnter(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg);
@@ -12,3 +14,5 @@ class Normal final : public SystemState {
 
     ~Normal() = default;
 };
+
+} // namespace System

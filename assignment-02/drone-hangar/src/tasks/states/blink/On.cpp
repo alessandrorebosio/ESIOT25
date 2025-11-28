@@ -3,6 +3,8 @@
 
 #include "tasks/BlinkTask.h"
 
+namespace Blink {
+
 void On::onEnter(BlinkTask &task, Led &led, const bool &enabled) {
     led.on();
 }
@@ -11,5 +13,7 @@ void On::onExit(BlinkTask &task, Led &led, const bool &enabled) {
 }
 
 void On::tick(BlinkTask &task, Led &led, const bool &enabled) {
-    task.changeState(new ::Off);
+    task.changeState(new Off);
 }
+
+} // namespace Blink

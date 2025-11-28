@@ -6,6 +6,8 @@
 
 #include "Task.h"
 
+namespace Blink {
+
 class BlinkTask final : public Task {
   private:
     Led &led;
@@ -21,3 +23,5 @@ class BlinkTask final : public Task {
 
     ~BlinkTask() = default;
 };
+
+} // namespace Blink

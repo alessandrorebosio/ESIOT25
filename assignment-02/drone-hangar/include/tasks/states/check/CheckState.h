@@ -1,9 +1,14 @@
 #pragma once
 
+namespace Check {
 class CheckTask;
+}
+
 class HWCheck;
 class Context;
 class MsgService;
+
+namespace Check {
 
 class CheckState {
   public:
@@ -15,3 +20,5 @@ class CheckState {
 
     virtual ~CheckState() = default;
 };
+
+} // namespace Check

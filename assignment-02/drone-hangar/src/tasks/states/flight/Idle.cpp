@@ -6,6 +6,8 @@
 
 #include "parameters.h"
 
+namespace Flight {
+
 void Idle::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
     ctx.stopBlink();
     // TODO: ctx.close()
@@ -19,15 +21,17 @@ void Idle::tick(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, c
         const String received = msg.receive();
         if (received.equals(TAKEOFF_MSG)) {
             if (hw.distance() < D1) {
-                task.changeState(new ::Operating);
+                task.changeState(new Operating);
                 ctx.dotTakeOff();
             }
         } else {
-           ctx.startMeasuring();
+            ctx.startMeasuring();
         }
 
         if (received.equals(LANDING_MSG)) {
-            task.changeState(new ::Waiting);
+            task.changeState(new Waiting);
         }
     }
 }
+
+} // namespace Flight

@@ -2,16 +2,16 @@
 
 #include "tasks/states/blink/Off.h"
 
-BlinkTask::BlinkTask(Led &led, const bool &enabled, int period) : led(led), enabled(enabled), state(nullptr) {
+Blink::BlinkTask::BlinkTask(Led &led, const bool &enabled, int period) : led(led), enabled(enabled), state(nullptr) {
     Task::init(period);
-    this->changeState(new ::Off);
+    this->changeState(new ::Blink::Off);
 }
 
-void BlinkTask::tick() {
+void Blink::BlinkTask::tick() {
     this->state->tick(*this, this->led, this->enabled);
 }
 
-void BlinkTask::changeState(BlinkState *newState) {
+void Blink::BlinkTask::changeState(BlinkState *newState) {
     if (this->state != nullptr) {
         this->state->onExit(*this, this->led, this->enabled);
         delete this->state;
