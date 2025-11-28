@@ -3,8 +3,7 @@
 
 #include "tasks/SystemTask.h"
 
-#define TEMP1 25
-#define T1 10000
+#include "parameters.h"
 
 static unsigned long timer;
 

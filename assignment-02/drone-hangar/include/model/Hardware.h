@@ -10,8 +10,6 @@
 #include <Sonar.h>
 #include <TMP36.h>
 
-#include "config.h"
-
 class Hardware final {
   private:
     Button *button;

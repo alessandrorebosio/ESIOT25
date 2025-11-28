@@ -1,4 +1,5 @@
 #include "model/Hardware.h"
+
 #include "config.h"
 
 void Hardware::init() {
