@@ -10,6 +10,7 @@
 static unsigned long timer;
 
 void Closing::onEnter(GateTask &task, Motor &motor, const bool &enabled) {
+    motor.on();
     timer = millis();
 }
 

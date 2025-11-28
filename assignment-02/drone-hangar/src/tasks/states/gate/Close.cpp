@@ -7,7 +7,6 @@ void Close::onEnter(GateTask &task, Motor &motor, const bool &enabled) {
 }
 
 void Close::onExit(GateTask &task, Motor &motor, const bool &enabled) {
-    motor.on();
 }
 
 void Close::tick(GateTask &task, Motor &motor, const bool &enabled) {
