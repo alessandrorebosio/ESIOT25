@@ -24,8 +24,9 @@ void Measuring::tick(CheckTask &task, HWCheck &hw, Context &ctx, MsgService &msg
         if (hw.distance() > D1) {
             if (millis() - takeOffTimer >= T3) {
                 task.changeState(new Idle);
+                hw.printOnLcd(OUTSIDE_MSG);
+                msg.send(OUTSIDE_MSG);
                 if (ctx.isTakeOff()) {
-                    msg.send(OUTSIDE_MSG);
                     ctx.takeOffDone();
                 }
             }
@@ -38,8 +39,9 @@ void Measuring::tick(CheckTask &task, HWCheck &hw, Context &ctx, MsgService &msg
         if (hw.distance() < D2) {
             if (millis() - landingTimer >= T4) {
                 task.changeState(new Idle);
+                hw.printOnLcd(INSIDE_MSG);
+                msg.send(INSIDE_MSG);
                 if (ctx.isLanding()) {
-                    msg.send(INSIDE_MSG);
                     ctx.landingDone();
                 }
             }

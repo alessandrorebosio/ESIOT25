@@ -2,8 +2,8 @@
 
 #include "tasks/states/check/Idle.h"
 
-Check::CheckTask::CheckTask(Sonar &sonar, TMP36 &temp, Context &ctx, MsgService &msg, const bool &enabled, int period)
-    : hardware(sonar, temp), context(ctx), msg(msg), enabled(enabled), state(nullptr) {
+Check::CheckTask::CheckTask(Sonar &sonar, TMP36 &temp, Lcd &lcd, Context &ctx, MsgService &msg, const bool &enabled, int period)
+    : hardware(sonar, temp, lcd), context(ctx), msg(msg), enabled(enabled), state(nullptr) {
     Task::init(period);
     this->changeState(new ::Check::Idle);
 }
