@@ -6,6 +6,8 @@
 
 #include "Task.h"
 
+namespace Gate {
+
 class GateTask final : public Task {
   private:
     Motor &motor;
@@ -22,3 +24,5 @@ class GateTask final : public Task {
 
     ~GateTask();
 };
+
+} // namespace Gate

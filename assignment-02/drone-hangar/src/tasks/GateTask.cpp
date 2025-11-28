@@ -2,16 +2,16 @@
 
 #include "tasks/states/gate/Close.h"
 
-GateTask::GateTask(Motor &motor, const bool &enabled, int period) : motor(motor), enabled(enabled), state(nullptr) {
+Gate::GateTask::GateTask(Motor &motor, const bool &enabled, int period) : motor(motor), enabled(enabled), state(nullptr) {
     Task::init(period);
-    this->changeState(new ::Close);
+    this->changeState(new ::Gate::Close);
 }
 
-void GateTask::tick() {
+void Gate::GateTask::tick() {
     this->state->tick(*this, this->motor, this->enabled);
 }
 
-void GateTask::changeState(GateState *newState) {
+void Gate::GateTask::changeState(GateState *newState) {
     if (this->state != nullptr) {
         this->state->onExit(*this, this->motor, this->enabled);
         delete this->state;
@@ -22,6 +22,6 @@ void GateTask::changeState(GateState *newState) {
     }
 }
 
-GateTask::~GateTask() {
+Gate::GateTask::~GateTask() {
     delete this->state;
 }

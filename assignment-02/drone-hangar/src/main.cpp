@@ -9,8 +9,8 @@
 #include "tasks/BlinkTask.h"
 #include "tasks/CheckTask.h"
 #include "tasks/FlightTask.h"
-#include "tasks/SystemTask.h"
 #include "tasks/GateTask.h"
+#include "tasks/SystemTask.h"
 
 #include "config.h"
 
@@ -28,7 +28,7 @@ void setup() {
     scheduler.addTask(new Flight::FlightTask(hw.getPir(), hw.getSonar(), hw.getTempSensor(), context, msg, false, 200));
     scheduler.addTask(new Check::CheckTask(hw.getSonar(), hw.getTempSensor(), context, msg, false, 500));
     scheduler.addTask(new Blink::BlinkTask(hw.getLed3(), context.shouldBlink(), 500));
-    scheduler.addTask(new GateTask(hw.getMotor(), context.shouldOpen(), 20));
+    scheduler.addTask(new Gate::GateTask(hw.getMotor(), context.shouldOpen(), 20));
 }
 
 void loop() {

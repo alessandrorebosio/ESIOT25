@@ -3,6 +3,8 @@
 
 #include "tasks/GateTask.h"
 
+namespace Gate {
+
 void Open::onEnter(GateTask &task, Motor &motor, const bool &enabled) {
     motor.off();
 }
@@ -13,6 +15,8 @@ void Open::onExit(GateTask &task, Motor &motor, const bool &enabled) {
 
 void Open::tick(GateTask &task, Motor &motor, const bool &enabled) {
     if (!enabled) {
-        task.changeState(new ::Closing);
+        task.changeState(new Closing);
     }
 }
+
+} // namespace Gate

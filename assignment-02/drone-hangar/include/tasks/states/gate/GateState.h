@@ -1,7 +1,12 @@
 #pragma once
 
+namespace Gate {
 class GateTask;
+}
+
 class Motor;
+
+namespace Gate {
 
 class GateState {
   public:
@@ -13,3 +18,5 @@ class GateState {
 
     virtual ~GateState() = default;
 };
+
+} // namespace Gate

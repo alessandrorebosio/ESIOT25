@@ -8,6 +8,8 @@
 
 static unsigned long timer;
 
+namespace Gate {
+
 void Opening::onEnter(GateTask &task, Motor &motor, const bool &enabled) {
     timer = millis();
 }
@@ -17,7 +19,7 @@ void Opening::onExit(GateTask &task, Motor &motor, const bool &enabled) {
 
 void Opening::tick(GateTask &task, Motor &motor, const bool &enabled) {
     if (!enabled) {
-        task.changeState(new ::Closing);
+        task.changeState(new Closing);
     }
 
     unsigned long dt = millis() - timer;
@@ -27,6 +29,8 @@ void Opening::tick(GateTask &task, Motor &motor, const bool &enabled) {
 
     if (dt >= OPEN_TIME) {
         motor.setPosition(OPEN_POS);
-        task.changeState(new ::Open);
+        task.changeState(new Open);
     }
 }
+
+} // namespace Gate
