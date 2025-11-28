@@ -33,14 +33,16 @@ class Context final {
 
     const bool &isFlightAllowed() const;
     const bool &shouldBlink() const;
-    const bool &shouldMeasure() const;
+    bool shouldMeasure();
     const bool &isTakeOff() const;
     const bool &isLanding() const;
     const bool &shouldOpen() const;
 
-    bool isOperationDone() const;
+    bool isOperationDone();
 
     void reset();
+
+    static Context* instance;
 
     virtual ~Context() = default;
 };

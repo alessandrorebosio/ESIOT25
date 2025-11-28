@@ -37,7 +37,6 @@ void Context::doTakeOff() {
 void Context::doLanding() {
     this->landing = true;
     this->takeOff = false;
-    this->measuring = false;
 }
 
 void Context::startMeasuring() {
@@ -66,7 +65,7 @@ const bool &Context::shouldBlink() const {
     return this->blinking;
 }
 
-const bool &Context::shouldMeasure() const {
+bool Context::shouldMeasure() {
     return this->measuring;
 }
 
@@ -74,7 +73,7 @@ const bool &Context::shouldOpen() const {
     return this->opening;
 }
 
-bool Context::isOperationDone() const {
+bool Context::isOperationDone() {
     return !(this->landing || this->takeOff);
 }
 
