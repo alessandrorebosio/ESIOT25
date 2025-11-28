@@ -1,6 +1,6 @@
 #include "model/system/HWSystem.h"
 
-HWSystem::HWSystem(Button &btn, Led &led, TMP36 &sensor) : button(btn), led(led), temp(sensor) {
+HWSystem::HWSystem(Button &btn, Led &led, TMP36 &temp) : button(btn), led(led), temp(temp) {
 }
 
 bool HWSystem::isPressed() {

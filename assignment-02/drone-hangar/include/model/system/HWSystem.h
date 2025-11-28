@@ -11,7 +11,7 @@ class HWSystem final {
     TMP36 &temp;
 
   public:
-    explicit HWSystem(Button &btn, Led &led, TMP36 &sensor);
+    explicit HWSystem(Button &btn, Led &led, TMP36 &temp);
 
     bool isPressed();
 

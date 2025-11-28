@@ -33,6 +33,10 @@ class Hardware final {
 
     Led &getLed3();
 
+    Pir &getPir();
+
+    Sonar &getSonar();
+
     TMP36 &getTempSensor();
 
     ~Hardware();
