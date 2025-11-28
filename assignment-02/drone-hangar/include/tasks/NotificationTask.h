@@ -6,12 +6,12 @@ namespace Notification {
 
 class NotificationTask final : public Task {
   private:
-    String *str;
     const bool &enabled;
+    void (*send)(void);
     void (*callback)(void);
 
   public:
-    explicit NotificationTask(String *str, const bool &enabled, void (*callback)(void), int period);
+    explicit NotificationTask(const bool &enabled, void (*send)(void), void (*callback)(void), int period);
 
     void tick() override;
 
