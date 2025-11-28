@@ -41,5 +41,7 @@ class Hardware final {
 
     Motor &getMotor();
 
+    Lcd &getLcd();
+
     ~Hardware();
 };

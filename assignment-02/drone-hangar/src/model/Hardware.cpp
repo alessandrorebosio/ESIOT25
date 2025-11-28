@@ -30,11 +30,11 @@ Led &Hardware::getLed3() {
     return *this->led3;
 }
 
-Pir &Hardware::getPir(){
+Pir &Hardware::getPir() {
     return *this->pir;
 }
 
-Sonar &Hardware::getSonar(){
+Sonar &Hardware::getSonar() {
     return *this->sonar;
 }
 
@@ -44,6 +44,10 @@ TMP36 &Hardware::getTempSensor() {
 
 Motor &Hardware::getMotor() {
     return *this->motor;
+}
+
+Lcd &Hardware::getLcd(){
+    return *this->lcd;
 }
 
 Hardware::~Hardware() {
