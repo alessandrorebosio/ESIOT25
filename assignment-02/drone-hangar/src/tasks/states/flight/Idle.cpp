@@ -10,7 +10,7 @@ namespace Flight {
 
 void Idle::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
     ctx.stopBlink();
-    // TODO: ctx.close()
+    ctx.closeGate();
 }
 
 void Idle::onExit(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {

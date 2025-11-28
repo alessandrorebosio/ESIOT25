@@ -9,8 +9,9 @@ namespace Flight {
 
 void Operating::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
     msg.send(ctx.isTakeOff() ? TAKEOFF_MSG : ctx.isLanding() ? LANDING_MSG : "");
+    hw.printOnLcd(ctx.isTakeOff() ? TAKEOFF_MSG : ctx.isLanding() ? LANDING_MSG : "");
     ctx.startBlink();
-    // TODO: ctx.open()
+    ctx.openGate();
 }
 
 void Operating::onExit(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
