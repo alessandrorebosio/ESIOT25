@@ -8,7 +8,7 @@
 static unsigned long timer;
 
 void Normal::onEnter(SystemTask &task, HWSystem &hw, Context &cxt, MsgService &msg) {
-    msg.send("normal");
+    msg.send(NORMAL_STATE_MSG);
     hw.turnOnLed();
     cxt.allowFlight();
     timer = millis();

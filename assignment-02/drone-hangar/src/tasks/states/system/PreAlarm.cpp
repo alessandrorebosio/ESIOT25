@@ -7,7 +7,7 @@
 static unsigned long timer;
 
 void PreAlarm::onEnter(SystemTask &task, HWSystem &hw, Context &cxt, MsgService &msg) {
-    msg.send("prealarm");
+    msg.send(PREALARM_STATE_MSG);
     timer = millis();
 }
 

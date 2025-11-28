@@ -3,8 +3,10 @@
 
 #include "tasks/SystemTask.h"
 
+#include "parameters.h"
+
 void Alarm::onEnter(SystemTask &task, HWSystem &hw, Context &cxt, MsgService &msg) {
-    msg.send("alarm");
+    msg.send(ALARM_STATE_MSG);
     cxt.startBlink();
 }
 
