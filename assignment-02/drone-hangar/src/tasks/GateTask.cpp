@@ -21,3 +21,7 @@ void GateTask::changeState(GateState *newState) {
         this->state->onEnter(*this, this->motor, this->enabled);
     }
 }
+
+GateTask::~GateTask() {
+    delete this->state;
+}

@@ -20,5 +20,5 @@ class GateTask final : public Task {
 
     void changeState(GateState *newState);
 
-    ~GateTask() = default;
+    ~GateTask();
 };
