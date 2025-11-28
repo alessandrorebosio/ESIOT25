@@ -22,7 +22,7 @@ void setup() {
     msg.init(BAUD);
     hw.init();
 
-    scheduler.addTask(new SystemTask(hw.getButton(), hw.getLed1(), hw.getTempSensor(), context, 1000));
+    scheduler.addTask(new SystemTask(hw.getButton(), hw.getLed1(), hw.getTempSensor(), context, msg, 1000));
     scheduler.addTask(new BlinkTask(hw.getLed3(), context.shouldBlink(), 500));
 }
 
