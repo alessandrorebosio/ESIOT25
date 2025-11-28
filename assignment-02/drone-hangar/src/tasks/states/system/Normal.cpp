@@ -3,22 +3,22 @@
 
 #include "tasks/SystemTask.h"
 
-#define TEMP1 25
-#define T1 10000
+#include "parameters.h"
 
 static unsigned long timer;
 
-void Normal::onEnter(SystemTask &task, HWSystem &hw, Context &cxt) {
+void Normal::onEnter(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
+    msg.send(NORMAL_STATE_MSG);
     hw.turnOnLed();
-    cxt.allowFlight();
+    ctx.allowFlight();
     timer = millis();
 }
 
-void Normal::onExit(SystemTask &task, HWSystem &hw, Context &cxt) {
-    cxt.blockFlight();
+void Normal::onExit(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
+    ctx.blockFlight();
 }
 
-void Normal::tick(SystemTask &task, HWSystem &hw, Context &cxt) {
+void Normal::tick(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
     if (hw.temperature() > TEMP1) {
         if (millis() - timer >= T1) {
             task.changeState(new ::PreAlarm);

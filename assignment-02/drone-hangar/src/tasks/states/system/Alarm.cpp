@@ -3,15 +3,18 @@
 
 #include "tasks/SystemTask.h"
 
-void Alarm::onEnter(SystemTask &task, HWSystem &hw, Context &cxt) {
-    cxt.startBlink();
+#include "parameters.h"
+
+void Alarm::onEnter(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
+    msg.send(ALARM_STATE_MSG);
+    ctx.startBlink();
 }
 
-void Alarm::onExit(SystemTask &task, HWSystem &hw, Context &cxt) {
-    cxt.stopBlink();
+void Alarm::onExit(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
+    ctx.stopBlink();
 }
 
-void Alarm::tick(SystemTask &task, HWSystem &hw, Context &cxt) {
+void Alarm::tick(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg) {
     if (hw.isPressed()) {
         task.changeState(new ::Normal);
     }

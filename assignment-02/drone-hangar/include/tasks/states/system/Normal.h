@@ -4,11 +4,11 @@
 
 class Normal final : public SystemState {
   public:
-    void onEnter(SystemTask &task, HWSystem &hw, Context &cxt);
+    void onEnter(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg);
 
-    void onExit(SystemTask &task, HWSystem &hw, Context &cxt);
+    void onExit(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg);
 
-    void tick(SystemTask &task, HWSystem &hw, Context &cxt);
+    void tick(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg);
 
     ~Normal() = default;
 };

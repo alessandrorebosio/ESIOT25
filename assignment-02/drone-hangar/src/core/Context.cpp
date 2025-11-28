@@ -26,6 +26,16 @@ void Context::openGate() {
 
 void Context::closeGate() {
     this->opening = false;
+    }
+
+void Context::doTakeOff() {
+    this->takeOff = true;
+    this->landing = false;
+}
+
+void Context::doLanding() {
+    this->landing = true;
+    this->takeOff = false;
 }
 
 const bool &Context::isFlightAllowed() const {
@@ -38,6 +48,18 @@ const bool &Context::shouldBlink() const {
 
 const bool &Context::shouldOpen() const {
     return this->opening;
+}
+
+bool Context::isOperationDone() const {
+    return !(this->landing || this->takeOff);
+}
+
+bool Context::isTakeOff() const {
+    return this->takeOff;
+}
+
+bool Context::isLanding() const {
+    return this->landing;
 }
 
 void Context::reset() {

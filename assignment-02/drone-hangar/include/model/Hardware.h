@@ -10,8 +10,6 @@
 #include <Sonar.h>
 #include <TMP36.h>
 
-#include "config.h"
-
 class Hardware final {
   private:
     Button *button;
@@ -34,6 +32,10 @@ class Hardware final {
     Led &getLed2();
 
     Led &getLed3();
+
+    Pir &getPir();
+
+    Sonar &getSonar();
 
     TMP36 &getTempSensor();
 
