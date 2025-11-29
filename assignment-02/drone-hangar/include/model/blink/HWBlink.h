@@ -2,16 +2,35 @@
 
 #include <Led.h>
 
+/**
+ * @brief Hardware abstraction layer for blinking LED
+ * 
+ * Provides a simplified interface for controlling an LED
+ * for blinking purposes.
+ */
 class HWBlink final {
   private:
-  Led &led;
+    Led &led;
 
   public:
+    /**
+     * @brief Construct a new HWBlink object
+     * @param led Reference to LED instance
+     */
     explicit HWBlink(Led &led);
 
-    void turnOn();
+    /**
+     * @brief Turn on the LED
+     */
+    void turnOn(void);
 
-    void turnOff();
+    /**
+     * @brief Turn off the LED
+     */
+    void turnOff(void);
 
+    /**
+     * @brief Destroy the HWBlink object
+     */
     ~HWBlink() = default;
 };

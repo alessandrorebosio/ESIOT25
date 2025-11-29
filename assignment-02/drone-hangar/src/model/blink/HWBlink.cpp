@@ -1,12 +1,22 @@
 #include "model/blink/HWBlink.h"
 
+/**
+ * @brief Construct a new HWBlink object
+ * @param led Reference to LED instance
+ */
 HWBlink::HWBlink(Led &led) : led(led) {
 }
 
-void HWBlink::turnOn() {
+/**
+ * @brief Turn on the LED
+ */
+void HWBlink::turnOn(void) {
     this->led.on();
 }
 
-void HWBlink::turnOff() {
+/**
+ * @brief Turn off the LED
+ */
+void HWBlink::turnOff(void) {
     this->led.off();
 }

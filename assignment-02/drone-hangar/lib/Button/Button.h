@@ -26,7 +26,7 @@ class Button final {
      *
      * @return true if the button is pressed, false otherwise
      */
-    bool isPressed();
+    bool isPressed(void);
 
     /**
      * @brief Default destructor.

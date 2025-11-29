@@ -14,33 +14,33 @@ class Context final {
     bool measuring;
 
   public:
-    Context();
+    Context(void);
 
-    void reset();
+    void reset(void);
 
-    void printNormal();
-    void printPreAlarm();
-    void printAlarm();
-    void printDone();
+    void printNormal(void);
+    void printPreAlarm(void);
+    void printAlarm(void);
+    void printDone(void);
 
-    void allowFlight();
-    void blockFlight();
+    void allowFlight(void);
+    void blockFlight(void);
 
-    void startBlink();
-    void stopBlink();
+    void startBlink(void);
+    void stopBlink(void);
 
-    void openGate();
-    void closeGate();
+    void openGate(void);
+    void closeGate(void);
 
-    const bool &shouldBlink() const;
-    const bool &shouldOpen() const;
+    const bool &shouldBlink(void) const;
+    const bool &shouldOpen(void) const;
 
-    bool shouldPrint();
-    bool shouldPrintNormal();
-    bool shouldPrintPreAlarm();
-    bool shouldPrintAlarm();
+    bool shouldPrint(void);
+    bool shouldPrintNormal(void);
+    bool shouldPrintPreAlarm(void);
+    bool shouldPrintAlarm(void);
 
-    static Context *instance;
+    static Context &instance;
 
     virtual ~Context() = default;
 };

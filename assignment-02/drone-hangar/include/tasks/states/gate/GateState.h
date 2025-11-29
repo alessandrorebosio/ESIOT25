@@ -8,14 +8,43 @@ class HWGate;
 
 namespace Gate {
 
+/**
+ * @brief Abstract base class for gate states in the state pattern
+ * 
+ * Defines the interface for all gate states with lifecycle methods
+ * for state transitions and periodic updates during gate operation.
+ */
 class GateState {
   public:
+    /**
+     * @brief Called when entering this state
+     * @param task Reference to the GateTask
+     * @param hw Reference to the hardware abstraction
+     * @param enabled Reference to the enabled flag
+     */
     virtual void onEnter(GateTask &task, HWGate &hw, const bool &enabled) = 0;
 
+    /**
+     * @brief Called when exiting this state
+     * @param task Reference to the GateTask
+     * @param hw Reference to the hardware abstraction
+     * @param enabled Reference to the enabled flag
+     */
     virtual void onExit(GateTask &task, HWGate &hw, const bool &enabled) = 0;
 
+    /**
+     * @brief Called periodically to update state logic
+     * @param task Reference to the GateTask
+     * @param hw Reference to the hardware abstraction
+     * @param enabled Reference to the enabled flag
+     * 
+     * Handles state-specific logic, position control, and state transitions.
+     */
     virtual void tick(GateTask &task, HWGate &hw, const bool &enabled) = 0;
 
+    /**
+     * @brief Virtual destructor for proper cleanup of derived states
+     */
     virtual ~GateState() = default;
 };
 

@@ -20,6 +20,6 @@ Button::Button(const uint8_t pin, const uint8_t mode) : pin(pin) {
  * 
  * @return true if the button is pressed, false otherwise.
  */
-bool Button::isPressed() {
+bool Button::isPressed(void) {
     return digitalRead(pin);
 }

@@ -10,16 +10,13 @@ class HWFlight final {
     Pir &pir;
     Sonar &sonar;
     TMP36 &temp;
-    Lcd &lcd;
 
   public:
-    explicit HWFlight(Pir &pir, Sonar &sonar, TMP36 &temp, Lcd &lcd);
+    explicit HWFlight(Pir &pir, Sonar &sonar, TMP36 &temp);
 
-    bool isDetected();
+    bool isDetected(void);
 
-    float distance();
-
-    void printOnLcd(String msg);
+    float distance(void);
 
     ~HWFlight() = default;
 };

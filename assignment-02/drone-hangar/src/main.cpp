@@ -20,29 +20,31 @@ static MsgService msg;
 static Context context;
 static Hardware hw;
 
-void setup() {
+void setup(void) {
     scheduler.init(100);
     msg.init(BAUD);
     hw.init();
 
-    scheduler.addTask(new System::SystemTask(new HWSystem(hw.getButton(), hw.getLed1(), hw.getTempSensor()), context, 1000));
-    scheduler.addTask(new Blink::BlinkTask(new HWBlink(hw.getLed3()), context.shouldBlink(), 500));
+    scheduler.addTask(new System::SystemTask(new HWSystem(hw.getButton(), hw.getLed1(), hw.getLed3(),hw.getTempSensor()), context, 1000));
+    scheduler.addTask(new Blink::BlinkTask(new HWBlink(hw.getLed2()), context.shouldBlink(), 500));
     scheduler.addTask(new Gate::GateTask(new HWGate(hw.getMotor()), context.shouldOpen(), 20));
 
     scheduler.addTask(new Observer::ObserverTask(
-        &context, &Context::shouldPrint,
+        context, &Context::shouldPrint,
         [] {
-            String output = context.shouldPrintNormal()     ? "NORMAL"
-                            : context.shouldPrintPreAlarm() ? "PREALARM"
-                            : context.shouldPrintAlarm()    ? "ALARM"
-                                                            : "";
-            hw.getLcd().print(output);
-            msg.send(output);
+            String sys = context.shouldPrintNormal()     ? "NORMAL"
+                         : context.shouldPrintPreAlarm() ? "PREALARM"
+                         : context.shouldPrintAlarm()    ? "ALARM"
+                                                         : nullptr;
+            if (sys) {
+                hw.getLcd().print(0, "SYSTEM: " + sys);
+                msg.send(sys);
+            }
             context.printDone();
         },
         1000));
 }
 
-void loop() {
+void loop(void) {
     scheduler.schedule();
 }

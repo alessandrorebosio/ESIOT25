@@ -8,14 +8,11 @@ class HWCheck final {
   private:
     Sonar &sonar;
     TMP36 &temp;
-    Lcd &lcd;
 
   public:
-    explicit HWCheck(Sonar &sonar, TMP36 &temp, Lcd &lcd);
+    explicit HWCheck(Sonar &sonar, TMP36 &temp);
 
-    float distance();
-
-    void printOnLcd(String msg);
+    float distance(void);
 
     ~HWCheck() = default;
 };

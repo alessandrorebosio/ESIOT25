@@ -23,11 +23,12 @@ Lcd::Lcd(const uint8_t address, const uint8_t cols, const uint8_t rows) {
  * This method clears the display, sets cursor to the home position (0,0),
  * and prints the provided text.
  *
+ * @param y Row position (0-based)
  * @param text The string to be displayed
  */
-void Lcd::print(const String text) {
+void Lcd::print(const uint8_t y, const String text) {
     this->clear();
-    this->setCursor(0, 0);
+    this->setCursor(0, y);
     this->lcd->print(text);
 }
 
@@ -51,4 +52,3 @@ void Lcd::setCursor(const uint8_t x, const uint8_t y) {
 void Lcd::clear() {
     this->lcd->clear();
 }
-
