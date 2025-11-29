@@ -36,43 +36,35 @@ void setup(void) {
 
             String m = msg.get();
             m.toUpperCase();
-            if (m.equals("TAKEOFF")) {
-                msg.send("ok");
-            } else if (m.equals("LANDING")) {
-                msg.send("ko");
+            if (m.equals("TAKEOFF") || m.equals("LANDING")) {
+                context.startBlink();
             }
         },
         100));
 
-    // scheduler.addTask(new Observer::ObserverTask(
-    //     context, &Context::shouldPrint,
-    //     context, &Context::shouldSystemPrint,
-    //     [] {
-    //         String sys = context.shouldPrintNormal()     ? "NORMAL"
-    //                      : context.shouldPrintPreAlarm() ? "PREALARM"
-    //                      : context.shouldPrintAlarm()    ? "ALARM"
-    //                                                      : nullptr;
-    //         if (sys) {
-    //             hw.getLcd().print(0, "SYSTEM: " + sys);
-    //             msg.send(sys);
-    //         }
-    //         context.systemPrintDone();
-    //     },
-    //     1000));
-
     scheduler.addTask(new Observer::ObserverTask(
-        context, &Context::shouldDronePrint,
+        context, &Context::shouldPrint,
         [] {
-            String sys = context.shouldPrintInside()       ? "INSIDE"
-                         : context.shouldPrintTakeOff()    ? "TAKEOFF"
-                         : context.shouldPrintOutside()    ? "OUTSIDE"
-                         : context.shouldPrintLanding()    ? "LANDING"
-                                                         : nullptr;
+            String sys = context.shouldPrintNormal()     ? "NORMAL"
+                            : context.shouldPrintPreAlarm() ? "PREALARM"
+                            : context.shouldPrintAlarm()    ? "ALARM"
+                                                            : nullptr;
             if (sys) {
-                hw.getLcd().print(0, "DRONE: " + sys);
+                hw.getLcd().print(0, "SYSTEM: " + sys);
                 msg.send(sys);
             }
-            context.dronePrintDone();
+
+            String drone = context.shouldPrintInside()    ? "INSIDE"
+                            : context.shouldPrintTakeOff() ? "TAKEOFF"
+                            : context.shouldPrintOutside() ? "OUTSIDE"
+                            : context.shouldPrintLanding() ? "LANDING"
+                                                           : nullptr;
+            if (drone) {
+                hw.getLcd().print(1, "DRONE: " + drone);
+                msg.send(drone);
+            }
+
+            context.printDone();
         },
         500));
 }
