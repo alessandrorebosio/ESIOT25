@@ -36,7 +36,7 @@
 /**
  * @brief Digital pin for LED 2
  */
-#define LED4_PIN 4
+#define LED2_PIN 4
 
 /**
  * @brief Digital pin for LED 1
