@@ -2,17 +2,26 @@
 
 class Context final {
   private:
+    enum SystemPrint { DONE, NORMAL, PREALARM, ALARM };
+
+    SystemPrint systemPrint : 2;
+
     bool flightAllowed;
+
     bool blinking;
     bool opening;
-
-    bool takeOff;
-    bool landing;
 
     bool measuring;
 
   public:
     Context();
+
+    void reset();
+
+    void printNormal();
+    void printPreAlarm();
+    void printAlarm();
+    void printDone();
 
     void allowFlight();
     void blockFlight();
@@ -23,26 +32,17 @@ class Context final {
     void openGate();
     void closeGate();
 
-    void doTakeOff();
-    void doLanding();
-    void startMeasuring();
-
-    void takeOffDone();
-    void landingDone();
-    void stopMeasuring();
-
-    const bool &isFlightAllowed() const;
     const bool &shouldBlink() const;
-    bool shouldMeasure();
-    const bool &isTakeOff() const;
-    const bool &isLanding() const;
     const bool &shouldOpen() const;
 
-    bool isOperationDone();
+    bool shouldPrint();
+    bool shouldPrintNormal();
+    bool shouldPrintPreAlarm();
+    bool shouldPrintAlarm();
 
-    void reset();
-
-    static Context* instance;
+    static Context *instance;
 
     virtual ~Context() = default;
 };
+
+typedef bool (Context::*Predicate)();

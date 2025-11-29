@@ -2,28 +2,28 @@
 
 #include "tasks/states/system/Normal.h"
 
-System::SystemTask::SystemTask(HWSystem *hw, Context &ctx, MsgService &msg, int period)
-    : hardware(hw), context(ctx), msg(msg), state(nullptr) {
-    Task::init(period);
-    this->changeState(new ::System::Normal);
+System::SystemTask::SystemTask(HWSystem *hw, Context &ctx, int period)
+	: hardware(hw), context(ctx), state(nullptr) {
+	Task::init(period);
+	this->changeState(new ::System::Normal);
 }
 
 void System::SystemTask::tick() {
-    this->state->tick(*this, *this->hardware, this->context, this->msg);
+	this->state->tick(*this, *this->hardware, this->context);
 }
 
 void System::SystemTask::changeState(SystemState *newState) {
-    if (this->state != nullptr) {
-        this->state->onExit(*this, *this->hardware, this->context, this->msg);
-        delete this->state;
-    }
-    this->state = newState;
-    if (this->state != nullptr) {
-        this->state->onEnter(*this, *this->hardware, this->context, this->msg);
-    }
+	if (this->state != nullptr) {
+		this->state->onExit(*this, *this->hardware, this->context);
+		delete this->state;
+	}
+	this->state = newState;
+	if (this->state != nullptr) {
+		this->state->onEnter(*this, *this->hardware, this->context);
+	}
 }
 
 System::SystemTask::~SystemTask() {
-    delete this->hardware;
-    delete this->state;
+	delete this->hardware;
+	delete this->state;
 }

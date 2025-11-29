@@ -6,13 +6,13 @@ namespace System {
 
 class Normal final : public SystemState {
   public:
-    void onEnter(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg);
+	void onEnter(SystemTask &task, HWSystem &hw, Context &ctx);
 
-    void onExit(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg);
+	void onExit(SystemTask &task, HWSystem &hw, Context &ctx);
 
-    void tick(SystemTask &task, HWSystem &hw, Context &ctx, MsgService &msg);
+	void tick(SystemTask &task, HWSystem &hw, Context &ctx);
 
-    ~Normal() = default;
+	~Normal() = default;
 };
 
 } // namespace System
