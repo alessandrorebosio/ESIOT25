@@ -7,6 +7,7 @@ Context::Context() {
 void Context::reset() {
     this->stopBlink();
     this->closeGate();
+    this->startMeasuring();
     this->printDone();
 }
 
@@ -50,12 +51,24 @@ void Context::closeGate(void) {
     this->opening = false;
 }
 
+void Context::startMeasuring(void) {
+    this->measuring = true;
+}
+
+void Context::stopMeasuring(void) {
+    this->measuring = false;
+}
+
 const bool &Context::shouldBlink(void) const {
     return this->blinking;
 }
 
 const bool &Context::shouldOpen(void) const {
     return this->opening;
+}
+
+const bool &Context::shouldMeasure(void) const {
+    return this->measuring;
 }
 
 bool Context::shouldListen(void) {

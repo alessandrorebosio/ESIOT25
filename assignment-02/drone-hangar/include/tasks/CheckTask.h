@@ -15,12 +15,11 @@ class CheckTask final : public Task {
   private:
     HWCheck *hardware;
     Context &context;
-    MsgService &msg;
     const bool &enabled;
     CheckState *state;
 
   public:
-    explicit CheckTask(HWCheck *hw, Context &ctx, MsgService &msg, const bool &enabled, int period);
+    explicit CheckTask(HWCheck *hw, Context &ctx, const bool &enabled, int period);
 
     void tick();
 

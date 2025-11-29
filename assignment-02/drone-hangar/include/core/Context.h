@@ -32,8 +32,12 @@ class Context final {
     void openGate(void);
     void closeGate(void);
 
+    void startMeasuring(void);
+    void stopMeasuring(void);
+
     const bool &shouldBlink(void) const;
     const bool &shouldOpen(void) const;
+    const bool &shouldMeasure(void) const;
 
     bool shouldListen(void);
 

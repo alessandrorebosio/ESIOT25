@@ -17,7 +17,7 @@
  * - LCD display at LCD_ADDR with LCD_COLS columns and LCD_ROWS rows
  */
 void Hardware::init(void) {
-    button = new Button(BUTTON_PIN, INPUT);
+    button = new Button(BUTTON_PIN, INPUT_PULLUP);
     led1 = new Led(LED1_PIN);
     led2 = new Led(LED2_PIN);
     led3 = new Led(LED3_PIN);
