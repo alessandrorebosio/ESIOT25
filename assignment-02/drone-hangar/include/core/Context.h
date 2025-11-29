@@ -1,10 +1,16 @@
 #pragma once
 
+namespace System {
+      enum Print { DONE, NORMAL, PREALARM, ALARM };
+  }
+
+  namespace Drone {
+      enum Print { DONE, INSIDE, TAKEOFF, OUTSIDE, LANDING };
+  }
 class Context final {
   private:
-    enum SystemPrint { DONE, NORMAL, PREALARM, ALARM };
-
-    SystemPrint systemPrint : 2;
+    System::Print systemPrint : 2;
+    Drone::Print dronePrint : 3;
 
     bool flightAllowed;
 
@@ -21,7 +27,13 @@ class Context final {
     void printNormal(void);
     void printPreAlarm(void);
     void printAlarm(void);
-    void printDone(void);
+    void systemPrintDone(void);
+
+    void printInside(void);
+    void printTakeOff(void);
+    void printOutside(void);
+    void printLanding(void);
+    void dronePrintDone(void);
 
     void allowFlight(void);
     void blockFlight(void);
@@ -38,9 +50,16 @@ class Context final {
     bool shouldListen(void);
 
     bool shouldPrint(void);
+    bool shouldSystemPrint(void);
     bool shouldPrintNormal(void);
     bool shouldPrintPreAlarm(void);
     bool shouldPrintAlarm(void);
+
+    bool shouldDronePrint(void);
+    bool shouldPrintInside(void);
+    bool shouldPrintTakeOff(void);
+    bool shouldPrintOutside(void);
+    bool shouldPrintLanding(void);
 
     static Context &instance;
 

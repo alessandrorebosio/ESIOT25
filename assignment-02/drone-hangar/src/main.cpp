@@ -44,20 +44,37 @@ void setup(void) {
         },
         100));
 
+    // scheduler.addTask(new Observer::ObserverTask(
+    //     context, &Context::shouldPrint,
+    //     context, &Context::shouldSystemPrint,
+    //     [] {
+    //         String sys = context.shouldPrintNormal()     ? "NORMAL"
+    //                      : context.shouldPrintPreAlarm() ? "PREALARM"
+    //                      : context.shouldPrintAlarm()    ? "ALARM"
+    //                                                      : nullptr;
+    //         if (sys) {
+    //             hw.getLcd().print(0, "SYSTEM: " + sys);
+    //             msg.send(sys);
+    //         }
+    //         context.systemPrintDone();
+    //     },
+    //     1000));
+
     scheduler.addTask(new Observer::ObserverTask(
-        context, &Context::shouldPrint,
+        context, &Context::shouldDronePrint,
         [] {
-            String sys = context.shouldPrintNormal()     ? "NORMAL"
-                         : context.shouldPrintPreAlarm() ? "PREALARM"
-                         : context.shouldPrintAlarm()    ? "ALARM"
+            String sys = context.shouldPrintInside()       ? "INSIDE"
+                         : context.shouldPrintTakeOff()    ? "TAKEOFF"
+                         : context.shouldPrintOutside()    ? "OUTSIDE"
+                         : context.shouldPrintLanding()    ? "LANDING"
                                                          : nullptr;
             if (sys) {
-                hw.getLcd().print(0, "SYSTEM: " + sys);
+                hw.getLcd().print(0, "DRONE: " + sys);
                 msg.send(sys);
             }
-            context.printDone();
+            context.dronePrintDone();
         },
-        1000));
+        500));
 }
 
 void loop(void) {
