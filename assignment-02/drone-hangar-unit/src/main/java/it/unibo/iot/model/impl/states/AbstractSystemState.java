@@ -35,7 +35,6 @@ public abstract class AbstractSystemState implements SystemState {
      */
     @Override
     public void update(final Model model) {
-        model.getDevice().update();
     }
 
     /**
@@ -45,7 +44,6 @@ public abstract class AbstractSystemState implements SystemState {
     public void handle(final Model model, final String msg) {
         Objects.requireNonNull(model, "The model cannot be null.");
         Objects.requireNonNull(msg, "The msg cannot be null.");
-        model.getDevice().handle(msg);
     }
 
     /**

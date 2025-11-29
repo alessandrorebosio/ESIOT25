@@ -1,5 +1,6 @@
 package it.unibo.iot.model.impl.states.normal;
 
+import it.unibo.iot.common.api.Messages;
 import it.unibo.iot.model.api.Model;
 import it.unibo.iot.model.impl.states.AbstractSystemState;
 import it.unibo.iot.model.impl.states.prealarm.PreAlarmSystemState;
@@ -17,8 +18,8 @@ public class NormalSystemState extends AbstractSystemState {
     @Override
     public void handle(final Model model, final String msg) {
         super.handle(model, msg);
-        switch (msg) {
-            case "prealarm" -> model.changeState(new PreAlarmSystemState());
+        switch (Messages.fromString(msg)) {
+            case PREALARM -> model.changeState(new PreAlarmSystemState());
             default -> {
             }
         }

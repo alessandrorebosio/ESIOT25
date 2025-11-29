@@ -1,5 +1,6 @@
 package it.unibo.iot.model.impl.states.alarm;
 
+import it.unibo.iot.common.api.Messages;
 import it.unibo.iot.model.api.Model;
 import it.unibo.iot.model.impl.states.AbstractSystemState;
 import it.unibo.iot.model.impl.states.normal.NormalSystemState;
@@ -17,8 +18,8 @@ public class AlarmSystemState extends AbstractSystemState {
     @Override
     public void handle(final Model model, final String msg) {
         super.handle(model, msg);
-        switch (msg) {
-            case "normal" -> model.changeState(new NormalSystemState());
+        switch (Messages.fromString(msg)) {
+            case NORMAL -> model.changeState(new NormalSystemState());
             default -> {
             }
         }

@@ -37,10 +37,8 @@ void setup(void) {
 
             String m = msg.get();
             m.toUpperCase();
-            if (m.equals("TAKEOFF")) {
-                msg.send("ok");
-            } else if (m.equals("LANDING")) {
-                msg.send("ko");
+            if (m.equals("TAKEOFF") || m.equals("LANDING")) {
+                context.startBlink();
             }
         },
         100));
@@ -56,9 +54,20 @@ void setup(void) {
                 hw.getLcd().print(0, "SYSTEM: " + sys);
                 msg.send(sys);
             }
+
+            String drone = context.shouldPrintInside()    ? "INSIDE"
+                           : context.shouldPrintTakeOff() ? "TAKEOFF"
+                           : context.shouldPrintOutside() ? "OUTSIDE"
+                           : context.shouldPrintLanding() ? "LANDING"
+                                                          : nullptr;
+            if (drone) {
+                hw.getLcd().print(1, "DRONE: " + drone);
+                msg.send(drone);
+            }
+
             context.printDone();
         },
-        1000));
+        500));
 }
 
 void loop(void) {

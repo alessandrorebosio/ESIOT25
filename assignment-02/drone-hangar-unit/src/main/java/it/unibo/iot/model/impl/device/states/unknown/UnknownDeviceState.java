@@ -1,5 +1,6 @@
 package it.unibo.iot.model.impl.device.states.unknown;
 
+import it.unibo.iot.common.api.Messages;
 import it.unibo.iot.model.api.device.Device;
 import it.unibo.iot.model.impl.device.states.AbstractDeviceState;
 import it.unibo.iot.model.impl.device.states.landing.LandingDeviceState;
@@ -24,11 +25,11 @@ public class UnknownDeviceState extends AbstractDeviceState {
     @Override
     public void handle(final Device device, final String msg) {
         super.handle(device, msg);
-        switch (msg) {
-            case "inside" -> device.changeState(new RestDeviceState());
-            case "takeoff" -> device.changeState(new TakeoffDeviceState());
-            case "operating" -> device.changeState(new OperatingDeviceState());
-            case "landing" -> device.changeState(new LandingDeviceState());
+        switch (Messages.fromString(msg)) {
+            case INSIDE -> device.changeState(new RestDeviceState());
+            case TAKEOFF -> device.changeState(new TakeoffDeviceState());
+            case OUTSIDE -> device.changeState(new OperatingDeviceState());
+            case LANDING -> device.changeState(new LandingDeviceState());
             default -> {
             }
         }
