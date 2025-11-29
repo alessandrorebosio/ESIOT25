@@ -182,20 +182,16 @@ for a specific function of the project. A simple scheduler was
 implemented to run these tasks concurrently. The main tasks are described below.
 
 \section{System Task}
-The system defines three main states: \texttt{NORMAL},
-\texttt{PREALARM}, and \texttt{ALARM}. In the \texttt{NORMAL} state
-take-offs and landings are allowed. If the internal temperature
-remains greater than or equal to \texttt{Temp1} for more than
-\texttt{T3}, the system transitions to \texttt{PREALARM}, where new
-take-off and landing requests are suspended while in-progress
-operations may complete. If the temperature then remains greater than
-or equal to \texttt{Temp2} (with \texttt{Temp2} $>$ \texttt{Temp1}) for
-more than \texttt{T4}, the system enters the \texttt{ALARM} state:
-the hangar door is closed if open, \texttt{L3} is turned on, and the
-LCD displays \texttt{ALARM}. If the drone is outside when the alarm
-triggers, an alarm message is sent via \texttt{DRU}. All operations
-remain suspended in \texttt{ALARM} until the \texttt{RESET} button is
-pressed, which returns the system to \texttt{NORMAL}.
+The system operates in three main states: \texttt{NORMAL}, \texttt{PREALARM}, and \texttt{ALARM}, with transitions driven by the internal temperature and timing conditions. 
+In the \texttt{NORMAL} state, the system enables take-off and landing operations. 
+If the temperature exceeds \texttt{TEMP1} for a continuous period longer than \texttt{T1}, the system transitions to the \texttt{PREALARM} state; otherwise, the timer is reset whenever the temperature drops below \texttt{TEMP1}. 
+
+In the \texttt{PREALARM} state, the system suspends new flight operations while allowing in-progress ones to complete. 
+If the temperature rises above \texttt{TEMP2} for more than \texttt{T2}, the system enters the \texttt{ALARM} state; if it falls below \texttt{TEMP1}, the timer is reset and the system returns to \texttt{NORMAL}. 
+
+In the \texttt{ALARM} state, the system closes the hangar door if it is open. 
+If the drone is outside when the alarm is triggered, an alarm message is sent via \texttt{DRU}. 
+The system remains in the \texttt{ALARM} state until the \texttt{RESET} button is pressed, which returns the system to the \texttt{NORMAL} state. 
 
 \begin{figure}[H]
   \centering
@@ -254,20 +250,37 @@ remains off when blinking is not allowed.
 \end{figure}
 
 \section{Gate Task}
-The Gate Task controls the gate with four states: \texttt{CLOSED},
-\texttt{OPENING}, \texttt{OPEN}, and \texttt{CLOSING}. At startup the gate is
-\texttt{CLOSED}. On the \texttt{open} command it transitions to \texttt{OPENING}
-and then to \texttt{OPEN} when the opening is completed. On the
-\texttt{close} command it transitions to \texttt{CLOSING} and then to
-\texttt{CLOSED} once closed.
+The \texttt{Gate Task} manages the hangar gate through four operational states:
+\texttt{CLOSE}, \texttt{OPENING}, \texttt{OPEN}, and \texttt{CLOSING}. 
+At system startup, the gate is in the \texttt{CLOSE} state, where the motor is turned off. 
+Upon receiving an \texttt{enabled} signal, the task transitions to the \texttt{OPENING} state, 
+where the gate starts to open. Once the opening process is completed, 
+the system moves to the \texttt{OPEN} state, in which the motor is turned off and the gate remains open. 
 
-If an opposite command arrives while the gate is moving, the
-direction is reversed immediately.
+If the \texttt{enabled} condition becomes false while the gate is open, the task transitions to the \texttt{CLOSING} state, 
+closing the gate until the \texttt{CLOSE} state is reached. 
+
+If an opposite command is received while the gate is in motion, 
+the direction is immediately reversed, allowing for dynamic control of gate movement.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{./pdf/GateTask.pdf}
   \caption{Gate Task state diagram.}
   \label{fig:GateTask}
+\end{figure}
+
+\section{Observer Task}
+The \texttt{Observer Task} is responsible for periodically monitoring system conditions through the evaluation of a predicate function. 
+It operates in a single state, \texttt{OBSERVER}, where at each activation the associated predicate is checked. 
+If the predicate evaluates to true, the corresponding function or callback is executed, allowing the system to react to specific events or conditions in real time. 
+This task provides a lightweight mechanism for asynchronous observation and event detection without interfering with the main control logic.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{./pdf/ObserverTask.pdf}
+  \caption{Observer Task state diagram.}
+  \label{fig:ObserverTask}
 \end{figure}
 
 \chapter{Diagrams}
