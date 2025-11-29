@@ -91,6 +91,7 @@ public class AppModel implements Model {
     @Override
     public void handle(final String msg) {
         this.state.handle(this, msg);
+        this.device.handle(msg);
         this.addMsg("received: " + msg);
     }
 
@@ -100,6 +101,7 @@ public class AppModel implements Model {
     @Override
     public void update() {
         this.state.update(this);
+        this.device.update();
     }
 
     /**

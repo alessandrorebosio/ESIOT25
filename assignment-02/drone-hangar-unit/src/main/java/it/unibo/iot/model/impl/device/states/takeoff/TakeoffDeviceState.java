@@ -1,5 +1,6 @@
 package it.unibo.iot.model.impl.device.states.takeoff;
 
+import it.unibo.iot.common.api.Messages;
 import it.unibo.iot.model.api.device.Device;
 import it.unibo.iot.model.impl.device.states.AbstractDeviceState;
 import it.unibo.iot.model.impl.device.states.operating.OperatingDeviceState;
@@ -21,8 +22,8 @@ public class TakeoffDeviceState extends AbstractDeviceState {
     @Override
     public void handle(final Device device, final String msg) {
         super.handle(device, msg);
-        switch (msg) {
-            case "operating" -> device.changeState(new OperatingDeviceState());
+        switch (Messages.fromString(msg)) {
+            case OUTSIDE -> device.changeState(new OperatingDeviceState());
             default -> {
             }
         }
