@@ -35,6 +35,8 @@ class Context final {
     const bool &shouldBlink(void) const;
     const bool &shouldOpen(void) const;
 
+    bool shouldListen(void);
+
     bool shouldPrint(void);
     bool shouldPrintNormal(void);
     bool shouldPrintPreAlarm(void);

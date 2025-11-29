@@ -58,6 +58,10 @@ const bool &Context::shouldOpen(void) const {
     return this->opening;
 }
 
+bool Context::shouldListen(void) {
+    return true;
+}
+
 bool Context::shouldPrint(void) {
     return this->systemPrint != Context::DONE;
 }
@@ -65,9 +69,11 @@ bool Context::shouldPrint(void) {
 bool Context::shouldPrintNormal(void) {
     return this->systemPrint == Context::NORMAL;
 }
+
 bool Context::shouldPrintPreAlarm(void) {
     return this->systemPrint == Context::PREALARM;
 }
+
 bool Context::shouldPrintAlarm(void) {
     return this->systemPrint == Context::ALARM;
 }

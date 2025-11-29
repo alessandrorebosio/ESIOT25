@@ -25,9 +25,24 @@ void setup(void) {
     msg.init(BAUD);
     hw.init();
 
-    scheduler.addTask(new System::SystemTask(new HWSystem(hw.getButton(), hw.getLed1(), hw.getLed3(),hw.getTempSensor()), context, 1000));
+    scheduler.addTask(new System::SystemTask(new HWSystem(hw.getButton(), hw.getLed1(), hw.getLed3(), hw.getTempSensor()), context, 1000));
     scheduler.addTask(new Blink::BlinkTask(new HWBlink(hw.getLed2()), context.shouldBlink(), 500));
     scheduler.addTask(new Gate::GateTask(new HWGate(hw.getMotor()), context.shouldOpen(), 20));
+
+    scheduler.addTask(new Observer::ObserverTask(
+        context, &Context::shouldListen,
+        [] {
+            msg.read();
+
+            String m = msg.get();
+            m.toUpperCase();
+            if (m.equals("TAKEOFF")) {
+                msg.send("ok");
+            } else if (m.equals("LANDING")) {
+                msg.send("ko");
+            }
+        },
+        100));
 
     scheduler.addTask(new Observer::ObserverTask(
         context, &Context::shouldPrint,
@@ -47,4 +62,5 @@ void setup(void) {
 
 void loop(void) {
     scheduler.schedule();
+    msg.clear();
 }
