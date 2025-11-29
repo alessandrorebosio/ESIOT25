@@ -30,7 +30,7 @@ void setup(void) {
     scheduler.addTask(new Gate::GateTask(new HWGate(hw.getMotor()), context.shouldOpen(), 20));
 
     scheduler.addTask(new Observer::ObserverTask(
-        context, &Context::shouldPrint,
+        context, &Context::shouldSystemPrint,
         [] {
             String sys = context.shouldPrintNormal()     ? "NORMAL"
                          : context.shouldPrintPreAlarm() ? "PREALARM"
@@ -40,7 +40,7 @@ void setup(void) {
                 hw.getLcd().print(0, "SYSTEM: " + sys);
                 msg.send(sys);
             }
-            context.printDone();
+            context.systemPrintDone();
         },
         1000));
 }
