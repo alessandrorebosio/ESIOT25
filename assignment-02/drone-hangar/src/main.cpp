@@ -46,19 +46,19 @@ void setup(void) {
         context, &Context::shouldPrint,
         [] {
             String sys = context.shouldPrintNormal()     ? "NORMAL"
-                            : context.shouldPrintPreAlarm() ? "PREALARM"
-                            : context.shouldPrintAlarm()    ? "ALARM"
-                                                            : nullptr;
+                         : context.shouldPrintPreAlarm() ? "PREALARM"
+                         : context.shouldPrintAlarm()    ? "ALARM"
+                                                         : nullptr;
             if (sys) {
                 hw.getLcd().print(0, "SYSTEM: " + sys);
                 msg.send(sys);
             }
 
             String drone = context.shouldPrintInside()    ? "INSIDE"
-                            : context.shouldPrintTakeOff() ? "TAKEOFF"
-                            : context.shouldPrintOutside() ? "OUTSIDE"
-                            : context.shouldPrintLanding() ? "LANDING"
-                                                           : nullptr;
+                           : context.shouldPrintTakeOff() ? "TAKEOFF"
+                           : context.shouldPrintOutside() ? "OUTSIDE"
+                           : context.shouldPrintLanding() ? "LANDING"
+                                                          : nullptr;
             if (drone) {
                 hw.getLcd().print(1, "DRONE: " + drone);
                 msg.send(drone);
