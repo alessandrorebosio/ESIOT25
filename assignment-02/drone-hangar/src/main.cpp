@@ -43,6 +43,22 @@ void setup(void) {
             context.systemPrintDone();
         },
         1000));
+
+    scheduler.addTask(new Observer::ObserverTask(
+        context, &Context::shouldDronePrint,
+        [] {
+            String sys = context.shouldPrintInside()       ? "INSIDE"
+                         : context.shouldPrintTakeOff()    ? "TAKEOFF"
+                         : context.shouldPrintOutside()    ? "OUTSIDE"
+                         : context.shouldPrintLanding()    ? "LANDING"
+                                                         : nullptr;
+            if (sys) {
+                hw.getLcd().print(0, "DRONE: " + sys);
+                msg.send(sys);
+            }
+            context.dronePrintDone();
+        },
+        500));
 }
 
 void loop(void) {
