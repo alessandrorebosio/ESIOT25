@@ -6,7 +6,6 @@
 
 namespace Observer {
 
-typedef bool (Context::*Predicate)();
 typedef void (*Function)();
 
 class ObserverTask final : public Task {
