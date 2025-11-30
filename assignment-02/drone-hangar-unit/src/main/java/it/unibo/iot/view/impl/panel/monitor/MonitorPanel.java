@@ -1,4 +1,4 @@
-package it.unibo.iot.view.impl.panel.connection;
+package it.unibo.iot.view.impl.panel.monitor;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -23,7 +23,7 @@ import it.unibo.iot.view.impl.panel.AbstractPanel;
  * @author Unknown
  * @since 1.0
  */
-public class ConnectionPanel extends AbstractPanel {
+public class MonitorPanel extends AbstractPanel {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -46,7 +46,7 @@ public class ConnectionPanel extends AbstractPanel {
      *
      * @param controller the application controller used for connection operations
      */
-    public ConnectionPanel(final Controller controller) {
+    public MonitorPanel(final Controller controller) {
         super(controller, "Connection");
 
         super.setLayout(new BorderLayout(GAPS, GAPS));
@@ -114,6 +114,7 @@ public class ConnectionPanel extends AbstractPanel {
         this.send.setEnabled(controller.isConnected());
 
         controller.message().ifPresent(this.textArea::append);
+        textArea.setCaretPosition(textArea.getDocument().getLength());
     }
 
 }

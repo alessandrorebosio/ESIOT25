@@ -70,6 +70,13 @@ public class CommChannel implements Connection, SerialPortEventListener {
 
             this.port.addEventListener(this);
 
+            /*
+             * drop any previously received data so we don't deliver messages
+             * that arrived before this explicit connect call
+             */
+            this.currentMsg = "";
+            this.queue.clear();
+
             return true;
         } catch (final SerialPortException ex) {
             return false;
@@ -92,6 +99,9 @@ public class CommChannel implements Connection, SerialPortEventListener {
         } catch (final SerialPortException ex) {
             return false;
         } finally {
+            /* clear buffer and queue on disconnect to avoid stale messages */
+            this.currentMsg = "";
+            this.queue.clear();
             this.port = null;
         }
     }
@@ -157,7 +167,7 @@ public class CommChannel implements Connection, SerialPortEventListener {
     @SuppressWarnings("PMD.EmptyCatchBlock")
     @Override
     public synchronized void serialEvent(final SerialPortEvent event) {
-        if (!event.isRXCHAR() || event.getEventValue() <= 0 || port == null) {
+        if (!event.isRXCHAR() || event.getEventValue() <= 0 || port == null || !port.isOpened()) {
             return;
         }
         try {

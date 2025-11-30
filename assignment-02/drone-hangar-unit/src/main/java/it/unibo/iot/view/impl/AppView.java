@@ -12,8 +12,8 @@ import javax.swing.JFrame;
 import it.unibo.iot.controller.api.Controller;
 import it.unibo.iot.view.api.View;
 import it.unibo.iot.view.impl.panel.AbstractPanel;
-import it.unibo.iot.view.impl.panel.connection.ConnectionPanel;
 import it.unibo.iot.view.impl.panel.control.ControlPanel;
+import it.unibo.iot.view.impl.panel.monitor.MonitorPanel;
 import it.unibo.iot.view.impl.panel.status.StatusPanel;
 
 /**
@@ -44,7 +44,7 @@ public class AppView extends JFrame implements View {
 
         super.setLayout(new GridLayout(3, 1));
 
-        super.add(new ConnectionPanel(controller));
+        super.add(new MonitorPanel(controller));
         super.add(new ControlPanel(controller));
         super.add(new StatusPanel(controller));
 
