@@ -7,7 +7,6 @@ Context::Context() {
 void Context::reset() {
     this->stopBlink();
     this->closeGate();
-    this->startMeasuring();
     this->printDone();
 }
 
@@ -68,31 +67,15 @@ void Context::closeGate(void) {
     this->opening = false;
 }
 
-void Context::startMeasuring(void) {
-    this->measuring = true;
-}
-
-void Context::stopMeasuring(void) {
-    this->measuring = false;
-}
-
-const bool &Context::shouldBlink(void) const {
+Predicate Context::shouldBlink(void) {
     return this->blinking;
 }
 
-const bool &Context::shouldOpen(void) const {
+Predicate Context::shouldOpen(void) {
     return this->opening;
 }
 
-const bool &Context::shouldMeasure(void) const {
-    return this->measuring;
-}
-
-bool Context::shouldListen(void) {
-    return true;
-}
-
-bool Context::shouldPrint(void) {
+Predicate Context::shouldPrint(void) {
     return this->systemPrint != System::Print::DONE || this->dronePrint != Drone::Print::DONE;
 }
 

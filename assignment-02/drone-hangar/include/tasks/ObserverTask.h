@@ -22,19 +22,17 @@ typedef void (*Function)(void);
  */
 class ObserverTask final : public Task {
   private:
-    Context &context;
     Predicate predicate;
     Function function;
 
   public:
     /**
      * @brief Construct a new Observer Task object
-     * @param ctx Reference to the application context
      * @param pred Pointer to predicate method that returns bool
      * @param fn Callback function to execute when predicate is true
      * @param period Execution period in milliseconds for checking the condition
      */
-    explicit ObserverTask(Context &ctx, Predicate pred, Function fn, int period);
+    explicit ObserverTask(Predicate pred, Function fn, int period);
 
     /**
      * @brief Check the predicate condition and execute callback if true

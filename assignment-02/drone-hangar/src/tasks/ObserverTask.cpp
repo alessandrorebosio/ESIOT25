@@ -2,13 +2,12 @@
 
 /**
  * @brief Construct a new Observer Task:: Observer Task object
- * @param ctx Reference to the application context
  * @param pred Pointer to predicate method that returns bool
  * @param fn Callback function to execute when predicate is true
  * @param period Execution period in milliseconds for checking the condition
  */
-Observer::ObserverTask::ObserverTask(Context &ctx, Predicate pred, Function fn, int period) 
-    : context(ctx), predicate(pred), function(fn) {
+Observer::ObserverTask::ObserverTask(Predicate pred, Function fn, int period) 
+    : predicate(pred), function(fn) {
     Task::init(period);
 }
 
@@ -20,7 +19,7 @@ Observer::ObserverTask::ObserverTask(Context &ctx, Predicate pred, Function fn, 
  * executes the registered callback function.
  */
 void Observer::ObserverTask::tick(void) {
-    if ((this->context.*predicate)() && this->function) {
+    if (this->predicate && this->function) {
         this->function();
     }
 }

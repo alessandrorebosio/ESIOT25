@@ -26,25 +26,26 @@ void setup(void) {
     hw.init();
 
     scheduler.addTask(new System::SystemTask(new HWSystem(hw.getButton(), hw.getLed1(), hw.getLed3(), hw.getTempSensor()), context, 1000));
-    scheduler.addTask(new Check::CheckTask(new HWCheck(hw.getSonar(), hw.getTempSensor()), context, context.shouldMeasure(), 1000));
+    scheduler.addTask(new Flight::FlightTask(new HWFlight(hw.getPir(), hw.getSonar(), hw.getTempSensor()), context, true, 500));
     scheduler.addTask(new Blink::BlinkTask(new HWBlink(hw.getLed2()), context.shouldBlink(), 500));
     scheduler.addTask(new Gate::GateTask(new HWGate(hw.getMotor()), context.shouldOpen(), 20));
 
     scheduler.addTask(new Observer::ObserverTask(
-        context, &Context::shouldListen,
+        true,
         [] {
             msg.read();
 
             String m = msg.get();
             m.toUpperCase();
-            if (m.equals("TAKEOFF") || m.equals("LANDING")) {
-                context.startBlink();
+            if (m.equals("TAKEOFF")) {
+            }
+            if (m.equals("LANDING")) {
             }
         },
         100));
 
     scheduler.addTask(new Observer::ObserverTask(
-        context, &Context::shouldPrint,
+        context.shouldPrint(),
         [] {
             String sys = context.shouldPrintNormal()     ? "NORMAL"
                          : context.shouldPrintPreAlarm() ? "PREALARM"

@@ -7,6 +7,9 @@ enum Print { DONE, NORMAL, PREALARM, ALARM };
 namespace Drone {
 enum Print { DONE, INSIDE, TAKEOFF, OUTSIDE, LANDING };
 }
+
+typedef const bool &Predicate;
+
 class Context final {
   private:
     System::Print systemPrint : 2;
@@ -17,8 +20,6 @@ class Context final {
     bool blinking;
     bool opening;
 
-    bool measuring;
-
   public:
     Context(void);
 
@@ -27,7 +28,6 @@ class Context final {
     void printNormal(void);
     void printPreAlarm(void);
     void printAlarm(void);
-
     void printInside(void);
     void printTakeOff(void);
     void printOutside(void);
@@ -44,28 +44,17 @@ class Context final {
     void openGate(void);
     void closeGate(void);
 
-    void startMeasuring(void);
-    void stopMeasuring(void);
+    Predicate shouldBlink(void);
+    Predicate shouldOpen(void);
+    Predicate shouldPrint(void);
 
-    const bool &shouldBlink(void) const;
-    const bool &shouldOpen(void) const;
-    const bool &shouldMeasure(void) const;
-
-    bool shouldListen(void);
-
-    bool shouldPrint(void);
     bool shouldPrintNormal(void);
     bool shouldPrintPreAlarm(void);
     bool shouldPrintAlarm(void);
-
     bool shouldPrintInside(void);
     bool shouldPrintTakeOff(void);
     bool shouldPrintOutside(void);
     bool shouldPrintLanding(void);
 
-    static Context &instance;
-
     virtual ~Context() = default;
 };
-
-typedef bool (Context::*Predicate)();
