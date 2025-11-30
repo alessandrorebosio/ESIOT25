@@ -14,8 +14,6 @@ import it.unibo.iot.model.api.states.SystemState;
  */
 public abstract class AbstractSystemState implements SystemState {
 
-    private float sysTemp;
-
     /**
      * {@inheritDoc}
      */
@@ -54,10 +52,10 @@ public abstract class AbstractSystemState implements SystemState {
                 if (!after.isEmpty()) {
                     try {
                         final String numberToken = after.split("\\s+")[0];
-                        this.sysTemp = Float.parseFloat(numberToken);
+                        model.setSystemTemperature(Float.parseFloat(numberToken));
                     } catch (final NumberFormatException e) {
                         // Invalid temperature value, set to -1
-                        this.sysTemp = -1f;
+                        model.setSystemTemperature(-1.0f);
                     }
                 }
             }
@@ -70,8 +68,6 @@ public abstract class AbstractSystemState implements SystemState {
      * @return the state name as a string.
      */
     @Override
-    public String toString() {
-        return "TEMPERATURE: " + this.sysTemp + "°C";
-    }
+    public abstract String toString();
 
 }

@@ -26,6 +26,8 @@ public class AppModel implements Model {
     private SystemState state;
     private final Device device;
 
+    private volatile float sysTemp;
+
     private volatile boolean running;
 
     /**
@@ -128,14 +130,6 @@ public class AppModel implements Model {
      * {@inheritDoc}
      */
     @Override
-    public Device getDevice() {
-        return this.device;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public DeviceState getDeviceState() {
         return this.device.getDeviceState();
     }
@@ -146,6 +140,30 @@ public class AppModel implements Model {
     @Override
     public SystemState getAppState() {
         return this.state;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float getSystemTemperature() {
+        return this.sysTemp;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float getDroneDistance() {
+        return this.device.getDroneDistance();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSystemTemperature(final float temperature) {
+        this.sysTemp = temperature;
     }
 
 }
