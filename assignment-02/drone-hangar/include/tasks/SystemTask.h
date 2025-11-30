@@ -1,15 +1,15 @@
 #pragma once
 
+#include "Task.h"
 #include "core/Context.h"
 #include "model/system/HWSystem.h"
 #include "tasks/states/system/SystemState.h"
-#include "Task.h"
 
 namespace System {
 
 /**
  * @brief Task for temperature monitoring system with state pattern
- * 
+ *
  * This task manages temperature monitoring using a state machine with three states:
  * Normal, PreAlarm, and Alarm. It monitors temperature readings and controls
  * system behavior based on temperature thresholds and timing conditions.
@@ -31,7 +31,7 @@ class SystemTask final : public Task {
 
     /**
      * @brief Execute one tick of the system state machine
-     * 
+     *
      * Calls the current state's tick method to handle state transitions
      * and temperature monitoring logic.
      */
@@ -40,7 +40,7 @@ class SystemTask final : public Task {
     /**
      * @brief Change the current state of the system state machine
      * @param newState Pointer to the new state to transition to
-     * 
+     *
      * Handles state transition by calling onExit for current state,
      * deleting it, then calling onEnter for the new state.
      */
@@ -48,7 +48,7 @@ class SystemTask final : public Task {
 
     /**
      * @brief Destroy the System Task object
-     * 
+     *
      * Cleans up hardware and state objects to prevent memory leaks.
      */
     ~SystemTask();

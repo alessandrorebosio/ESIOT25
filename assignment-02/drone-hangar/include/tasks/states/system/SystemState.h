@@ -9,7 +9,7 @@ class SystemTask;
 
 /**
  * @brief Abstract base class for system states in the state pattern
- * 
+ *
  * Defines the interface for all system states with lifecycle methods
  * for state transitions and periodic updates in the temperature monitoring system.
  */
@@ -36,7 +36,7 @@ class SystemState {
      * @param task Reference to the SystemTask
      * @param hw Reference to the hardware abstraction
      * @param ctx Reference to the application context
-     * 
+     *
      * Handles state-specific logic, temperature monitoring, and state transitions.
      */
     virtual void tick(SystemTask &task, HWSystem &hw, Context &ctx) = 0;

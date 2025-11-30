@@ -4,8 +4,6 @@
 #include "tasks/states/system/Normal.h"
 #include "parameters.h"
 
-static unsigned long timer; 
-
 namespace System {
 
 /**
@@ -15,7 +13,7 @@ namespace System {
  */
 void PreAlarm::onEnter(SystemTask &task, HWSystem &hw, Context &ctx) {
     ctx.printPreAlarm();
-    timer = millis();
+    this->timer = millis();
 }
 
 /**
@@ -35,19 +33,17 @@ void PreAlarm::onExit(SystemTask &task, HWSystem &hw, Context &ctx) {
  * Resets timer if temperature drops below TEMP2.
  */
 void PreAlarm::tick(SystemTask &task, HWSystem &hw, Context &ctx) {
-    // Return to normal if temperature improves
     if (hw.temperature() <= TEMP1) {
         task.changeState(new Normal);
         return;
     }
 
-    // Check for escalation to alarm conditions
     if (hw.temperature() >= TEMP2) {
-        if (millis() - timer >= T2) {
+        if (millis() - this->timer >= T2) {
             task.changeState(new Alarm);
         }
     } else {
-        timer = millis();  // Reset timer if temperature drops below critical threshold
+        this->timer = millis();
     }
 }
 

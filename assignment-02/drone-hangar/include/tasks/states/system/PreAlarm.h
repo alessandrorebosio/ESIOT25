@@ -6,11 +6,14 @@ namespace System {
 
 /**
  * @brief Pre-alarm system state - elevated temperature conditions
- * 
+ *
  * This state represents warning conditions with temperatures between TEMP1 and TEMP2.
  * Monitors for temperature escalation to alarm conditions or return to normal.
  */
 class PreAlarm final : public SystemState {
+  private:
+    unsigned long timer;
+
   public:
     /**
      * @brief Initialize pre-alarm state with warnings

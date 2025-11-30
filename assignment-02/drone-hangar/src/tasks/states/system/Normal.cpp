@@ -3,8 +3,6 @@
 #include "tasks/states/system/PreAlarm.h"
 #include "parameters.h"
 
-static unsigned long timer;
-
 namespace System {
 
 /**
@@ -16,7 +14,7 @@ void Normal::onEnter(SystemTask &task, HWSystem &hw, Context &ctx) {
     ctx.printNormal();
     hw.turnOnLed1();
     ctx.allowFlight();
-    timer = millis();
+    this->timer = millis();
 }
 
 /**
@@ -36,11 +34,11 @@ void Normal::onExit(SystemTask &task, HWSystem &hw, Context &ctx) {
  */
 void Normal::tick(SystemTask &task, HWSystem &hw, Context &ctx) {
     if (hw.temperature() >= TEMP1) {
-        if (millis() - timer >= T1) {
+        if (millis() - this->timer >= T1) {
             task.changeState(new PreAlarm);
         }
     } else {
-        timer = millis();  // Reset timer if temperature drops below threshold
+        this->timer = millis();
     }
 }
 
