@@ -9,6 +9,7 @@
 #include "tasks/BlinkTask.h"
 #include "tasks/FlightTask.h"
 #include "tasks/GateTask.h"
+#include "tasks/LandingTask.h"
 #include "tasks/ObserverTask.h"
 #include "tasks/SystemTask.h"
 
@@ -25,7 +26,8 @@ void setup(void) {
     hw.init();
 
     scheduler.addTask(new System::SystemTask(new HWSystem(hw.getButton(), hw.getLed1(), hw.getLed3(), hw.getTempSensor()), context, 1000));
-    scheduler.addTask(new Flight::FlightTask(new HWFlight(hw.getPir(), hw.getSonar(), hw.getTempSensor()), context, context.isFlightAllowed(), 500));
+    scheduler.addTask(new Flight::FlightTask(new HWFlight(hw.getPir(), hw.getSonar(), hw.getTempSensor()), context, context.isFlightAllowed(), 400));
+    scheduler.addTask(new Landing::LandingTask(new HWLanding(hw.getSonar(), hw.getTempSensor()), context, context.isLandingInProgress(), 200));
     scheduler.addTask(new Blink::BlinkTask(new HWBlink(hw.getLed2()), context.shouldBlink(), 500));
     scheduler.addTask(new Gate::GateTask(new HWGate(hw.getMotor()), context.shouldOpen(), 20));
 
@@ -70,7 +72,7 @@ void setup(void) {
 
             context.printDone();
         },
-        500));
+        400));
 }
 
 void loop(void) {

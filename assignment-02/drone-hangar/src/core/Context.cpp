@@ -121,6 +121,14 @@ const bool &Context::shouldPrint(void) {
     return this->print;
 }
 
+const bool &Context::isTakeOffInProgress(void) {
+    return this->takeoff;
+}
+
+const bool &Context::isLandingInProgress(void) {
+    return this->landing;
+}
+
 bool Context::shouldPrintNormal(void) {
     return this->systemPrint == System::Print::NORMAL;
 }
