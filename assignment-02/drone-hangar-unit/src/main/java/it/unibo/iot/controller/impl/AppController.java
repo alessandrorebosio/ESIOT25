@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import it.unibo.iot.controller.api.Controller;
 import it.unibo.iot.controller.api.serial.Connection;
-import it.unibo.iot.controller.impl.serial.SerialConnection;
+import it.unibo.iot.controller.impl.serial.CommChannel;
 import it.unibo.iot.model.api.Model;
 import it.unibo.iot.model.api.device.states.DeviceState;
 import it.unibo.iot.model.api.states.SystemState;
@@ -41,7 +41,7 @@ public class AppController implements Controller {
      */
     public AppController(final Model model) {
         this.model = Objects.requireNonNull(model, "The model cannot be null.");
-        this.connection = new SerialConnection();
+        this.connection = new CommChannel();
     }
 
     /**

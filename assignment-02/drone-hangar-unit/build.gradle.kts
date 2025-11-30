@@ -38,7 +38,7 @@ dependencies {
     implementation("org.jooq:jool:0.9.15")
 
     implementation("com.fazecast:jSerialComm:2.10.4")
-    implementation("org.scream3r:jssc:2.8.0")
+    implementation("io.github.java-native:jssc:2.10.2")
 
     /*
      * Simple Logging Facade for Java (SLF4J) with Apache Log4j
