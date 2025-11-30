@@ -14,6 +14,7 @@ import it.unibo.iot.model.impl.device.states.unknown.UnknownDeviceState;
 public class Drone implements Device {
 
     private DeviceState state;
+    private float drnDistance;
 
     /**
      * Creates a new drone with an initial {@link UnknownDeviceState}.
@@ -71,6 +72,22 @@ public class Drone implements Device {
     @Override
     public DeviceState getDeviceState() {
         return this.state;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float getDroneDistance() {
+        return this.drnDistance;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setDroneDistance(final float distance) {
+        this.drnDistance = distance;
     }
 
 }
