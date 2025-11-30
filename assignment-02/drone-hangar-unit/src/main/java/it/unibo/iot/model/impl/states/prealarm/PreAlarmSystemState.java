@@ -32,7 +32,7 @@ public class PreAlarmSystemState extends AbstractSystemState {
      */
     @Override
     public String toString() {
-        return "PREALARM STATE";
+        return "PREALARM STATE\n TEMPERATURE: " + super.toString();
     }
 
 }

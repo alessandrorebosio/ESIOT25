@@ -14,6 +14,8 @@ import it.unibo.iot.model.api.states.SystemState;
  */
 public abstract class AbstractSystemState implements SystemState {
 
+    private float sysTemp;
+
     /**
      * {@inheritDoc}
      */
@@ -44,6 +46,21 @@ public abstract class AbstractSystemState implements SystemState {
     public void handle(final Model model, final String msg) {
         Objects.requireNonNull(model, "The model cannot be null.");
         Objects.requireNonNull(msg, "The msg cannot be null.");
+
+        if (msg.contains("D:")) {
+            final int idx = msg.indexOf("D:");
+            if (idx >= 0) {
+                final String after = msg.substring(idx + 2).trim();
+                if (!after.isEmpty()) {
+                    try {
+                        final String numberToken = after.split("\\s+")[0];
+                        this.sysTemp = Float.parseFloat(numberToken);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Unable to parse integer from message after 'D:': " + after);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -52,6 +69,8 @@ public abstract class AbstractSystemState implements SystemState {
      * @return the state name as a string.
      */
     @Override
-    public abstract String toString();
+    public String toString() {
+        return String.valueOf(this.sysTemp) + "°C";
+    }
 
 }
