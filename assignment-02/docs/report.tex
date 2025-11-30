@@ -182,16 +182,23 @@ for a specific function of the project. A simple scheduler was
 implemented to run these tasks concurrently. The main tasks are described below.
 
 \section{System Task}
-The system operates in three main states: \texttt{NORMAL}, \texttt{PREALARM}, and \texttt{ALARM}, with transitions driven by the internal temperature and timing conditions. 
-In the \texttt{NORMAL} state, the system enables take-off and landing operations. 
-If the temperature exceeds \texttt{TEMP1} for a continuous period longer than \texttt{T1}, the system transitions to the \texttt{PREALARM} state; otherwise, the timer is reset whenever the temperature drops below \texttt{TEMP1}. 
+The system has three states: \texttt{NORMAL}, \texttt{PREALARM} and
+\texttt{ALARM}.
 
-In the \texttt{PREALARM} state, the system suspends new flight operations while allowing in-progress ones to complete. 
-If the temperature rises above \texttt{TEMP2} for more than \texttt{T2}, the system enters the \texttt{ALARM} state; if it falls below \texttt{TEMP1}, the timer is reset and the system returns to \texttt{NORMAL}. 
+In \texttt{NORMAL} take-offs and landings are allowed. If temperature
+stays at or above \texttt{TEMP1} for more than \texttt{T1}, the
+system goes to \texttt{PREALARM}; the timer resets when temperature
+drops below \texttt{TEMP1}.
 
-In the \texttt{ALARM} state, the system closes the hangar door if it is open. 
-If the drone is outside when the alarm is triggered, an alarm message is sent via \texttt{DRU}. 
-The system remains in the \texttt{ALARM} state until the \texttt{RESET} button is pressed, which returns the system to the \texttt{NORMAL} state. 
+In \texttt{PREALARM} new flights are suspended but ongoing operations
+may complete. If temperature stays at or above \texttt{TEMP2} for
+more than \texttt{T2}, the system enters \texttt{ALARM}. If
+temperature falls below \texttt{TEMP1} it returns to \texttt{NORMAL}.
+
+In \texttt{ALARM} the door is closed and the alarm is activated; if
+the drone is outside an alarm message is sent via \texttt{DRU}. The
+system stays in \texttt{ALARM} until \texttt{RESET} is pressed, which
+returns it to \texttt{NORMAL}.
 
 \begin{figure}[H]
   \centering
@@ -204,25 +211,20 @@ executed, a boolean flag is set to \texttt{true}; when the exit
 action \texttt{/BlockFlight} is executed, the flag is set to \texttt{false}.
 
 \section{Flight Task}
+The \texttt{FlightTask} manages drone take-off and landing operations
+through three main states.  Initially in the \texttt{IDLE} state, the
+task awaits user commands.
 
-The \texttt{FlightTask} manages the drone behavior three states: 
-\texttt{IDLE}, \texttt{WAITING}, and \texttt{OPERATING}.
-The task runs only when the flight system is enabled.  
-During initialization, the starting state is chosen dynamically: if the operation
-is already completed (\texttt{isOperationDone()} returns true), the task starts
-in \texttt{IDLE}; otherwise, it starts in \texttt{OPERATING}.
+Upon receiving a take-off command, it verifies the drone's distance
+and, if below threshold \texttt{D1},  transitions to the
+\texttt{OPERATING} state to execute the departure sequence.
 
-In \texttt{IDLE}, the system waits for commands. When a take-off message is received
-and the measured distance is below \texttt{D1}, the task switches to
-\texttt{OPERATING}, starting the take-off sequence. If a landing message is received,
-it transitions to \texttt{WAITING}.
+For landing operations, it moves to the \texttt{WAITING} state, where
+it awaits drone detection within a predefined timeout \texttt{T5}.
 
-In \texttt{WAITING}, the task waits up to \texttt{T5} milliseconds for the drone to be
-detected. If detection occurs, it performs the landing actions and moves to
-\texttt{OPERATING}; otherwise, after the timeout, it returns to \texttt{IDLE}.
-
-In \texttt{OPERATING}, the gate is opened and a blinking signal is activated.
-When the operation is completed, the task stops the blinking, closes the gate, and returns to \texttt{IDLE}.
+In \texttt{OPERATING}, the hangar door opens and LED L2 starts
+blinking; upon operation completion, the door closes, blinking stops,
+and the system returns to \texttt{IDLE}.
 
 \begin{figure}[H]
   \centering
@@ -230,22 +232,35 @@ When the operation is completed, the task stops the blinking, closes the gate, a
   \caption{Flight Task state diagram.}
   \label{fig:FlightTask}
 \end{figure}
-Note: the actions \texttt{/close} and \texttt{/stopBlink} stop the Gate
-and Blink tasks respectively; the actions \texttt{/startBlink} and
-\texttt{/open} start those tasks.
 
-\section{Check Task}
-The Check Task is responsible for monitoring and maintaining the
-drone state. At startup it reads the presence/distance sensors and
-sets the initial state to \texttt{DRONE\_INSIDE} if the drone is
-detected, or to \texttt{DRONE\_OUTSIDE} otherwise.
+Note: When the Flight Task enters the \texttt{OPERATING} state, it
+triggers the \texttt{/startBlink} and \texttt{/openGate} actions to
+activate the corresponding tasks. Upon completion of the flight
+operation, it executes \texttt{/stopBlink} and \texttt{/closeGate} to
+stop these tasks.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=\textwidth]{./pdf/CheckTask.pdf}
-  \caption{Check Task state diagram.}
-  \label{fig:CheckTask}
-\end{figure}
+\subsection{Flight Task Operation}
+
+Based on sensor checks and conditions, the system then activates
+either \texttt{/doLanding} or \texttt{/doTakeoff} to initiate the
+specialized landing or takeoff sequences. These dedicated tasks
+handle the complete operational workflow and, once finished, signal
+the Flight Task to transition from \texttt{OPERATING} back to
+\texttt{IDLE} state.
+
+\newpage
+% \section{Check Task}
+% The Check Task is responsible for monitoring and maintaining the
+% drone state. At startup it reads the presence/distance sensors and
+% sets the initial state to \texttt{DRONE\_INSIDE} if the drone is
+% detected, or to \texttt{DRONE\_OUTSIDE} otherwise.
+
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=\textwidth]{./pdf/CheckTask.pdf}
+%   \caption{Check Task state diagram.}
+%   \label{fig:CheckTask}
+% \end{figure}
 
 \section{Blink Task}
 It implements two states: \texttt{ON} and \texttt{OFF}. On each
@@ -262,18 +277,15 @@ remains off when blinking is not allowed.
 \end{figure}
 
 \section{Gate Task}
-The \texttt{Gate Task} manages the hangar gate through four operational states:
-\texttt{CLOSE}, \texttt{OPENING}, \texttt{OPEN}, and \texttt{CLOSING}. 
-At system startup, the gate is in the \texttt{CLOSE} state, where the motor is turned off. 
-Upon receiving an \texttt{enabled} signal, the task transitions to the \texttt{OPENING} state, 
-where the gate starts to open. Once the opening process is completed, 
-the system moves to the \texttt{OPEN} state, in which the motor is turned off and the gate remains open. 
+The \texttt{Gate Task} controls the hangar door using four states:
+\texttt{CLOSE}, \texttt{OPENING}, \texttt{OPEN}, and
+\texttt{CLOSING}. At startup the gate is in \texttt{CLOSE}. When
+enabled it goes to \texttt{OPENING} until fully open, then to
+\texttt{OPEN}. If enabled becomes false it moves to \texttt{CLOSING}
+until \texttt{CLOSE}.
 
-If the \texttt{enabled} condition becomes false while the gate is open, the task transitions to the \texttt{CLOSING} state, 
-closing the gate until the \texttt{CLOSE} state is reached. 
-
-If an opposite command is received while the gate is in motion, 
-the direction is immediately reversed, allowing for dynamic control of gate movement.
+If an opposite command arrives while moving, the task reverses
+direction immediately.
 
 \begin{figure}[H]
   \centering
@@ -282,42 +294,66 @@ the direction is immediately reversed, allowing for dynamic control of gate move
   \label{fig:GateTask}
 \end{figure}
 
+\newpage
 \section{Observer Task}
-The \texttt{Observer Task} is responsible for periodically monitoring system conditions through the evaluation of a predicate function. 
-It operates in a single state, \texttt{OBSERVER}, where at each activation the associated predicate is checked. 
-If the predicate evaluates to true, the corresponding function or callback is executed, allowing the system to react to specific events or conditions in real time. 
-This task provides a lightweight mechanism for asynchronous observation and event detection without interfering with the main control logic.
+The \texttt{Observer Task} is responsible for periodically monitoring
+system conditions through the evaluation of a predicate function.
+It operates in a single state, \texttt{OBSERVER}, where at each
+activation the associated predicate is checked.
+If the predicate evaluates to true, the corresponding function or
+callback is executed, allowing the system to react to specific events
+or conditions in real time.
+This task provides a lightweight mechanism for asynchronous
+observation and event detection without interfering with the main control logic.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.6\textwidth]{./pdf/ObserverTask.pdf}
+  \includegraphics[width=0.8\textwidth]{./pdf/ObserverTask.pdf}
   \caption{Observer Task state diagram.}
   \label{fig:ObserverTask}
 \end{figure}
 
+Note: The Observer Task acts as the system's central listener. It
+periodically reads inputs and messages (for example from the
+DRU/serial) and evaluates the associated predicates without consuming
+the messages inside specific functional tasks. When an event or
+command is detected, the Observer delegates processing and the
+relevant values to the appropriate tasks (System, Flight, Gate,
+etc.), keeping each task lightweight and focused on its own logic.
+
+\vspace{\baselineskip}
+This design allows multiple SystemTask instances, each with its own
+Context. The Observer receives serial messages and forwards each one
+to the correct Context, so a single Arduino can manage multiple
+hangars. This simplifies message routing and makes the system easier
+to extend and maintain.
+
+\chapter{Arduino Workflow}
 
 \appendix
 \chapter{User Interface}
 
-The user interface of the application is organized into three main panels, 
+The user interface of the application is organized into three main panels,
 each serving a distinct purpose within the system.
 
-
-
 \section{Connection Panel}
-The upper part of the view is dedicated to managing the connection with the serial 
-port. The user can select the desired port, configure the communication parameters, 
+The upper part of the view is dedicated to managing the connection
+with the serial
+port. The user can select the desired port, configure the
+communication parameters,
 and establish or terminate the connection with the device.
 
 \section{Control Panel}
-The central part of the interface provides simple controls for operating the drone.
-It includes two buttons — \textit{Takeoff} and \textit{Landing} — which send the corresponding 
-commands to the controller. These buttons are automatically enabled or disabled 
+The central part of the interface provides simple controls for
+operating the drone.
+It includes two buttons — \textit{Takeoff} and \textit{Landing} —
+which send the corresponding
+commands to the controller. These buttons are automatically enabled or disabled
 based on the current connection status and system state.
 
 \section{Status Panel}
-The lower part of the view displays real-time information about the 
-\textit{Hangar} and \textit{Drone} states, allowing continuous monitoring of the 
+The lower part of the view displays real-time information about the
+\textit{Hangar} and \textit{Drone} states, allowing continuous monitoring of the
 overall system status.
 
 \begin{figure}[H]
@@ -326,7 +362,6 @@ overall system status.
   \caption{App view}
   \label{fig:app}
 \end{figure}
-
 
 \chapter{User Guide}
 
