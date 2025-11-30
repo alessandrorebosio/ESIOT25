@@ -29,6 +29,15 @@ void setup(void) {
     scheduler.addTask(new Blink::BlinkTask(new HWBlink(hw.getLed2()), context.shouldBlink(), 500));
     scheduler.addTask(new Gate::GateTask(new HWGate(hw.getMotor()), context.shouldOpen(), 20));
 
+    scheduler.addTask(new Observer::ObserverTask(true, [] { message.send("T: " + String(hw.getTempSensor().readTemperature())); }, 1000));
+    scheduler.addTask(new Observer::ObserverTask(
+        true,
+        [] {
+            hw.getSonar().setTemperature(hw.getTempSensor().readTemperature());
+            message.send("D: " + String(hw.getSonar().readDistance()));
+        },
+        1000));
+
     scheduler.addTask(new Observer::ObserverTask(
         message.isMessageAvailable(),
         [] {
