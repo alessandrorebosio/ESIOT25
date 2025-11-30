@@ -27,7 +27,9 @@ public class StatusPanel extends AbstractPanel {
     private static final long serialVersionUID = 1L;
 
     private final JLabel hangarLabel = new JLabel("", JLabel.CENTER);
+    private final JLabel temperatureLabel = new JLabel("", JLabel.CENTER);
     private final JLabel droneLabel = new JLabel("", JLabel.CENTER);
+    private final JLabel distanceLabel = new JLabel("", JLabel.CENTER);
 
     /**
      * Constructs a new StatusPanel with a grid layout containing two rows and one
@@ -40,13 +42,19 @@ public class StatusPanel extends AbstractPanel {
     public StatusPanel(final Controller controller) {
         super(controller, "Status");
 
-        super.setLayout(new GridLayout(2, 1));
+        super.setLayout(new GridLayout(4, 1));
 
         this.hangarLabel.setVerticalAlignment(JLabel.CENTER);
         super.add(hangarLabel);
 
+        this.temperatureLabel.setVerticalAlignment(JLabel.CENTER);
+        super.add(this.temperatureLabel);
+
         this.droneLabel.setVerticalAlignment(JLabel.CENTER);
         super.add(this.droneLabel);
+
+        this.distanceLabel.setVerticalAlignment(JLabel.CENTER);
+        super.add(this.distanceLabel);
     }
 
     /**
@@ -59,7 +67,9 @@ public class StatusPanel extends AbstractPanel {
     @Override
     public void update(final Controller controller) {
         this.hangarLabel.setText("HANGAR: " + controller.getSystemState());
+        this.temperatureLabel.setText("HANGAR TEMPERATURE: " + controller.getSystemTemperature() + "°C");
         this.droneLabel.setText("DRONE: " + controller.getDeviceState());
+        this.distanceLabel.setText("DRONE DISTANCE: " + controller.getDroneDistance() + " cm");
     }
 
 }
