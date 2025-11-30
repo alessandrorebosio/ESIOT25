@@ -6,7 +6,7 @@
 namespace Landing {
 
 void Idle::onEnter(LandingTask &task, HWLanding &hw, Context &ctx, const bool &enabled) {
-
+    Serial.println("idle");
 }
 
 void Idle::onExit(LandingTask &task, HWLanding &hw, Context &ctx, const bool &enabled) {

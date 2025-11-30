@@ -22,9 +22,9 @@ class LandingTask final : public Task {
     void changeState(LandingState *newState);
 
     /**
-     * @brief Destroy the Observer Task object
+     * @brief Destroy the Landing Task object
      */
     ~LandingTask() = default;
 };
 
-} // namespace Check
+} // namespace Landing

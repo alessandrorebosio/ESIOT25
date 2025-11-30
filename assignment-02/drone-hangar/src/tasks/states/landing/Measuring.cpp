@@ -9,6 +9,7 @@ namespace Landing {
 
 void Measuring::onEnter(LandingTask &task, HWLanding &hw, Context &ctx, const bool &enabled) {
     this->timer = millis();
+    Serial.println("Measuring");
 }
 
 void Measuring::onExit(LandingTask &task, HWLanding &hw, Context &ctx, const bool &enabled) {

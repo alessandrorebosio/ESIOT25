@@ -1,13 +1,14 @@
 #include "tasks/LandingTask.h"
+#include "tasks/states/landing/Idle.h"
 
-#include "parameters.h"
-
-Landing::LandingTask::LandingTask(HWLanding *hw, Context &ctx, const bool &enabled, int period) : hardware(hw), context(ctx), enabled(enabled) {
+Landing::LandingTask::LandingTask(HWLanding *hw, Context &ctx, const bool &enabled, int period)
+    : hardware(hw), context(ctx), enabled(enabled), state(nullptr) {
     Task::init(period);
+    this->changeState(new Idle());
 }
 
 void Landing::LandingTask::tick() {
-    this->state->tick(*this, *this->hardware, this->context, this->enabled);
+        this->state->tick(*this, *this->hardware, this->context, this->enabled);
 }
 
 void Landing::LandingTask::changeState(LandingState *newState) {
