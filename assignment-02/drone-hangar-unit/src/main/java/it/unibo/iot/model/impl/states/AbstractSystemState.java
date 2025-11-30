@@ -55,8 +55,9 @@ public abstract class AbstractSystemState implements SystemState {
                     try {
                         final String numberToken = after.split("\\s+")[0];
                         this.sysTemp = Float.parseFloat(numberToken);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Unable to parse integer from message after 'D:': " + after);
+                    } catch (final NumberFormatException e) {
+                        // Invalid temperature value, set to -1
+                        this.sysTemp = -1f;
                     }
                 }
             }
@@ -70,7 +71,7 @@ public abstract class AbstractSystemState implements SystemState {
      */
     @Override
     public String toString() {
-        return "TEMPERATURE: " + String.valueOf(this.sysTemp) + "°C";
+        return "TEMPERATURE: " + this.sysTemp + "°C";
     }
 
 }

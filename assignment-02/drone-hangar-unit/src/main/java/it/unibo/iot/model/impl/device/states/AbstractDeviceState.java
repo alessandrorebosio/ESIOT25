@@ -56,8 +56,8 @@ public abstract class AbstractDeviceState implements DeviceState {
                     try {
                         final String numberToken = after.split("\\s+")[0];
                         this.drnDistance = Float.parseFloat(numberToken);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Unable to parse integer from message after 'D:': " + after);
+                    } catch (final NumberFormatException e) {
+                        this.drnDistance = -1.0f;
                     }
                 }
             }
