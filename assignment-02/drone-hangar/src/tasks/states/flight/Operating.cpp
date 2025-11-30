@@ -7,20 +7,18 @@
 
 namespace Flight {
 
-void Operating::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
-    // msg.send(ctx.isTakeOff() ? TAKEOFF_MSG : ctx.isLanding() ? LANDING_MSG : "");
-    // hw.printOnLcd(ctx.isTakeOff() ? TAKEOFF_MSG : ctx.isLanding() ? LANDING_MSG : "");
+void Operating::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
     ctx.startBlink();
     ctx.openGate();
 }
 
-void Operating::onExit(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
+void Operating::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
 }
 
-void Operating::tick(FlightTask &task, HWFlight &hw, Context &ctx, MsgService &msg, const bool &enabled) {
-    // if (ctx.isOperationDone()) {
-    //     task.changeState(new Idle);
-    // }
+void Operating::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
+    if (false) { // TODO: opDone
+        task.changeState(new Idle);
+    }
 }
 
 } // namespace Flight

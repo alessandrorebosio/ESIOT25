@@ -15,12 +15,11 @@ class FlightTask final : public Task {
   private:
     HWFlight *hardware;
     Context &context;
-    MsgService &msg;
     const bool &enabled;
     FlightState *state;
 
   public:
-    explicit FlightTask(HWFlight *hw, Context &ctx, MsgService &msg, const bool &enabled, int period);
+    explicit FlightTask(HWFlight *hw, Context &ctx, const bool &enabled, int period);
 
     void tick() override;
 

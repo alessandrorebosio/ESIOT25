@@ -16,7 +16,7 @@ void Measuring::onEnter(CheckTask &task, HWCheck &hw, Context &ctx, const bool &
 }
 
 void Measuring::onExit(CheckTask &task, HWCheck &hw, Context &ctx, const bool &enabled) {
-    ctx.stopMeasuring();
+    // ctx.stopMeasuring();
 }
 
 void Measuring::tick(CheckTask &task, HWCheck &hw, Context &ctx, const bool &enabled) {
