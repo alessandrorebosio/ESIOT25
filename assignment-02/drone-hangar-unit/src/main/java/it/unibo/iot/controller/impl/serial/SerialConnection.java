@@ -107,6 +107,7 @@ public class SerialConnection implements Connection {
      * @param message the message to send
      * @return true if the message was sent successfully, false otherwise
      */
+    @Override
     public boolean send(final String message) {
         if (!this.isConnected() || message == null) {
             return false;
