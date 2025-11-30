@@ -7,7 +7,6 @@
 #include "model/Hardware.h"
 
 #include "tasks/BlinkTask.h"
-#include "tasks/CheckTask.h"
 #include "tasks/FlightTask.h"
 #include "tasks/GateTask.h"
 #include "tasks/ObserverTask.h"
