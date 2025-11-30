@@ -47,8 +47,8 @@ public abstract class AbstractSystemState implements SystemState {
         Objects.requireNonNull(model, "The model cannot be null.");
         Objects.requireNonNull(msg, "The msg cannot be null.");
 
-        if (msg.contains("D:")) {
-            final int idx = msg.indexOf("D:");
+        if (msg.contains("T:")) {
+            final int idx = msg.indexOf("T:");
             if (idx >= 0) {
                 final String after = msg.substring(idx + 2).trim();
                 if (!after.isEmpty()) {
@@ -70,7 +70,7 @@ public abstract class AbstractSystemState implements SystemState {
      */
     @Override
     public String toString() {
-        return String.valueOf(this.sysTemp) + "°C";
+        return "TEMPERATURE: " + String.valueOf(this.sysTemp) + "°C";
     }
 
 }

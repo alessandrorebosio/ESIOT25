@@ -34,7 +34,7 @@ public class UnknownSystemState extends AbstractSystemState {
      */
     @Override
     public String toString() {
-        return "UNKNOWN STATE\n TEMPERATURE: " + super.toString();
+        return "UNKNOWN STATE\n" + super.toString();
     }
 
 }

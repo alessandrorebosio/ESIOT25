@@ -14,6 +14,8 @@ import it.unibo.iot.model.api.device.states.DeviceState;
  */
 public abstract class AbstractDeviceState implements DeviceState {
 
+    private float drnDistance;
+
     /**
      * {@inheritDoc}
      */
@@ -45,6 +47,21 @@ public abstract class AbstractDeviceState implements DeviceState {
     public void handle(final Device device, final String msg) {
         Objects.requireNonNull(device, "The device cannot be null.");
         Objects.requireNonNull(msg, "The msg cannot be null.");
+
+        if (msg.contains("D:")) {
+            final int idx = msg.indexOf("D:");
+            if (idx >= 0) {
+                final String after = msg.substring(idx + 2).trim();
+                if (!after.isEmpty()) {
+                    try {
+                        final String numberToken = after.split("\\s+")[0];
+                        this.drnDistance = Float.parseFloat(numberToken);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Unable to parse integer from message after 'D:': " + after);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -53,6 +70,8 @@ public abstract class AbstractDeviceState implements DeviceState {
      * @return the state name as a string.
      */
     @Override
-    public abstract String toString();
+    public String toString() {
+        return "DISTANCE: " + this.drnDistance + "cm";
+    }
 
 }
