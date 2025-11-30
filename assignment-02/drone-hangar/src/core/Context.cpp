@@ -12,35 +12,43 @@ void Context::reset() {
 
 void Context::printNormal(void) {
     this->systemPrint = System::Print::NORMAL;
+    this->print = true;
 }
 
 void Context::printPreAlarm(void) {
     this->systemPrint = System::Print::PREALARM;
+    this->print = true;
 }
 
 void Context::printAlarm(void) {
     this->systemPrint = System::Print::ALARM;
+    this->print = true;
 }
 
 void Context::printInside(void) {
     this->dronePrint = Drone::Print::INSIDE;
+    this->print = true;
 }
 
 void Context::printTakeOff(void) {
     this->dronePrint = Drone::Print::TAKEOFF;
+    this->print = true;
 }
 
 void Context::printOutside(void) {
     this->dronePrint = Drone::Print::OUTSIDE;
+    this->print = true;
 }
 
 void Context::printLanding(void) {
     this->dronePrint = Drone::Print::LANDING;
+    this->print = true;
 }
 
 void Context::printDone(void) {
     this->systemPrint = System::Print::DONE;
     this->dronePrint = Drone::Print::DONE;
+    this->print = false;
 }
 
 void Context::allowFlight(void) {
@@ -67,16 +75,16 @@ void Context::closeGate(void) {
     this->opening = false;
 }
 
-Predicate Context::shouldBlink(void) {
+const bool &Context::shouldBlink(void) {
     return this->blinking;
 }
 
-Predicate Context::shouldOpen(void) {
+const bool &Context::shouldOpen(void) {
     return this->opening;
 }
 
-Predicate Context::shouldPrint(void) {
-    return this->systemPrint != System::Print::DONE || this->dronePrint != Drone::Print::DONE;
+const bool &Context::shouldPrint(void) {
+    return this->print;
 }
 
 bool Context::shouldPrintNormal(void) {

@@ -14,6 +14,7 @@ namespace System {
  */
 void Normal::onEnter(SystemTask &task, HWSystem &hw, Context &ctx) {
     ctx.printNormal();
+    ctx.startBlink();
     hw.turnOnLed1();
     ctx.allowFlight();
     timer = millis();
@@ -26,6 +27,7 @@ void Normal::onEnter(SystemTask &task, HWSystem &hw, Context &ctx) {
  */
 void Normal::onExit(SystemTask &task, HWSystem &hw, Context &ctx) {
     ctx.blockFlight();
+    ctx.stopBlink();
 }
 
 /**

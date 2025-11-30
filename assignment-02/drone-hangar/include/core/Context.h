@@ -8,8 +8,6 @@ namespace Drone {
 enum Print { DONE, INSIDE, TAKEOFF, OUTSIDE, LANDING };
 }
 
-typedef const bool &Predicate;
-
 class Context final {
   private:
     System::Print systemPrint : 2;
@@ -17,6 +15,7 @@ class Context final {
 
     bool flightAllowed;
 
+    bool print;
     bool blinking;
     bool opening;
 
@@ -44,9 +43,9 @@ class Context final {
     void openGate(void);
     void closeGate(void);
 
-    Predicate shouldBlink(void);
-    Predicate shouldOpen(void);
-    Predicate shouldPrint(void);
+    const bool &shouldBlink(void);
+    const bool &shouldOpen(void);
+    const bool &shouldPrint(void);
 
     bool shouldPrintNormal(void);
     bool shouldPrintPreAlarm(void);
