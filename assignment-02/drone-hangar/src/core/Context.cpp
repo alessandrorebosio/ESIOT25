@@ -95,6 +95,7 @@ void Context::doTakeOff(void) {
 
 void Context::takeOffDone(void) {
     this->takeoff = false;
+    this->landing = false;
 }
 
 void Context::doLanding(void) {
@@ -103,6 +104,7 @@ void Context::doLanding(void) {
 
 void Context::landingDone(void) {
     this->landing = false;
+    this->takeoff = false;
 }
 
 const bool &Context::isFlightAllowed(void) {
@@ -119,6 +121,14 @@ const bool &Context::shouldOpen(void) {
 
 const bool &Context::shouldPrint(void) {
     return this->print;
+}
+
+const bool &Context::isTakeOffInProgress(void) {
+    return this->takeoff;
+}
+
+const bool &Context::isLandingInProgress(void) {
+    return this->landing;
 }
 
 bool Context::shouldPrintNormal(void) {
