@@ -35,4 +35,17 @@ public interface Device {
      */
     DeviceState getDeviceState();
 
+    /**
+     * Returns the current drone distance.
+     * 
+     * @return the drone distance.
+     */
+    float getDroneDistance();
+
+    /**
+     * Sets the drone distance.
+     * 
+     * @param distance the cnew distance.
+     */
+    void setDroneDistance(float distance);
 }
