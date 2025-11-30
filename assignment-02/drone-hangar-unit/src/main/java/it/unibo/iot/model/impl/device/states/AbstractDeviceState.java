@@ -14,8 +14,6 @@ import it.unibo.iot.model.api.device.states.DeviceState;
  */
 public abstract class AbstractDeviceState implements DeviceState {
 
-    private float drnDistance;
-
     /**
      * {@inheritDoc}
      */
@@ -55,9 +53,9 @@ public abstract class AbstractDeviceState implements DeviceState {
                 if (!after.isEmpty()) {
                     try {
                         final String numberToken = after.split("\\s+")[0];
-                        this.drnDistance = Float.parseFloat(numberToken);
+                        device.setDroneDistance(Float.parseFloat(numberToken));
                     } catch (final NumberFormatException e) {
-                        this.drnDistance = -1.0f;
+                        device.setDroneDistance(-1);
                     }
                 }
             }
@@ -70,8 +68,6 @@ public abstract class AbstractDeviceState implements DeviceState {
      * @return the state name as a string.
      */
     @Override
-    public String toString() {
-        return "DISTANCE: " + this.drnDistance + "cm";
-    }
+    public abstract String toString();
 
 }

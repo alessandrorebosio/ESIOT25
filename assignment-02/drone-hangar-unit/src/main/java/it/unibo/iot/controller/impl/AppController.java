@@ -152,4 +152,20 @@ public class AppController implements Controller {
         return this.model.take();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float getDroneDistance() {
+        return this.model.getDroneDistance();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float getSystemTemperature() {
+        return this.model.getSystemTemperature();
+    }
+
 }

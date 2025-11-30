@@ -42,7 +42,7 @@ public class UnknownDeviceState extends AbstractDeviceState {
      */
     @Override
     public String toString() {
-        return "UNKNOWN STATE\n" + super.toString();
+        return "UNKNOWN STATE\n";
     }
 
 }

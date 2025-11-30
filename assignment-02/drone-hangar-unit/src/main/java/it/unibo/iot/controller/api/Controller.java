@@ -95,6 +95,20 @@ public interface Controller {
     SystemState getSystemState();
 
     /**
+     * Returns the current drone distance.
+     * 
+     * @return the drone distance.
+     */
+    float getDroneDistance();
+
+    /**
+     * Returns the current system temperature.
+     * 
+     * @return the system temperature.
+     */
+    float getSystemTemperature();
+
+    /**
      * Retrieves the most recent message from the system, if available.
      *
      * @return an Optional containing the most recent message, or empty if no

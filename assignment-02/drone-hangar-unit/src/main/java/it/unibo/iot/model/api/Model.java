@@ -2,7 +2,6 @@ package it.unibo.iot.model.api;
 
 import java.util.Optional;
 
-import it.unibo.iot.model.api.device.Device;
 import it.unibo.iot.model.api.device.states.DeviceState;
 import it.unibo.iot.model.api.states.SystemState;
 
@@ -67,13 +66,6 @@ public interface Model {
     boolean isRunning();
 
     /**
-     * Retrieves the device associated with this model.
-     * 
-     * @return the device
-     */
-    Device getDevice();
-
-    /**
      * Returns the current {@link DeviceState} of the associated device.
      *
      * @return the device state.
@@ -86,5 +78,26 @@ public interface Model {
      * @return the application (system) state.
      */
     SystemState getAppState();
+
+    /**
+     * Returns the current system temperature.
+     * 
+     * @return the system temperature.
+     */
+    float getSystemTemperature();
+
+    /**
+     * Returns the current drone distance.
+     * 
+     * @return the drone distance.
+     */
+    float getDroneDistance();
+
+    /**
+     * Sets the system temperature.
+     * 
+     * @param temperature the new teperature.
+     */
+    void setSystemTemperature(float temperature);
 
 }

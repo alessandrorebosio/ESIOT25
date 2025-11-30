@@ -36,7 +36,7 @@ public class TakeoffDeviceState extends AbstractDeviceState {
      */
     @Override
     public String toString() {
-        return "TAKEOFF STATE\n" + super.toString();
+        return "TAKEOFF STATE\n";
     }
 
 }
