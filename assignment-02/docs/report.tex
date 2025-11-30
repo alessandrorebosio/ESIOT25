@@ -204,13 +204,25 @@ executed, a boolean flag is set to \texttt{true}; when the exit
 action \texttt{/BlockFlight} is executed, the flag is set to \texttt{false}.
 
 \section{Flight Task}
-The Flight Task consists of two states: \texttt{WAITING} and
-\texttt{OPERATING}. In
-\texttt{WAITING} the task waits for a command from the drone (take-off or
-landing). When a request is accepted, the task transitions to
-\texttt{OPERATING}, where it waits for the operation to complete
-(exit detection for take-off, or touchdown detection for landing). Once
-the operation completes the task returns to \texttt{WAITING}.
+
+The \texttt{FlightTask} manages the drone behavior three states: 
+\texttt{IDLE}, \texttt{WAITING}, and \texttt{OPERATING}.
+The task runs only when the flight system is enabled.  
+During initialization, the starting state is chosen dynamically: if the operation
+is already completed (\texttt{isOperationDone()} returns true), the task starts
+in \texttt{IDLE}; otherwise, it starts in \texttt{OPERATING}.
+
+In \texttt{IDLE}, the system waits for commands. When a take-off message is received
+and the measured distance is below \texttt{D1}, the task switches to
+\texttt{OPERATING}, starting the take-off sequence. If a landing message is received,
+it transitions to \texttt{WAITING}.
+
+In \texttt{WAITING}, the task waits up to \texttt{T5} milliseconds for the drone to be
+detected. If detection occurs, it performs the landing actions and moves to
+\texttt{OPERATING}; otherwise, after the timeout, it returns to \texttt{IDLE}.
+
+In \texttt{OPERATING}, the gate is opened and a blinking signal is activated.
+When the operation is completed, the task stops the blinking, closes the gate, and returns to \texttt{IDLE}.
 
 \begin{figure}[H]
   \centering
