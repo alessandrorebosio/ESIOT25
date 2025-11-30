@@ -18,14 +18,15 @@ void Idle::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enab
 
 void Idle::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
     if (enabled) {
-        if (false) { // TODO: ctx.isTakeOff()
+        if (ctx.isTakeOffMsg()) {
             if (hw.distance() < D1) {
                 task.changeState(new Operating);
-                // TODO: ctx.doTakeOff();
+                ctx.printTakeOff();
+                ctx.doTakeOff();
             }
         }
 
-        if (false) { // TODO: ctx.isLanding()
+        if (ctx.isLandingMsg()) {
             task.changeState(new Waiting);
         }
     }

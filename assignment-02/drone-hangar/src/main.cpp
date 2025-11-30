@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #include "core/Context.h"
-#include "core/MsgService.h"
+#include "core/Message.h"
 #include "core/Scheduler.h"
 
 #include "model/Hardware.h"
@@ -16,31 +16,25 @@
 #include "config.h"
 
 static Scheduler scheduler;
-static MsgService msg;
+static Message message;
 static Context context;
 static Hardware hw;
 
 void setup(void) {
     scheduler.init(100);
-    msg.init(BAUD);
+    message.init(BAUD);
     hw.init();
 
     scheduler.addTask(new System::SystemTask(new HWSystem(hw.getButton(), hw.getLed1(), hw.getLed3(), hw.getTempSensor()), context, 1000));
-    // scheduler.addTask(new Flight::FlightTask(new HWFlight(hw.getPir(), hw.getSonar(), hw.getTempSensor()), context, true, 500));
+    scheduler.addTask(new Flight::FlightTask(new HWFlight(hw.getPir(), hw.getSonar(), hw.getTempSensor()), context, context.isFlightAllowed(), 500));
     scheduler.addTask(new Blink::BlinkTask(new HWBlink(hw.getLed2()), context.shouldBlink(), 500));
     scheduler.addTask(new Gate::GateTask(new HWGate(hw.getMotor()), context.shouldOpen(), 20));
 
     scheduler.addTask(new Observer::ObserverTask(
-        true,
+        message.isMessageAvailable(),
         [] {
-            msg.read();
-
-            String m = msg.get();
-            m.toUpperCase();
-            if (m.equals("TAKEOFF")) {
-            }
-            if (m.equals("LANDING")) {
-            }
+            message.equalsIgnoreCase("TAKEOFF") ? context.setTakeOffMsg() : void();
+            message.equalsIgnoreCase("LANDING") ? context.setLandingMsg() : void();
         },
         100));
 
@@ -53,7 +47,7 @@ void setup(void) {
                                                          : nullptr;
             if (sys) {
                 hw.getLcd().print(0, "SYSTEM: " + sys);
-                msg.send(sys);
+                message.send(sys);
             }
 
             String drone = context.shouldPrintInside()    ? "INSIDE"
@@ -63,7 +57,7 @@ void setup(void) {
                                                           : nullptr;
             if (drone) {
                 hw.getLcd().print(1, "DRONE: " + drone);
-                msg.send(drone);
+                message.send(drone);
             }
 
             context.printDone();
@@ -72,6 +66,7 @@ void setup(void) {
 }
 
 void loop(void) {
+    message.read();
     scheduler.schedule();
-    msg.clear();
+    message.clear();
 }

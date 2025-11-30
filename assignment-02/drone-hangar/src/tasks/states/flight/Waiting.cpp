@@ -21,7 +21,8 @@ void Waiting::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &ena
     if (millis() - timer <= T5) {
         if (hw.isDetected()) {
             task.changeState(new Operating);
-            // TODO: ctx.doLanding();
+            ctx.printLanding();
+            ctx.doLanding();
         }
     } else {
         task.changeState(new Idle);

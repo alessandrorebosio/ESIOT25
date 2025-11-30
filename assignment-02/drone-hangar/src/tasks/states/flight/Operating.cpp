@@ -16,7 +16,7 @@ void Operating::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool 
 }
 
 void Operating::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
-    if (false) { // TODO: opDone
+    if (ctx.isOperationDone()) { 
         task.changeState(new Idle);
     }
 }

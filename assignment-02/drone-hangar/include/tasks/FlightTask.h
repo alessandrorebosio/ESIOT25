@@ -1,10 +1,7 @@
 #pragma once
 
 #include "core/Context.h"
-#include "core/MsgService.h"
-
 #include "model/flight/HWFlight.h"
-
 #include "tasks/states/flight/FlightState.h"
 
 #include "Task.h"
@@ -17,6 +14,8 @@ class FlightTask final : public Task {
     Context &context;
     const bool &enabled;
     FlightState *state;
+
+    FlightState *initialState(void);
 
   public:
     explicit FlightTask(HWFlight *hw, Context &ctx, const bool &enabled, int period);

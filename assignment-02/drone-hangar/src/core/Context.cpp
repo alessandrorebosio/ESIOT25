@@ -5,9 +5,15 @@ Context::Context() {
 }
 
 void Context::reset() {
+    this->systemPrint = System::Print::DONE;
+    this->dronePrint = Drone::Print::DONE;
+    this->msg = NONE;
+    this->blockFlight();
     this->stopBlink();
     this->closeGate();
     this->printDone();
+    this->doTakeOff();
+    this->doLanding();
 }
 
 void Context::printNormal(void) {
@@ -51,6 +57,14 @@ void Context::printDone(void) {
     this->print = false;
 }
 
+void Context::setTakeOffMsg(void) {
+    this->msg = TAKEOFF;
+}
+
+void Context::setLandingMsg(void) {
+    this->msg = LANDING;
+}
+
 void Context::allowFlight(void) {
     this->flightAllowed = true;
 }
@@ -73,6 +87,26 @@ void Context::openGate(void) {
 
 void Context::closeGate(void) {
     this->opening = false;
+}
+
+void Context::doTakeOff(void) {
+    this->takeoff = true;
+}
+
+void Context::takeOffDone(void) {
+    this->takeoff = false;
+}
+
+void Context::doLanding(void) {
+    this->landing = true;
+}
+
+void Context::landingDone(void) {
+    this->landing = false;
+}
+
+const bool &Context::isFlightAllowed(void) {
+    return this->flightAllowed;
 }
 
 const bool &Context::shouldBlink(void) {
@@ -113,4 +147,24 @@ bool Context::shouldPrintOutside(void) {
 
 bool Context::shouldPrintLanding(void) {
     return this->dronePrint == Drone::Print::LANDING;
+}
+
+bool Context::isTakeOffMsg(void) {
+    if (this->msg == TAKEOFF) {
+        this->msg = NONE;
+        return true;
+    }
+    return false;
+}
+
+bool Context::isLandingMsg(void) {
+    if (this->msg == LANDING) {
+        this->msg = NONE;
+        return true;
+    }
+    return false;
+}
+
+bool Context::isOperationDone(void) {
+    return !(this->landing || this->takeoff);
 }

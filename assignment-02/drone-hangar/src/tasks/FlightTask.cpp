@@ -1,11 +1,12 @@
 #include "tasks/FlightTask.h"
 
 #include "tasks/states/flight/Idle.h"
+#include "tasks/states/flight/Operating.h"
 
 Flight::FlightTask::FlightTask(HWFlight *hw, Context &ctx, const bool &enabled, int period)
     : hardware(hw), context(ctx), enabled(enabled), state(nullptr) {
     Task::init(period);
-    this->changeState(new ::Flight::Idle);
+    this->changeState(this->initialState());
 }
 
 void Flight::FlightTask::tick() {
@@ -26,4 +27,11 @@ void Flight::FlightTask::changeState(FlightState *newState) {
 Flight::FlightTask::~FlightTask() {
     delete this->hardware;
     delete this->state;
+}
+
+Flight::FlightState *Flight::FlightTask::initialState(void) {
+    if (this->context.isOperationDone()) {
+        return new ::Flight::Idle;
+    }
+    return new ::Flight::Operating;
 }
