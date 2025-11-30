@@ -6,19 +6,39 @@
 
 #include "parameters.h"
 
-static unsigned long timer = 0;
-
 namespace Flight {
 
+/**
+ * @brief Handles entry actions for Waiting state
+ * @param task Reference to the FlightTask
+ * @param hw Reference to flight hardware interface
+ * @param ctx Reference to application context
+ * @param enabled Flag indicating if the system is enabled
+ */
 void Waiting::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
-    timer = millis();
+    this->timer = millis();
 }
 
+/**
+ * @brief Handles exit actions for Waiting state
+ * @param task Reference to the FlightTask
+ * @param hw Reference to flight hardware interface
+ * @param ctx Reference to application context
+ * @param enabled Flag indicating if the system is enabled
+ */
 void Waiting::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
+    // No action needed when exiting Waiting state
 }
 
+/**
+ * @brief Executes one tick of the Waiting state
+ * @param task Reference to the FlightTask
+ * @param hw Reference to flight hardware interface
+ * @param ctx Reference to application context
+ * @param enabled Flag indicating if the system is enabled
+ */
 void Waiting::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
-    if (millis() - timer <= T5) {
+    if (millis() - this->timer <= T5) {
         if (hw.isDetected()) {
             task.changeState(new Operating);
             ctx.printLanding();
