@@ -8,10 +8,10 @@ namespace Flight {
 
 /**
  * @brief Initializes timers when entering the Checking state.
- * 
+ *
  * Sets both takeOffTimer and landingTimer to the current system time.
  * This ensures fresh timing starts when the state becomes active.
- * 
+ *
  * @param task FlightTask instance managing the state machine.
  * @param hw Hardware interface for flight systems.
  * @param ctx Context containing flight state and control flags.
@@ -24,9 +24,9 @@ void Checking::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, const bool 
 
 /**
  * @brief Cleans up when exiting the Checking state.
- * 
+ *
  * Stops any ongoing LED blinking and closes the gate.
- * 
+ *
  * @param task FlightTask instance managing the state machine.
  * @param hw Hardware interface for flight systems.
  * @param ctx Context containing flight state and control flags.
@@ -39,14 +39,14 @@ void Checking::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool &
 
 /**
  * @brief Periodic update function for the Checking state.
- * 
+ *
  * Checks for two possible conditions:
  * 1. Takeoff in progress: Verifies if distance >= D1 for at least T3 milliseconds.
- * 2. Landing in progress: Verifies if distance <= D1 for at least T4 milliseconds.
- * 
+ * 2. Landing in progress: Verifies if 0 <= distance <= D2 for at least T4 milliseconds.
+ *
  * If either condition is met, transitions to Idle state and triggers appropriate
  * completion actions. If neither is in progress, also transitions to Idle.
- * 
+ *
  * @param task FlightTask instance for state transition.
  * @param hw Hardware interface for distance readings.
  * @param ctx Context containing takeoff/landing progress flags.

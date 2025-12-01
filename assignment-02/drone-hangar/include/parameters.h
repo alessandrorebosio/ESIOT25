@@ -3,7 +3,7 @@
 /**
  * @file parameters.h
  * @brief System configuration parameters and thresholds
- * 
+ *
  * This file contains all the configurable parameters for the system including
  * temperature thresholds, timing constants, and hardware positions.
  */
