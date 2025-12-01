@@ -79,26 +79,6 @@ HWGate *createHWGate(Hardware &hw) {
 }
 
 /**
- * @brief Create a HWOperating implementation.
- *
- * Implementation provides distance measurement using sonar with temperature compensation.
- */
-HWOperating *createHWOperating(Hardware &hw) {
-    struct Impl : public HWOperating {
-        Hardware &hw;
-
-        Impl(Hardware &h) : hw(h) {
-        }
-
-        float distance(void) override {
-            return measureDistance(hw);
-        }
-    };
-
-    return new Impl(hw);
-}
-
-/**
  * @brief Create a HWSystem implementation.
  *
  * Implementation provides system-level hardware operations including

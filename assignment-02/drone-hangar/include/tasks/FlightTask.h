@@ -25,15 +25,6 @@ class FlightTask final : public Task {
     const bool &enabled;
     FlightState *state;
 
-    /**
-     * @brief Determines the initial state based on system conditions
-     * @return FlightState* Pointer to the initial state object
-     *
-     * Checks if operation is already done to decide between Idle or Operating state.
-     * This ensures the system starts in the correct state after initialization.
-     */
-    FlightState *initialState(void);
-
   public:
     /**
      * @brief Constructs a new Flight Task object

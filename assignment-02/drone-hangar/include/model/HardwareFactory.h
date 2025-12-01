@@ -4,7 +4,6 @@
 #include "model/api/HWBlink.h"
 #include "model/api/HWFlight.h"
 #include "model/api/HWGate.h"
-#include "model/api/HWOperating.h"
 #include "model/api/HWSystem.h"
 
 /**
@@ -40,14 +39,6 @@ HWFlight *createHWFlight(Hardware &hw);
  * @return HWGate* Pointer to a new HWGate implementation.
  */
 HWGate *createHWGate(Hardware &hw);
-
-/**
- * @brief Create a HWOperating implementation.
- *
- * @param hw Reference to the concrete Hardware object.
- * @return HWOperating* Pointer to a new HWOperating implementation.
- */
-HWOperating *createHWOperating(Hardware &hw);
 
 /**
  * @brief Create a HWSystem implementation.

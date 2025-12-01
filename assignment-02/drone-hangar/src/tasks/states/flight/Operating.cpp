@@ -1,6 +1,6 @@
 #include "tasks/FlightTask.h"
 
-#include "tasks/states/flight/Idle.h"
+#include "tasks/states/flight/Measuring.h"
 #include "tasks/states/flight/Operating.h"
 
 #include "parameters.h"
@@ -27,8 +27,6 @@ void Operating::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, const bool
  * @param enabled Flag indicating if the system is enabled
  */
 void Operating::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
-    ctx.stopBlink();
-    ctx.closeGate();
 }
 
 /**
@@ -40,7 +38,7 @@ void Operating::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool 
  */
 void Operating::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
     if (ctx.isOperationDone()) {
-        task.changeState(new Idle);
+        task.changeState(new Measuring);
     }
 }
 
