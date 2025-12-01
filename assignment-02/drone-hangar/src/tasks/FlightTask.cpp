@@ -42,7 +42,6 @@ void Flight::FlightTask::changeState(FlightState *newState) {
  * @brief Destroy the Flight Task object
  */
 Flight::FlightTask::~FlightTask() {
-    delete this->hardware;
     delete this->state;
 }
 

@@ -10,10 +10,9 @@
 #include "tasks/BlinkTask.h"
 #include "tasks/FlightTask.h"
 #include "tasks/GateTask.h"
-#include "tasks/LandingTask.h"
 #include "tasks/ObserverTask.h"
+#include "tasks/OperatingTask.h"
 #include "tasks/SystemTask.h"
-#include "tasks/TakeOffTask.h"
 
 #include "config.h"
 
@@ -29,9 +28,7 @@ void setup(void) {
 
     scheduler.addTask(new System::SystemTask(HardwareFactory::createHWSystem(hw), context, 1000));
     scheduler.addTask(new Flight::FlightTask(HardwareFactory::createHWFlight(hw), context, context.isFlightAllowed(), 400));
-
-    scheduler.addTask(new TakeOff::TakeOffTask(HardwareFactory::createHWOperating(hw), context, context.isLandingInProgress(), 200));
-    scheduler.addTask(new Landing::LandingTask(HardwareFactory::createHWOperating(hw), context, context.isTakeOffInProgress(), 200));
+    scheduler.addTask(new Operating::OperatingTask(HardwareFactory::createHWOperating(hw), context, 200));
 
     scheduler.addTask(new Blink::BlinkTask(HardwareFactory::createHWBlink(hw), context.shouldBlink(), 500));
     scheduler.addTask(new Gate::GateTask(HardwareFactory::createHWGate(hw), context.shouldOpen(), 20));
