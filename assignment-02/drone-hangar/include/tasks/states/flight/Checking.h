@@ -5,8 +5,8 @@
 namespace Flight {
 
 /**
- * @class Measuring
- * @brief State class for measuring flight parameters during takeoff and landing.
+ * @class Checking
+ * @brief State class for Checking flight parameters during takeoff and landing.
  *
  * This state is responsible for monitoring distance sensors during takeoff and landing
  * phases, ensuring that the flight system meets required distance thresholds for
@@ -16,14 +16,14 @@ namespace Flight {
  * - takeOffTimer: Measures time above distance threshold D1 during takeoff
  * - landingTimer: Measures time below distance threshold D1 during landing
  */
-class Measuring : public FlightState {
+class Checking : public FlightState {
   private:
     unsigned long takeOffTimer;
     unsigned long landingTimer;
 
   public:
     /**
-     * @brief Called when entering the Measuring state.
+     * @brief Called when entering the Checking state.
      *
      * Initializes the takeoff and landing timers to the current system time.
      *
@@ -35,7 +35,7 @@ class Measuring : public FlightState {
     void onEnter(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled);
 
     /**
-     * @brief Called when exiting the Measuring state.
+     * @brief Called when exiting the Checking state.
      *
      * Stops any active LED blinking and closes the gate if applicable.
      *
@@ -47,7 +47,7 @@ class Measuring : public FlightState {
     void onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled);
 
     /**
-     * @brief Performs periodic checks during the Measuring state.
+     * @brief Performs periodic checks during the Checking state.
      *
      * Monitors distance sensors and timers for both takeoff and landing sequences.
      * Transitions to Idle state when:
@@ -65,7 +65,7 @@ class Measuring : public FlightState {
     /**
      * @brief Default destructor
      */
-    ~Measuring() = default;
+    ~Checking() = default;
 };
 
 } // namespace Flight

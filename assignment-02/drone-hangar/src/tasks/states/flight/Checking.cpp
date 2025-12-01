@@ -1,4 +1,4 @@
-#include "tasks/states/flight/Measuring.h"
+#include "tasks/states/flight/Checking.h"
 #include "tasks/FlightTask.h"
 #include "tasks/states/flight/Idle.h"
 
@@ -7,7 +7,7 @@
 namespace Flight {
 
 /**
- * @brief Initializes timers when entering the Measuring state.
+ * @brief Initializes timers when entering the Checking state.
  * 
  * Sets both takeOffTimer and landingTimer to the current system time.
  * This ensures fresh timing starts when the state becomes active.
@@ -17,13 +17,13 @@ namespace Flight {
  * @param ctx Context containing flight state and control flags.
  * @param enabled Whether the state is currently enabled.
  */
-void Measuring::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
+void Checking::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
     this->takeOffTimer = millis();
     this->landingTimer = millis();
 }
 
 /**
- * @brief Cleans up when exiting the Measuring state.
+ * @brief Cleans up when exiting the Checking state.
  * 
  * Stops any ongoing LED blinking and closes the gate.
  * 
@@ -32,13 +32,13 @@ void Measuring::onEnter(FlightTask &task, HWFlight &hw, Context &ctx, const bool
  * @param ctx Context containing flight state and control flags.
  * @param enabled Whether the state is currently enabled.
  */
-void Measuring::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
+void Checking::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
     ctx.stopBlink();
     ctx.closeGate();
 }
 
 /**
- * @brief Periodic update function for the Measuring state.
+ * @brief Periodic update function for the Checking state.
  * 
  * Checks for two possible conditions:
  * 1. Takeoff in progress: Verifies if distance >= D1 for at least T3 milliseconds.
@@ -52,7 +52,7 @@ void Measuring::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool 
  * @param ctx Context containing takeoff/landing progress flags.
  * @param enabled Whether the state is currently enabled.
  */
-void Measuring::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
+void Checking::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
     if (ctx.isTakeOffInProgress()) {
         if (hw.distance() >= D1) {
             if (millis() - this->takeOffTimer >= T3) {

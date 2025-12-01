@@ -1,7 +1,7 @@
 #include "tasks/FlightTask.h"
 
 #include "tasks/states/flight/Idle.h"
-#include "tasks/states/flight/Operating.h"
+#include "tasks/states/flight/Checking.h"
 #include "tasks/states/flight/Waiting.h"
 
 #include "parameters.h"
@@ -41,9 +41,11 @@ void Idle::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enable
     if (enabled) {
         if (ctx.isTakeOffMsg()) {
             if (hw.distance() < D1) {
-                task.changeState(new Operating);
+                task.changeState(new Checking);
                 ctx.printTakeOff();
                 ctx.doTakeOff();
+                ctx.startBlink();
+                ctx.openGate();
             }
         }
 

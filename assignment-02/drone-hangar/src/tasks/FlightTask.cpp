@@ -1,7 +1,6 @@
 #include "tasks/FlightTask.h"
 
-#include "tasks/states/flight/Measuring.h"
-#include "tasks/states/flight/Operating.h"
+#include "tasks/states/flight/Checking.h"
 
 /**
  * @brief Constructs a new Flight Task object
@@ -13,7 +12,7 @@
 Flight::FlightTask::FlightTask(HWFlight *hw, Context &ctx, const bool &enabled, int period)
     : hardware(hw), context(ctx), enabled(enabled), state(nullptr) {
     Task::init(period);
-    this->changeState(new Measuring);
+    this->changeState(new Checking);
 }
 
 /**

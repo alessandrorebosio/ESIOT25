@@ -1,7 +1,7 @@
 #include "tasks/FlightTask.h"
 
 #include "tasks/states/flight/Idle.h"
-#include "tasks/states/flight/Operating.h"
+#include "tasks/states/flight/Checking.h"
 #include "tasks/states/flight/Waiting.h"
 
 #include "parameters.h"
@@ -40,9 +40,11 @@ void Waiting::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool &e
 void Waiting::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
     if (millis() - this->timer <= T5) {
         if (hw.isDetected()) {
-            task.changeState(new Operating);
+            task.changeState(new Checking);
             ctx.printLanding();
             ctx.doLanding();
+            ctx.startBlink();
+            ctx.openGate();
         }
     } else {
         task.changeState(new Idle);
