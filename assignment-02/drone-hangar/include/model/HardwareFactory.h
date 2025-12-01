@@ -57,4 +57,31 @@ HWOperating *createHWOperating(Hardware &hw);
  */
 HWSystem *createHWSystem(Hardware &hw);
 
+
+/**
+ * @brief Measure the distance using the provided hardware sensors.
+ *
+ * Performs a single distance measurement using the given Hardware instance
+ * (e.g., ultrasonic, infrared or LIDAR sensor) and returns the value in metres.
+ *
+ * @param hw Reference to the Hardware object used to access the sensor.
+ * @return float Measured distance in metres. A negative value indicates an error
+ *               (for example: sensor failure, invalid reading or timeout).
+ */
+float measureDistance(Hardware &hw);
+
+/**
+ * @brief Measure the ambient temperature using the provided hardware interface.
+ *
+ * Obtains a single temperature measurement from the sensor accessible via the given
+ * Hardware instance and returns the result in degrees Celsius.
+ *
+ * @param hw Reference to a Hardware object that provides access to the temperature sensor.
+ *           The caller must ensure that hw is properly initialized and remains valid for
+ *           the duration of the call.
+ *
+ * @return The measured temperature in degrees Celsius as a float.
+ */
+float measureTemperature(Hardware &hw);
+
 } // namespace HardwareFactory

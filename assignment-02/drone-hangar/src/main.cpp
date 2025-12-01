@@ -5,6 +5,7 @@
 #include "core/Scheduler.h"
 
 #include "model/Hardware.h"
+#include "model/HardwareFactory.h"
 
 #include "tasks/BlinkTask.h"
 #include "tasks/FlightTask.h"
@@ -16,29 +17,30 @@
 
 #include "config.h"
 
+static Hardware hw(BTN_PIN, L1_PIN, L2_PIN, L3_PIN, SERVO_PIN, PIR_PIN, SNR_TRIG_PIN, SNR_TRIG_PIN, MAXTIME, TMP_PIN, LCD_ADDR, LCD_COLS, LCD_ROWS);
 static Scheduler scheduler;
 static Message message;
 static Context context;
-static Hardware hw;
 
 void setup(void) {
     scheduler.init(100);
     message.init(BAUD);
     hw.init();
 
-    scheduler.addTask(new System::SystemTask(new HWSystem(hw.getButton(), hw.getLed1(), hw.getLed3(), hw.getTempSensor()), context, 1000));
-    scheduler.addTask(new Flight::FlightTask(new HWFlight(hw.getPir(), hw.getSonar(), hw.getTempSensor()), context, context.isFlightAllowed(), 400));
-    scheduler.addTask(new Landing::LandingTask(new HWLanding(hw.getSonar(), hw.getTempSensor()), context, context.isLandingInProgress(), 200));
-    scheduler.addTask(new TakeOff::TakeOffTask(new HWTakeOff(hw.getSonar(), hw.getTempSensor()), context, context.isLandingInProgress(), 200));
-    scheduler.addTask(new Blink::BlinkTask(new HWBlink(hw.getLed2()), context.shouldBlink(), 500));
-    scheduler.addTask(new Gate::GateTask(new HWGate(hw.getMotor()), context.shouldOpen(), 20));
+    scheduler.addTask(new System::SystemTask(HardwareFactory::createHWSystem(hw), context, 1000));
+    scheduler.addTask(new Flight::FlightTask(HardwareFactory::createHWFlight(hw), context, context.isFlightAllowed(), 400));
 
-    scheduler.addTask(new Observer::ObserverTask(true, [] { message.send("T: " + String(hw.getTempSensor().readTemperature())); }, 1000));
+    scheduler.addTask(new TakeOff::TakeOffTask(HardwareFactory::createHWOperating(hw), context, context.isLandingInProgress(), 200));
+    scheduler.addTask(new Landing::LandingTask(HardwareFactory::createHWOperating(hw), context, context.isTakeOffInProgress(), 200));
+
+    scheduler.addTask(new Blink::BlinkTask(HardwareFactory::createHWBlink(hw), context.shouldBlink(), 500));
+    scheduler.addTask(new Gate::GateTask(HardwareFactory::createHWGate(hw), context.shouldOpen(), 20));
+
     scheduler.addTask(new Observer::ObserverTask(
         true,
         [] {
-            hw.getSonar().setTemperature(hw.getTempSensor().readTemperature());
-            message.send("D: " + String(hw.getSonar().readDistance()));
+            message.send("T: " + String(HardwareFactory::measureTemperature(hw)));
+            message.send("D: " + String(HardwareFactory::measureDistance(hw)));
         },
         1000));
 

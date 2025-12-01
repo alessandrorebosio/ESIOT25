@@ -2,15 +2,15 @@
 
 #include <Motor.h>
 
-#include "model/gate/HWGate.h"
-#include "tasks/states/gate/GateState.h"
 #include "Task.h"
+#include "model/api/HWGate.h"
+#include "tasks/states/gate/GateState.h"
 
 namespace Gate {
 
 /**
  * @brief Task for controlling gate operation with state pattern
- * 
+ *
  * This task manages gate movement using a state machine with four states:
  * Open, Close, Opening, and Closing. It handles smooth gate movement
  * with position control and enables/disables motor as needed.
@@ -32,7 +32,7 @@ class GateTask final : public Task {
 
     /**
      * @brief Execute one tick of the gate state machine
-     * 
+     *
      * Calls the current state's tick method to handle state transitions
      * and gate position control logic.
      */
@@ -41,7 +41,7 @@ class GateTask final : public Task {
     /**
      * @brief Change the current state of the gate state machine
      * @param newState Pointer to the new state to transition to
-     * 
+     *
      * Handles state transition by calling onExit for current state,
      * deleting it, then calling onEnter for the new state.
      */
@@ -49,7 +49,7 @@ class GateTask final : public Task {
 
     /**
      * @brief Destroy the Gate Task object
-     * 
+     *
      * Cleans up hardware and state objects to prevent memory leaks.
      */
     ~GateTask();

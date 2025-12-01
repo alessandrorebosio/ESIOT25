@@ -1,24 +1,10 @@
 #include "model/HardwareFactory.h"
 
-/**
- * @brief Helper function to read distance from sonar with temperature compensation.
- * 
- * This function configures the sonar sensor with the current temperature
- * reading for accurate distance measurement, then reads the distance.
- * 
- * @param hw Reference to the Hardware object containing the sensors.
- * @return float The measured distance with temperature compensation.
- */
-static float readSonarDistance(Hardware &hw) {
-    hw.getSonar().setTemperature(hw.getTempSensor().readTemperature());
-    return hw.getSonar().readDistance();
-}
-
 namespace HardwareFactory {
 
 /**
  * @brief Create a HWBlink implementation.
- * 
+ *
  * Implementation uses LED2 for blinking functionality.
  */
 HWBlink *createHWBlink(Hardware &hw) {
@@ -42,7 +28,7 @@ HWBlink *createHWBlink(Hardware &hw) {
 
 /**
  * @brief Create a HWFlight implementation.
- * 
+ *
  * Implementation uses PIR sensor for detection and sonar for distance measurement.
  */
 HWFlight *createHWFlight(Hardware &hw) {
@@ -57,7 +43,7 @@ HWFlight *createHWFlight(Hardware &hw) {
         }
 
         float distance(void) override {
-            return readSonarDistance(this->hw);
+            return measureDistance(this->hw);
         }
     };
 
@@ -66,7 +52,7 @@ HWFlight *createHWFlight(Hardware &hw) {
 
 /**
  * @brief Create a HWGate implementation.
- * 
+ *
  * Implementation uses motor for gate control with on/off and positioning.
  */
 HWGate *createHWGate(Hardware &hw) {
@@ -94,7 +80,7 @@ HWGate *createHWGate(Hardware &hw) {
 
 /**
  * @brief Create a HWOperating implementation.
- * 
+ *
  * Implementation provides distance measurement using sonar with temperature compensation.
  */
 HWOperating *createHWOperating(Hardware &hw) {
@@ -105,7 +91,7 @@ HWOperating *createHWOperating(Hardware &hw) {
         }
 
         float distance(void) override {
-            return readSonarDistance(hw);
+            return measureDistance(hw);
         }
     };
 
@@ -114,10 +100,10 @@ HWOperating *createHWOperating(Hardware &hw) {
 
 /**
  * @brief Create a HWSystem implementation.
- * 
+ *
  * Implementation provides system-level hardware operations including
  * button input, LED control, and temperature sensing.
- * 
+ *
  * @bug There is a bug in turnOnLed2() and turnOffLed2() methods - both
  *      currently control LED3 instead of LED2. This should be corrected
  *      to match the intended behavior.
@@ -150,11 +136,29 @@ HWSystem *createHWSystem(Hardware &hw) {
         }
 
         float temperature(void) override {
-            return this->hw.getTempSensor().readTemperature();
+            return measureTemperature(this->hw);
         }
     };
 
     return new Impl(hw);
+}
+
+/**
+ * @brief Helper function to read distance from sonar with temperature compensation.
+ *
+ * This function configures the sonar sensor with the current temperature
+ * reading for accurate distance measurement, then reads the distance.
+ *
+ * @param hw Reference to the Hardware object containing the sensors.
+ * @return float The measured distance with temperature compensation.
+ */
+float measureDistance(Hardware &hw) {
+    hw.getSonar().setTemperature(hw.getTempSensor().readTemperature());
+    return hw.getSonar().readDistance();
+}
+
+float measureTemperature(Hardware &hw) {
+    return hw.getTempSensor().readTemperature();
 }
 
 } // namespace HardwareFactory
