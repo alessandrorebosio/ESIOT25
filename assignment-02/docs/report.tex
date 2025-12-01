@@ -213,21 +213,6 @@ The \textit{Context} serves as a shared memory that enables coordination among
 components via Boolean variables and message codes, ensuring modularity and preventing
 direct coupling between tasks.
 
-\vspace{\baselineskip}
-The main functional components are:
-\begin{itemize}
-  \item \textbf{System Task} – manages the overall operating mode (\texttt{NORMAL},
-        \texttt{PREALARM}, \texttt{ALARM});
-  \item \textbf{Flight Task} – coordinates flight operations and activates the other
-        control tasks;
-  \item \textbf{Takeoff Task} and \textbf{Landing Task} – specialized observer tasks
-        managing their respective flight phases;
-  \item \textbf{Gate Task} – controls the hangar door actuator;
-  \item \textbf{Blink Task} – manages LED blinking during active operations;
-  \item \textbf{Observer Task} – monitors sensors and serial messages, updating the
-        \textit{Context}.
-\end{itemize}
-
 \section{System Task}
 The \textbf{SystemTask} manages the global operating mode of the hangar, switching
 between three states: \texttt{NORMAL}, \texttt{PREALARM}, and \texttt{ALARM}.  
@@ -250,13 +235,11 @@ If the drone is outside during an alarm, an alert message is sent via the DRU.
   \label{fig:SystemTask}
 \end{figure}
 
-\vspace{\baselineskip}
 When the entry action \texttt{/AllowFlight} is executed, a Boolean flag is set to
 \texttt{true}; conversely, the exit action \texttt{/BlockFlight} sets it to
 \texttt{false}.  
 This flag informs other tasks whether flight operations are currently permitted.
 
-\vspace{\baselineskip}
 \section{Flight Task}
 The \textbf{FlightTask} coordinates the take-off and landing sequences, acting as the
 intermediate layer between the high-level system logic and the low-level actuator
@@ -283,13 +266,11 @@ closes, blinking stops, and the system returns to \texttt{IDLE}.
   \label{fig:FlightTask}
 \end{figure}
 
-\vspace{\baselineskip}
 When entering the \texttt{OPERATING} state, the FlightTask triggers the
 \texttt{/startBlink} and \texttt{/openGate} actions, enabling the corresponding tasks.
 Upon completion of the operation, it executes \texttt{/stopBlink} and
 \texttt{/closeGate}, restoring the system to its resting configuration.
 
-\vspace{\baselineskip}
 \section{Takeoff Task}
 The \textbf{TakeoffTask} supervises the drone’s departure from the hangar.  
 It begins its operation when enabled by the \texttt{FlightTask} and enters the
@@ -313,7 +294,6 @@ detection of the drone’s exit.
   \label{fig:TakeoffTask}
 \end{figure}
 
-\vspace{\baselineskip}
 \section{Landing Task}
 The \textbf{LandingTask} operates similarly but monitors the approach of the drone
 during landing.  
@@ -336,7 +316,6 @@ This approach provides a robust and noise-tolerant mechanism for landing detecti
 \end{figure}
 
 
-\vspace{\baselineskip}
 \section{Gate Task}
 The \textbf{GateTask} controls the hangar door using four states:
 \texttt{CLOSE}, \texttt{OPENING}, \texttt{OPEN}, and \texttt{CLOSING}.  
@@ -355,7 +334,6 @@ direction.
   \label{fig:GateTask}
 \end{figure}
 
-\vspace{\baselineskip}
 \section{Blink Task}
 The \textbf{BlinkTask} handles LED~L2 blinking, providing visual feedback during active
 flight phases.  
@@ -371,7 +349,6 @@ LED off during idle periods.
   \label{fig:BlinkTask}
 \end{figure}
 
-\vspace{\baselineskip}
 \section{Observer Task}
 The \textbf{ObserverTask} periodically monitors sensors and communication channels by
 evaluating a predicate function at each activation.  
@@ -388,7 +365,6 @@ with the main control logic.
   \label{fig:ObserverTask}
 \end{figure}
 
-\vspace{\baselineskip}
 The Observer acts as a central listener: it periodically reads inputs and messages
 (e.g., from the DRU via serial communication) and dispatches relevant information to the
 appropriate tasks — System, Flight, Gate, etc.  
@@ -414,7 +390,6 @@ Through this structure, tasks communicate indirectly by setting and reading Bool
 flags that describe the hangar’s condition, the drone’s position, and the current
 operating mode.
 
-\vspace{\baselineskip}
 \section{System Dynamics}
 At startup the system initializes all hardware components, ensuring a safe condition:
 the hangar door is closed, the drone is detected inside, and flights are temporarily
@@ -434,7 +409,6 @@ operations remain halted until the \textbf{RESET} button is pressed.
 This mechanism ensures that flight activity occurs only under safe environmental
 conditions.
 
-\vspace{\baselineskip}
 \section{Coordination of Operations}
 When the system starts, the \textbf{FlightTask} determines its initial state from the
 Context.  
@@ -449,7 +423,6 @@ It stays in \texttt{OPERATING} while subordinate actions—such as gate movement
 landing detection—are active, and returns to \texttt{IDLE} only when all are completed.  
 This guarantees synchronization between software logic and the physical hangar.
 
-\vspace{\baselineskip}
 \section{Supporting Tasks and Context Interaction}
 Several supporting tasks ensure system responsiveness:
 \begin{itemize}
@@ -468,7 +441,6 @@ For example, the SystemTask may block new flights by setting a flag interpreted 
 FlightTask, while the ObserverTask records a command that will be processed in the
 next cycle.
 
-\vspace{\baselineskip}
 \section{Global Workflow}
 The overall operation arises from the cooperation of all tasks under the scheduler.
 The ObserverTask updates the Context with real-time data, the SystemTask enforces
