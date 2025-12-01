@@ -12,7 +12,7 @@
 
 /**
  * @brief Central hardware management class for the entire system
- * 
+ *
  * This class serves as a facade that initializes and provides access to all
  * hardware components used in the system. It manages the lifecycle of all
  * hardware objects and provides a unified interface for accessing them.
@@ -21,7 +21,7 @@ class Hardware final {
   private:
     Button *button;
     Led *led1;
-    Led *led2;  
+    Led *led2;
     Led *led3;
     Motor *motor;
     Pir *pir;
@@ -29,14 +29,31 @@ class Hardware final {
     TMP36 *tempSensor;
     Lcd *lcd;
 
+    uint8_t btnPin;
+    uint8_t l1Pin;
+    uint8_t l2Pin;
+    uint8_t l3Pin;
+    uint8_t servoPin;
+    uint8_t pirPin;
+    uint8_t sonarTrigPin;
+    uint8_t sonarEchoPin;
+    int maxTime;
+    uint8_t tmpPin;
+    uint8_t lcdAddr;
+    uint8_t lcdCols;
+    uint8_t lcdRows;
+
   public:
     /**
-     * @brief Initialize all hardware components
-     * 
-     * Creates and configures all hardware objects using pin definitions
-     * from config.h. Must be called before using any hardware components.
+     * @brief Construct a Hardware object and store pin configuration
      */
-    void init(void);
+    Hardware(uint8_t btnPin, uint8_t l1Pin, uint8_t l2Pin, uint8_t l3Pin, uint8_t servoPin, uint8_t pirPin, uint8_t sonarTrigPin,
+             uint8_t sonarEchoPin, int maxTime, uint8_t tmpPin, uint8_t lcdAddr, uint8_t lcdCols, uint8_t lcdRows);
+
+    /**
+     * @brief Initialize all hardware components.
+     */
+    void init();
 
     /**
      * @brief Get reference to button instance
@@ -94,7 +111,7 @@ class Hardware final {
 
     /**
      * @brief Destroy the Hardware object and clean up all components
-     * 
+     *
      * Deletes all allocated hardware objects to prevent memory leaks.
      * Automatically called when Hardware object goes out of scope.
      */

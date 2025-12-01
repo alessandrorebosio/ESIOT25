@@ -1,31 +1,31 @@
 #include "model/Hardware.h"
-#include "config.h"
 
 /**
  * @brief Initialize all hardware components
- * 
+ *
  * Creates and configures all hardware objects using pin definitions
  * from config.h. Must be called before using any hardware components.
- * 
- * Initializes:
- * - Button on BUTTON_PIN
- * - Three LEDs on LED1_PIN, LED2_PIN, LED3_PIN
- * - Motor on SERVO_PIN
- * - PIR sensor on PIR_PIN
- * - Sonar sensor on SONAR_TRIG_PIN and SONAR_ECHO_PIN with MAXTIME timeout
- * - Temperature sensor on TEMPERATURE_PIN
- * - LCD display at LCD_ADDR with LCD_COLS columns and LCD_ROWS rows
  */
-void Hardware::init(void) {
-    button = new Button(BUTTON_PIN, INPUT_PULLUP);
-    led1 = new Led(LED1_PIN);
-    led2 = new Led(LED2_PIN);
-    led3 = new Led(LED3_PIN);
-    motor = new Motor(SERVO_PIN);
-    pir = new Pir(PIR_PIN);
-    sonar = new Sonar(SONAR_TRIG_PIN, SONAR_ECHO_PIN, MAXTIME);
-    tempSensor = new TMP36(TEMPERATURE_PIN);
-    lcd = new Lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);
+Hardware::Hardware(uint8_t btnPin, uint8_t l1Pin, uint8_t l2Pin, uint8_t l3Pin, uint8_t servoPin, uint8_t pirPin, uint8_t sonarTrigPin,
+                   uint8_t sonarEchoPin, int maxTime, uint8_t tmpPin, uint8_t lcdAddr, uint8_t lcdCols, uint8_t lcdRows)
+    : button(nullptr), led1(nullptr), led2(nullptr), led3(nullptr), motor(nullptr), pir(nullptr), sonar(nullptr), tempSensor(nullptr), lcd(nullptr),
+      btnPin(btnPin), l1Pin(l1Pin), l2Pin(l2Pin), l3Pin(l3Pin), servoPin(servoPin), pirPin(pirPin), sonarTrigPin(sonarTrigPin),
+      sonarEchoPin(sonarEchoPin), maxTime(maxTime), tmpPin(tmpPin), lcdAddr(lcdAddr), lcdCols(lcdCols), lcdRows(lcdRows) {
+}
+
+/**
+ * @brief Initialize all hardware components.
+ */
+void Hardware::init() {
+    button = new Button(this->btnPin, INPUT_PULLUP);
+    led1 = new Led(this->l1Pin);
+    led2 = new Led(this->l2Pin);
+    led3 = new Led(this->l3Pin);
+    motor = new Motor(this->servoPin);
+    pir = new Pir(this->pirPin);
+    sonar = new Sonar(this->sonarTrigPin, this->sonarEchoPin, this->maxTime);
+    tempSensor = new TMP36(this->tmpPin);
+    lcd = new Lcd(this->lcdAddr, this->lcdCols, this->lcdRows);
 }
 
 /**
@@ -96,13 +96,13 @@ Motor &Hardware::getMotor(void) {
  * @brief Get reference to LCD display
  * @return Lcd& Reference to LCD object
  */
-Lcd &Hardware::getLcd(void){
+Lcd &Hardware::getLcd(void) {
     return *this->lcd;
 }
 
 /**
  * @brief Destroy the Hardware object and clean up all components
- * 
+ *
  * Deletes all allocated hardware objects to prevent memory leaks.
  * Automatically called when Hardware object goes out of scope.
  */

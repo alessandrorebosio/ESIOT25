@@ -1,6 +1,6 @@
 #include "tasks/FlightTask.h"
 
-#include "tasks/states/flight/Idle.h"
+#include "tasks/states/flight/Measuring.h"
 #include "tasks/states/flight/Operating.h"
 
 /**
@@ -13,7 +13,7 @@
 Flight::FlightTask::FlightTask(HWFlight *hw, Context &ctx, const bool &enabled, int period)
     : hardware(hw), context(ctx), enabled(enabled), state(nullptr) {
     Task::init(period);
-    this->changeState(this->initialState());
+    this->changeState(new Measuring);
 }
 
 /**
@@ -42,17 +42,6 @@ void Flight::FlightTask::changeState(FlightState *newState) {
  * @brief Destroy the Flight Task object
  */
 Flight::FlightTask::~FlightTask() {
-    delete this->hardware;
     delete this->state;
 }
 
-/**
- * @brief Determine the initial state based on system conditions
- * @return FlightState* Pointer to the initial state
- */
-Flight::FlightState *Flight::FlightTask::initialState(void) {
-    if (this->context.isOperationDone()) {
-        return new ::Flight::Idle;
-    }
-    return new ::Flight::Operating;
-}

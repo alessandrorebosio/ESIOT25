@@ -9,15 +9,14 @@ namespace Blink {
  * @param enabled Reference to enabled flag that controls blinking
  * @param period Blink task execution period in milliseconds
  */
-BlinkTask::BlinkTask(HWBlink *hw, const bool &enabled, int period) 
-    : hardware(hw), enabled(enabled), state(nullptr) {
+BlinkTask::BlinkTask(HWBlink *hw, const bool &enabled, int period) : hardware(hw), enabled(enabled), state(nullptr) {
     Task::init(period);
     this->changeState(new ::Blink::Off);
 }
 
 /**
  * @brief Execute one tick of the blink state machine
- * 
+ *
  * Delegates to the current state's tick method to handle state logic
  * and potential transitions.
  */
@@ -28,7 +27,7 @@ void BlinkTask::tick(void) {
 /**
  * @brief Change the current state of the blink state machine
  * @param newState Pointer to the new state to transition to
- * 
+ *
  * Manages the state transition lifecycle by calling onExit for current state,
  * deleting it, setting new state, and calling onEnter for the new state.
  */
@@ -45,11 +44,10 @@ void BlinkTask::changeState(BlinkState *newState) {
 
 /**
  * @brief Destroy the Blink Task object
- * 
+ *
  * Cleans up allocated hardware and state objects to prevent memory leaks.
  */
 BlinkTask::~BlinkTask() {
-    delete this->hardware;
     delete this->state;
 }
 

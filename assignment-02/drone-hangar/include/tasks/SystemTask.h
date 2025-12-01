@@ -2,7 +2,7 @@
 
 #include "Task.h"
 #include "core/Context.h"
-#include "model/system/HWSystem.h"
+#include "model/api/HWSystem.h"
 #include "tasks/states/system/SystemState.h"
 
 namespace System {

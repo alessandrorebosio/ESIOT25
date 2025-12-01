@@ -21,27 +21,27 @@
 /**
  * @brief Analog pin for temperature sensor (TMP36)
  */
-#define TEMPERATURE_PIN A0
+#define TMP_PIN A0
 
 /**
  * @brief Digital pin for button input
  */
-#define BUTTON_PIN 2
+#define BTN_PIN 2
 
 /**
  * @brief Digital pin for LED 3
  */
-#define LED3_PIN 3
+#define L3_PIN 3
 
 /**
  * @brief Digital pin for LED 2
  */
-#define LED2_PIN 4
+#define L2_PIN 4
 
 /**
  * @brief Digital pin for LED 1
  */
-#define LED1_PIN 5
+#define L1_PIN 5
 
 /**
  * @brief Digital pin for servo motor control
@@ -56,12 +56,12 @@
 /**
  * @brief Digital pin for ultrasonic sensor echo
  */
-#define SONAR_ECHO_PIN 9
+#define SNR_ECHO_PIN 9
 
 /**
  * @brief Digital pin for ultrasonic sensor trigger
  */
-#define SONAR_TRIG_PIN 10
+#define SNR_TRIG_PIN 10
 
 /* LCD Display Configuration */
 
