@@ -291,20 +291,50 @@ Upon completion of the operation, it executes \texttt{/stopBlink} and
 
 \vspace{\baselineskip}
 \section{Takeoff Task}
-The \textbf{TakeoffTask} is an observer responsible for verifying when the drone has
-fully left the hangar.  
-It monitors the distance sensor (DDD) and, when the measured distance exceeds
-$D_1$ for longer than $T_1$, it marks the operation as complete in the Context.
-This notification allows the FlightTask to terminate the sequence and return to the
-\texttt{IDLE} state.
+The \textbf{TakeoffTask} supervises the drone’s departure from the hangar.  
+It begins its operation when enabled by the \texttt{FlightTask} and enters the
+\texttt{MEASURING} state, where it continuously monitors the distance measured by the
+internal sensor.  
+When the detected distance remains greater than the threshold \texttt{D1} for longer
+than the configured time \texttt{T3}, the drone is assumed to have left the hangar
+completely.  
+At this point, the task returns to the \texttt{IDLE} state, updates the \texttt{Context}
+by printing the \texttt{DRONE OUTSIDE} message on the LCD, and signals the completion
+of the take-off sequence.  
+If the distance drops below the threshold before the timer expires, the counter is
+reset, ensuring that only stable readings are considered valid.  
+This simple timing-based mechanism filters out sensor noise and guarantees reliable
+detection of the drone’s exit.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./pdf/TakeOffTask.pdf}
+  \caption{Takeoff Task state diagram.}
+  \label{fig:TakeoffTask}
+\end{figure}
 
 \vspace{\baselineskip}
 \section{Landing Task}
-The \textbf{LandingTask} monitors the approach and landing phase of the drone.  
-Once the presence sensor (DPD) detects the drone and the distance measured by the DDD
-remains below $D_2$ for more than $T_2$, the task signals successful landing by updating
-the Context.  
-The FlightTask then closes the hangar door and resumes standby mode.
+The \textbf{LandingTask} operates similarly but monitors the approach of the drone
+during landing.  
+Once activated, it enters the \texttt{MEASURING} state and evaluates the distance
+between the drone and the ground using the same ultrasonic sensor.  
+When this distance remains below the threshold \texttt{D2} for a duration longer than
+\texttt{T4}, the system concludes that the drone has safely landed inside the hangar.  
+The task then switches back to \texttt{IDLE}, updates the \texttt{Context} by printing
+\texttt{DRONE INSIDE}, and notifies the completion of the landing sequence.  
+As in the take-off process, transient or unstable readings reset the internal timer,
+ensuring that the transition to the landed state occurs only when the condition is
+consistently verified.  
+This approach provides a robust and noise-tolerant mechanism for landing detection.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./pdf/LandingTask.pdf}
+  \caption{Landing Task state diagram.}
+  \label{fig:LandingTask}
+\end{figure}
+
 
 \vspace{\baselineskip}
 \section{Gate Task}
@@ -324,18 +354,6 @@ direction.
   \caption{Gate Task state diagram.}
   \label{fig:GateTask}
 \end{figure}
-
-% \section{Check Task} 
-% The Check Task is responsible for monitoring and maintaining the 
-% drone state. At startup it reads the presence/distance sensors and 
-% sets the initial state to \texttt{DRONE\_INSIDE} if the drone is 
-% detected, or to \texttt{DRONE\_OUTSIDE} otherwise. 
-% \begin{figure}[H] 
-% \centering 
-% \includegraphics[width=\textwidth]{./pdf/CheckTask.pdf} 
-% \caption{Check Task state diagram.} 
-% \label{fig:CheckTask} 
-% \end{figure}
 
 \vspace{\baselineskip}
 \section{Blink Task}
@@ -384,11 +402,11 @@ simplifying message routing and scalability.
 \section{Overview}
 This chapter describes the dynamic behaviour of the Smart Drone Hangar once deployed
 on the Arduino platform.  
-Each function of the system is implemented as an independent task, periodically
-activated by a simple cooperative scheduler.  
-Although tasks are executed sequentially, their rapid activation rate makes the system
-behave as if all processes were running concurrently, continuously reacting to inputs
-and updating outputs in real time.
+Each system function is implemented as an independent task, periodically activated by
+a cooperative scheduler.  
+Although tasks are executed sequentially, their rapid activation makes the system
+react as if all processes were concurrent, continuously responding to inputs and
+updating outputs in real time.
 
 All components share a common data structure, the \textbf{Context}, which represents
 the global state of the hangar.  
@@ -398,85 +416,69 @@ operating mode.
 
 \vspace{\baselineskip}
 \section{System Dynamics}
-At startup, the system initializes all hardware components, ensuring a safe initial
-state: the hangar door is closed, the drone is detected inside, and flight operations
-are temporarily disabled until normal conditions are confirmed.  
-From this point on, the scheduler maintains continuous control by activating all tasks
-in sequence to supervise sensors, actuators, and communication interfaces.
+At startup the system initializes all hardware components, ensuring a safe condition:
+the hangar door is closed, the drone is detected inside, and flights are temporarily
+disabled until normal parameters are restored.  
+The scheduler then maintains continuous control by cyclically activating all tasks to
+supervise sensors, actuators, and communication interfaces.
 
-The \textbf{SystemTask} governs the global behaviour of the hangar.  
-It continuously monitors temperature readings and, according to the measured values,
-selects the appropriate operating mode.  
-During normal conditions, flights are allowed and all functions operate regularly.  
-If the temperature exceeds the first threshold (\texttt{Temp1}) for longer than the
-configured time (\texttt{T1}), the system enters a pre-alarm state, suspending new
-take-offs or landings while allowing those already in progress to complete.  
-If the temperature rises further above the higher threshold (\texttt{Temp2}) and
-remains there for more than \texttt{T2}, the system switches to alarm mode: the hangar
-door closes automatically, the alarm indicator is activated, and all operations are
-halted until the user presses the \textbf{RESET} button.  
-Through this supervision, the SystemTask guarantees that all flight operations take
-place only under safe and stable environmental conditions.
+The \textbf{SystemTask} governs the overall behaviour of the hangar.  
+It monitors temperature values and selects the appropriate operating mode.  
+Under normal conditions flights are permitted.  
+If the temperature exceeds the first threshold (\texttt{Temp1}) for longer than
+\texttt{T1}, the system enters a pre-alarm state, suspending new take-offs or landings
+while allowing those in progress to finish.  
+If it surpasses the higher threshold (\texttt{Temp2}) for more than \texttt{T2}, the
+system switches to alarm mode: the door closes, the alarm indicator turns on, and all
+operations remain halted until the \textbf{RESET} button is pressed.  
+This mechanism ensures that flight activity occurs only under safe environmental
+conditions.
 
 \vspace{\baselineskip}
 \section{Coordination of Operations}
 When the system starts, the \textbf{FlightTask} determines its initial state from the
 Context.  
-If all operations are completed, it starts in the \texttt{IDLE} state; otherwise, it
-initializes directly in the \texttt{OPERATING} state.  
-This mechanism allows automatic recovery after a power loss or reset, enabling the
-system to resume any operation that was already in progress.
+If all operations are complete, it begins in \texttt{IDLE}; otherwise, it starts in
+\texttt{OPERATING}.  
+This allows automatic recovery after a power loss or reset, resuming any sequence that
+was already in progress.
 
-During normal execution, the FlightTask monitors Context variables to track the
-progress of take-off or landing.  
-It remains in the \texttt{OPERATING} state while subordinate actions — such as door
-movement or landing detection — are active, and returns to \texttt{IDLE} only once all
-tasks have completed.  
-This ensures proper synchronization between software logic and the physical behaviour
-of the hangar.
+During operation, the FlightTask monitors Context flags to follow the progress of
+take-off or landing.  
+It stays in \texttt{OPERATING} while subordinate actions—such as gate movement or
+landing detection—are active, and returns to \texttt{IDLE} only when all are completed.  
+This guarantees synchronization between software logic and the physical hangar.
 
 \vspace{\baselineskip}
 \section{Supporting Tasks and Context Interaction}
-Several supporting tasks operate concurrently to maintain overall responsiveness:
+Several supporting tasks ensure system responsiveness:
 \begin{itemize}
   \item The \textbf{GateTask} drives the servo motor to open or close the hangar door.
-  \item The \textbf{BlinkTask} controls the status LEDs, providing visual feedback
-        during active flight phases.
-  \item The \textbf{TakeoffTask} and \textbf{LandingTask} monitor distance sensors and
-        determine when the drone has completely left or entered the hangar.
-  \item The \textbf{ObserverTask} continuously monitors sensors and communication,
-        updating the Context with temperature, distance, and command data.
+  \item The \textbf{BlinkTask} controls LEDs, providing visual feedback during flight
+        operations.
+  \item The \textbf{TakeoffTask} and \textbf{LandingTask} monitor distance sensors to
+        detect when the drone has left or entered the hangar.
+  \item The \textbf{ObserverTask} reads sensors and serial messages, updating the
+        Context with temperature, distance, and command data.
 \end{itemize}
 
-All these components interact exclusively through the Context, which acts as a shared
-repository of information and coordination.  
-For instance, the SystemTask may block new flights by setting a flag that the
-FlightTask interprets as a constraint, while the ObserverTask updates the Context
-when a new landing command is received, prompting the FlightTask to react in the next
-cycle.
+All tasks interact exclusively through the Context, which acts as shared memory and
+coordination channel.  
+For example, the SystemTask may block new flights by setting a flag interpreted by the
+FlightTask, while the ObserverTask records a command that will be processed in the
+next cycle.
 
 \vspace{\baselineskip}
 \section{Global Workflow}
-The complete operation of the Smart Drone Hangar results from the cooperation of all
-tasks under the control of the scheduler.  
-The \textbf{ObserverTask} continuously updates the Context with sensor data and
-commands received from the drone interface, providing the information base for the
-entire system.  
-The \textbf{SystemTask} supervises the hangar’s safety state, authorizing or blocking
-flight operations according to temperature conditions.  
-When flight is allowed and a valid command is received, the \textbf{FlightTask}
-coordinates the corresponding sequence, activating the \textbf{GateTask} and
-\textbf{BlinkTask} to manage physical actions and visual indicators, while delegating
-monitoring to the \textbf{TakeoffTask} or \textbf{LandingTask}.  
-Once the sequence concludes, the system automatically returns to its standby state,
-ready for the next command.
-
-\vspace{\baselineskip}
-Through this cooperative workflow, the Smart Drone Hangar behaves as an integrated
-and deterministic system: each task focuses on its own responsibility while sharing
-information through the Context.  
-This structure guarantees safety, modularity, and continuous operation even in case of
-temporary interruptions or environmental changes.
+The overall operation arises from the cooperation of all tasks under the scheduler.
+The ObserverTask updates the Context with real-time data, the SystemTask enforces
+safety conditions, and the FlightTask coordinates flight sequences by activating the
+Gate and Blink tasks and delegating monitoring to Takeoff or Landing.  
+When the sequence concludes, the system automatically returns to standby, ready for a
+new command.  
+Through this cooperative design, the Smart Drone Hangar achieves safe, modular and
+deterministic behaviour, maintaining continuous operation even after temporary
+interruptions or environmental changes.
 
 \appendix
 \chapter{User Interface}
