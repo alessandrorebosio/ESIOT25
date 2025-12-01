@@ -37,9 +37,7 @@ void Operating::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool 
  * @param enabled Flag indicating if the system is enabled
  */
 void Operating::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
-    if (ctx.isOperationDone()) {
-        task.changeState(new Measuring);
-    }
+    task.changeState(new Measuring);
 }
 
 } // namespace Flight

@@ -17,11 +17,9 @@ class Context final {
     Messages msg : 2;
 
     bool flightAllowed;
-
     bool print;
     bool blinking;
     bool opening;
-
     bool takeoff;
     bool landing;
 
@@ -74,7 +72,6 @@ class Context final {
 
     bool isTakeOffMsg(void);
     bool isLandingMsg(void);
-    bool isOperationDone(void);
 
     virtual ~Context() = default;
 };

@@ -174,7 +174,3 @@ bool Context::isLandingMsg(void) {
     }
     return false;
 }
-
-bool Context::isOperationDone(void) {
-    return !(this->landing || this->takeoff);
-}
