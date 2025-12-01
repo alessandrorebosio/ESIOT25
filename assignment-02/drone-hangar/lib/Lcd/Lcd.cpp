@@ -27,7 +27,7 @@ Lcd::Lcd(const uint8_t address, const uint8_t cols, const uint8_t rows) {
  * @param text The string to be displayed
  */
 void Lcd::print(const uint8_t y, const String text) {
-    this->clear();
+    // this->clear();
     this->setCursor(0, y);
     this->lcd->print(text);
 }

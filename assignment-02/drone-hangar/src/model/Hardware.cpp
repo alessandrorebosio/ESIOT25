@@ -17,7 +17,7 @@ Hardware::Hardware(uint8_t btnPin, uint8_t l1Pin, uint8_t l2Pin, uint8_t l3Pin, 
  * @brief Initialize all hardware components.
  */
 void Hardware::init() {
-    button = new Button(this->btnPin, INPUT_PULLUP);
+    button = new Button(this->btnPin, INPUT);
     led1 = new Led(this->l1Pin);
     led2 = new Led(this->l2Pin);
     led3 = new Led(this->l3Pin);

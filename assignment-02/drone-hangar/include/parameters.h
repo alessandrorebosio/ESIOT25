@@ -14,7 +14,7 @@
  * @brief First temperature threshold for pre-alarm state
  * @details Temperature in degrees Celsius that triggers monitoring for pre-alarm
  */
-#define TEMP1 15
+#define TEMP1 25
 
 /**
  * @brief Time duration for TEMP1 threshold in pre-alarm detection
@@ -26,7 +26,7 @@
  * @brief Second temperature threshold for alarm state
  * @details Temperature in degrees Celsius that triggers alarm conditions
  */
-#define TEMP2 20
+#define TEMP2 30
 
 /**
  * @brief Time duration for TEMP2 threshold in alarm detection
