@@ -67,9 +67,9 @@ public class StatusPanel extends AbstractPanel {
     @Override
     public void update(final Controller controller) {
         this.hangarLabel.setText("HANGAR: " + controller.getSystemState());
-        this.temperatureLabel.setText("HANGAR TEMPERATURE: " + controller.getSystemTemperature() + "°C");
+        this.temperatureLabel.setText("TEMPERATURE: " + controller.getSystemTemperature() + "°C");
         this.droneLabel.setText("DRONE: " + controller.getDeviceState());
-        this.distanceLabel.setText("DRONE DISTANCE: " + controller.getDroneDistance() + " cm");
+        this.distanceLabel.setText("DISTANCE: " + controller.getDroneDistance() + " cm");
     }
 
 }
