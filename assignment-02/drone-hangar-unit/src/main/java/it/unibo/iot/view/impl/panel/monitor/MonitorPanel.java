@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -36,6 +37,9 @@ public class MonitorPanel extends AbstractPanel {
     private final JButton connect = new JButton("Connect");
     private final JButton disconnect = new JButton("Disconnect");
     private final JTextArea textArea = new JTextArea();
+    private final JScrollPane scrollPane = new JScrollPane(this.textArea);
+    /** When true, incoming messages will force the view to scroll to bottom. */
+    private boolean autoScroll = true;
     private final JTextField message = new JTextField();
     private final JButton send = new JButton("send");
     private final JButton clear = new JButton("clear");
@@ -85,7 +89,15 @@ public class MonitorPanel extends AbstractPanel {
         super.add(top, BorderLayout.NORTH);
 
         this.textArea.setEditable(false);
-        super.add(new JScrollPane(this.textArea), BorderLayout.CENTER);
+        super.add(this.scrollPane, BorderLayout.CENTER);
+
+        final JScrollBar vertical = this.scrollPane.getVerticalScrollBar();
+        vertical.addAdjustmentListener(e -> {
+            final int extent = vertical.getModel().getExtent();
+            final int max = vertical.getMaximum();
+            final int value = vertical.getValue();
+            this.autoScroll = value + extent >= max;
+        });
 
         final JPanel bottom = new JPanel(new BorderLayout(GAPS, 0));
 
@@ -94,7 +106,11 @@ public class MonitorPanel extends AbstractPanel {
             this.message.setText("");
         });
 
-        this.clear.addActionListener(l -> this.textArea.setText(""));
+        this.clear.addActionListener(l -> {
+            this.textArea.setText("");
+            this.autoScroll = true;
+            this.scrollPane.getVerticalScrollBar().setValue(0);
+        });
 
         bottom.add(this.message, BorderLayout.CENTER);
 
@@ -127,8 +143,12 @@ public class MonitorPanel extends AbstractPanel {
         this.message.setEnabled(controller.isConnected());
         this.send.setEnabled(controller.isConnected());
 
-        controller.message().ifPresent(this.textArea::append);
-        textArea.setCaretPosition(textArea.getDocument().getLength());
+        controller.message().ifPresent(m -> {
+            this.textArea.append(m);
+            if (this.autoScroll) {
+                textArea.setCaretPosition(textArea.getDocument().getLength());
+            }
+        });
     }
 
 }
