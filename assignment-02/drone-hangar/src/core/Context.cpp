@@ -91,6 +91,7 @@ void Context::closeGate(void) {
 
 void Context::doTakeOff(void) {
     this->takeoff = true;
+    this->msg = NONE;
 }
 
 void Context::takeOffDone(void) {
@@ -100,6 +101,7 @@ void Context::takeOffDone(void) {
 
 void Context::doLanding(void) {
     this->landing = true;
+    this->msg = NONE;
 }
 
 void Context::landingDone(void) {
@@ -160,17 +162,9 @@ bool Context::shouldPrintLanding(void) {
 }
 
 bool Context::isTakeOffMsg(void) {
-    if (this->msg == TAKEOFF) {
-        this->msg = NONE;
-        return true;
-    }
-    return false;
+    return this->msg == TAKEOFF;
 }
 
 bool Context::isLandingMsg(void) {
-    if (this->msg == LANDING) {
-        this->msg = NONE;
-        return true;
-    }
-    return false;
+    return this->msg == LANDING;
 }

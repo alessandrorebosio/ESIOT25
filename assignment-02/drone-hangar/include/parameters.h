@@ -14,7 +14,7 @@
  * @brief First temperature threshold for pre-alarm state
  * @details Temperature in degrees Celsius that triggers monitoring for pre-alarm
  */
-#define TEMP1 25
+#define TEMP1 29
 
 /**
  * @brief Time duration for TEMP1 threshold in pre-alarm detection
@@ -26,7 +26,7 @@
  * @brief Second temperature threshold for alarm state
  * @details Temperature in degrees Celsius that triggers alarm conditions
  */
-#define TEMP2 30
+#define TEMP2 32
 
 /**
  * @brief Time duration for TEMP2 threshold in alarm detection
@@ -40,7 +40,7 @@
  * @brief First distance threshold for object detection
  * @details Distance in centimeters that triggers first level detection
  */
-#define D1 10
+#define D1 15
 
 /**
  * @brief Time duration for D1 distance threshold
@@ -52,7 +52,7 @@
  * @brief Second distance threshold for closer object detection
  * @details Distance in centimeters that triggers second level detection
  */
-#define D2 5
+#define D2 10
 
 /**
  * @brief Time duration for D2 distance threshold

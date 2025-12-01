@@ -6,12 +6,16 @@
 /**
  * @brief LCD display controller class using I2C communication.
  *
- * This class provides a simplified interface for controlling an I2C LCD display.
- * It wraps the LiquidCrystal_I2C library with basic display operations.
+ * This class provides a simplified interface for controlling an I2C LCD
+ * display. It wraps the LiquidCrystal_I2C library with basic display
+ * operations.
  */
 class Lcd final {
   private:
     LiquidCrystal_I2C *lcd;
+
+    uint8_t cols;
+    uint8_t rows;
 
   public:
     /**
@@ -26,9 +30,10 @@ class Lcd final {
     /**
      * @brief Prints text to the LCD display.
      *
-     * This method clears the display, sets cursor to (0,0), and prints the text.
+     * This method clears the display, sets cursor to (0,0), and prints the
+     * text.
      *
-	 * @param y Row position (0-based)
+     * @param y Row position (0-based)
      * @param text The string to be displayed
      */
     void print(const uint8_t y, String text);
@@ -45,6 +50,15 @@ class Lcd final {
      * @brief Clears the entire LCD display.
      */
     void clear();
+
+    /**
+     * @brief Clears a specific line of the LCD display
+     *
+     * Fills the specified row with spaces to clear any existing text
+     *
+     * @param y Row position to clear (0-based)
+     */
+    void clearLine(const uint8_t y);
 
     /**
      * @brief Default destructor.

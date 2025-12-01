@@ -66,7 +66,7 @@ void Checking::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &en
     }
 
     if (ctx.isLandingInProgress()) {
-        if (hw.distance() <= D1) {
+        if (hw.distance() <= D2 && hw.distance() >= 0) {
             if (millis() - this->landingTimer >= T4) {
                 task.changeState(new Idle);
                 ctx.printInside();

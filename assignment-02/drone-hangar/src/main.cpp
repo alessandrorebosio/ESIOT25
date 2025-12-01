@@ -15,7 +15,9 @@
 
 #include "config.h"
 
-static Hardware hw(BTN_PIN, L1_PIN, L2_PIN, L3_PIN, SERVO_PIN, PIR_PIN, SNR_TRIG_PIN, SNR_TRIG_PIN, MAXTIME, TMP_PIN, LCD_ADDR, LCD_COLS, LCD_ROWS);
+static Hardware hw(BTN_PIN, L1_PIN, L2_PIN, L3_PIN, SERVO_PIN, PIR_PIN,
+                   SNR_TRIG_PIN, SNR_ECHO_PIN, MAXTIME, TMP_PIN, LCD_ADDR,
+                   LCD_COLS, LCD_ROWS);
 static Scheduler scheduler;
 static Message message;
 static Context context;
@@ -25,25 +27,35 @@ void setup(void) {
     message.init(BAUD);
     hw.init();
 
-    scheduler.addTask(new System::SystemTask(HardwareFactory::createHWSystem(hw), context, 1000));
-    scheduler.addTask(new Flight::FlightTask(HardwareFactory::createHWFlight(hw), context, context.isFlightAllowed(), 400));
+    scheduler.addTask(new System::SystemTask(
+        HardwareFactory::createHWSystem(hw), context, 1000));
+    scheduler.addTask(
+        new Flight::FlightTask(HardwareFactory::createHWFlight(hw), context,
+                               context.isFlightAllowed(), 400));
 
-    scheduler.addTask(new Blink::BlinkTask(HardwareFactory::createHWBlink(hw), context.shouldBlink(), 500));
-    scheduler.addTask(new Gate::GateTask(HardwareFactory::createHWGate(hw), context.shouldOpen(), 20));
+    scheduler.addTask(new Blink::BlinkTask(HardwareFactory::createHWBlink(hw),
+                                           context.shouldBlink(), 500));
+    scheduler.addTask(new Gate::GateTask(HardwareFactory::createHWGate(hw),
+                                         context.shouldOpen(), 20));
 
     scheduler.addTask(new Observer::ObserverTask(
         true,
         [] {
-            message.send("T: " + String(HardwareFactory::measureTemperature(hw)));
+            message.send("T: " +
+                         String(HardwareFactory::measureTemperature(hw)));
             message.send("D: " + String(HardwareFactory::measureDistance(hw)));
         },
         1000));
 
     scheduler.addTask(new Observer::ObserverTask(
-        message.isMessageAvailable(),
+        true,
         [] {
-            message.equalsIgnoreCase("TAKEOFF") ? context.setTakeOffMsg() : void();
-            message.equalsIgnoreCase("LANDING") ? context.setLandingMsg() : void();
+            if (message.equalsIgnoreCase("TAKEOFF")) {
+                context.setTakeOffMsg();
+            }
+            if (message.equalsIgnoreCase("LANDING")) {
+                context.setLandingMsg();
+            }
         },
         100));
 
@@ -55,6 +67,7 @@ void setup(void) {
                          : context.shouldPrintAlarm()    ? "ALARM"
                                                          : nullptr;
             if (sys) {
+                hw.getLcd().clearLine(0);
                 hw.getLcd().print(0, "SYSTEM: " + sys);
                 message.send(sys);
             }
@@ -65,6 +78,7 @@ void setup(void) {
                            : context.shouldPrintLanding() ? "LANDING"
                                                           : nullptr;
             if (drone) {
+                hw.getLcd().clearLine(1);
                 hw.getLcd().print(1, "DRONE: " + drone);
                 message.send(drone);
             }
