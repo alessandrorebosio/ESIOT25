@@ -7,6 +7,7 @@ import java.io.Serial;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -57,8 +58,21 @@ public class MonitorPanel extends AbstractPanel {
         this.availablePort = controller.getAvailablePort().size();
 
         this.baud.setText("9600");
-        this.connect.addActionListener(
-                l -> controller.connect((String) this.box.getSelectedItem(), Integer.parseInt(this.baud.getText())));
+
+        this.connect.addActionListener(l -> {
+            try {
+                final int baudRate = Integer.parseInt(this.baud.getText());
+                controller.connect((String) this.box.getSelectedItem(), baudRate);
+            } catch (final NumberFormatException ex) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Invalid baud rate value. Please enter an integer (e.g. 9600).",
+                        "Input Error",
+                        JOptionPane.ERROR_MESSAGE);
+                this.baud.setText("");
+            }
+        });
+
         this.disconnect.addActionListener(l -> controller.disconnect());
 
         top.add(new JLabel("Port:"));

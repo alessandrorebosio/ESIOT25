@@ -9,7 +9,6 @@ import javax.swing.JButton;
 import it.unibo.iot.controller.api.Controller;
 import it.unibo.iot.model.impl.device.states.operating.OperatingDeviceState;
 import it.unibo.iot.model.impl.device.states.rest.RestDeviceState;
-import it.unibo.iot.model.impl.device.states.unknown.UnknownDeviceState;
 import it.unibo.iot.model.impl.states.normal.NormalSystemState;
 import it.unibo.iot.view.impl.panel.AbstractPanel;
 
@@ -59,10 +58,8 @@ public final class ControlPanel extends AbstractPanel {
         final boolean connectedAndNormal = controller.isConnected()
                 && controller.getSystemState() instanceof NormalSystemState;
 
-        this.takeoff.setEnabled(connectedAndNormal && (controller.getDeviceState() instanceof UnknownDeviceState
-                || controller.getDeviceState() instanceof RestDeviceState));
-        this.landing.setEnabled(connectedAndNormal && (controller.getDeviceState() instanceof UnknownDeviceState
-                || controller.getDeviceState() instanceof OperatingDeviceState));
+        this.takeoff.setEnabled(connectedAndNormal && controller.getDeviceState() instanceof RestDeviceState);
+        this.landing.setEnabled(connectedAndNormal && controller.getDeviceState() instanceof OperatingDeviceState);
     }
 
 }
