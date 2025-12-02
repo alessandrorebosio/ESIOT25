@@ -37,7 +37,7 @@ class Hardware final {
     uint8_t pirPin;
     uint8_t sonarTrigPin;
     uint8_t sonarEchoPin;
-    int maxTime;
+    unsigned long maxTime;
     uint8_t tmpPin;
     uint8_t lcdAddr;
     uint8_t lcdCols;
@@ -48,7 +48,7 @@ class Hardware final {
      * @brief Construct a Hardware object and store pin configuration
      */
     Hardware(uint8_t btnPin, uint8_t l1Pin, uint8_t l2Pin, uint8_t l3Pin, uint8_t servoPin, uint8_t pirPin, uint8_t sonarTrigPin,
-             uint8_t sonarEchoPin, int maxTime, uint8_t tmpPin, uint8_t lcdAddr, uint8_t lcdCols, uint8_t lcdRows);
+             uint8_t sonarEchoPin, unsigned long maxTime, uint8_t tmpPin, uint8_t lcdAddr, uint8_t lcdCols, uint8_t lcdRows);
 
     /**
      * @brief Initialize all hardware components.

@@ -10,11 +10,6 @@
 class HWGate {
   public:
     /**
-     * @brief Construct a new HWGate object.
-     */
-    HWGate() = default;
-
-    /**
      * @brief Turn the gate motor on.
      */
     virtual void motorOn(void) = 0;

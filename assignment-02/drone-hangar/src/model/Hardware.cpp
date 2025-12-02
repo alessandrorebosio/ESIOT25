@@ -7,7 +7,7 @@
  * from config.h. Must be called before using any hardware components.
  */
 Hardware::Hardware(uint8_t btnPin, uint8_t l1Pin, uint8_t l2Pin, uint8_t l3Pin, uint8_t servoPin, uint8_t pirPin, uint8_t sonarTrigPin,
-                   uint8_t sonarEchoPin, int maxTime, uint8_t tmpPin, uint8_t lcdAddr, uint8_t lcdCols, uint8_t lcdRows)
+                   uint8_t sonarEchoPin, unsigned long maxTime, uint8_t tmpPin, uint8_t lcdAddr, uint8_t lcdCols, uint8_t lcdRows)
     : button(nullptr), led1(nullptr), led2(nullptr), led3(nullptr), motor(nullptr), pir(nullptr), sonar(nullptr), tempSensor(nullptr), lcd(nullptr),
       btnPin(btnPin), l1Pin(l1Pin), l2Pin(l2Pin), l3Pin(l3Pin), servoPin(servoPin), pirPin(pirPin), sonarTrigPin(sonarTrigPin),
       sonarEchoPin(sonarEchoPin), maxTime(maxTime), tmpPin(tmpPin), lcdAddr(lcdAddr), lcdCols(lcdCols), lcdRows(lcdRows) {

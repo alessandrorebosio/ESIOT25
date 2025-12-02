@@ -40,7 +40,7 @@ void Idle::onExit(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enab
 void Idle::tick(FlightTask &task, HWFlight &hw, Context &ctx, const bool &enabled) {
     if (enabled) {
         if (ctx.isTakeOffMsg()) {
-            if (hw.distance() < D1) {
+            if (hw.distance() <= D1) {
                 task.changeState(new Checking);
                 ctx.printTakeOff();
                 ctx.doTakeOff();

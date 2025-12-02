@@ -9,11 +9,6 @@
 class HWSystem {
   public:
     /**
-     * @brief Construct a new HWSystem object.
-     */
-    HWSystem() = default;
-
-    /**
      * @brief Check if the system button is pressed.
      *
      * @return true If the button is currently pressed.

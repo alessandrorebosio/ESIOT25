@@ -9,11 +9,6 @@
 class HWBlink {
   public:
     /**
-     * @brief Construct a new HWBlink object.
-     */
-    HWBlink() = default;
-
-    /**
      * @brief Turn the hardware component on.
      */
     virtual void turnOn(void) = 0;

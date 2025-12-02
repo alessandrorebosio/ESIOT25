@@ -2,7 +2,7 @@
 
 #include "tasks/Task.h"
 
-#define MAX_TASKS 50
+#define MAX_TASKS 10
 
 /**
  * @brief Task scheduler class for managing periodic tasks.

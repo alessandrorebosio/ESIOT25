@@ -10,11 +10,6 @@
 class HWFlight {
   public:
     /**
-     * @brief Construct a new HWFlight object.
-     */
-    HWFlight() = default;
-
-    /**
      * @brief Check if motion or an object is detected.
      * 
      * @return true If motion or an object is detected.
