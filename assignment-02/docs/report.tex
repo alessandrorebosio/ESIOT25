@@ -243,29 +243,35 @@ It operates through three main states: \texttt{IDLE}, \texttt{WAITING}, and
 \texttt{CHECKING}.
 
 At system startup, the task initializes directly in the \texttt{CHECKING} state,
-where it evaluates the sensor readings to determine whether a flight operation is in
+where it evaluates sensor readings to determine whether a flight operation is in
 progress or complete.  
-This mechanism ensures that the system remains consistent with the physical state of
-the hangar even after a power loss or reset.
+This mechanism ensures that the software remains synchronized with the physical state
+of the hangar even after a reset or power interruption.
 
-During normal operation, when a command is received from the Drone Remote Unit (DRU),
-the task transitions to \texttt{WAITING}.  
-In this state, timers are initialized and the actuators are prepared.  
-If valid conditions are detected within the timeout period (\(T_5\)) — for example, a
-take-off message combined with a safe distance or a landing request detected by the
-PIR sensor — the system moves to the \texttt{CHECKING} state.
+During normal operation, when a take-off message is received from the Drone Remote
+Unit (DRU) and the drone is detected inside the hangar (\(distance < D_1\)),
+the task transitions from \texttt{IDLE} to \texttt{CHECKING}.  
+In this state, the gate is opened, LED~L2 starts blinking, and the system monitors the
+distance to confirm that the drone has taken off.
 
-In \texttt{CHECKING}, the FlightTask monitors the distance sensor to verify the
-progress of the operation.  
-A take-off is confirmed when the measured distance remains above the threshold
-\(D_1\) for longer than \(T_3\), while landing is confirmed when the distance remains
-below \(D_2\) for longer than \(T_4\).  
+If a landing message is received instead, the task enters the \texttt{WAITING} state.
+Here, a timer is started, and the system waits for the presence sensor (PIR) to detect
+the approaching drone.  
+If the drone is detected before the timeout period \(T_5\), the task transitions to
+\texttt{CHECKING} to monitor the final phase of the landing.  
+If the timer expires without detection, the system returns to \texttt{IDLE}.
+
+In the \texttt{CHECKING} state, the FlightTask supervises both take-off and landing
+progress using the distance sensor.  
+A take-off is confirmed when the measured distance remains greater than \(D_1\) for
+longer than \(T_3\), while a landing is confirmed when the distance stays below
+\(D_2\) for at least \(T_4\).  
 Upon completion, the gate closes automatically, LED~L2 stops blinking, and the system
 returns to the \texttt{IDLE} state.
 
-This centralized structure allows the FlightTask to coordinate both flight phases in
-a single unified process, simplifying the control logic and maintaining full
-synchronization between software behaviour and the physical state of the hangar.
+This design unifies both flight operations within a single task, allowing automatic
+state recovery at startup and consistent synchronization between software logic,
+sensor data, and the physical hangar configuration.
 
 \begin{figure}[H]
   \centering
@@ -384,28 +390,31 @@ environmental conditions.
 \section{Coordination of Operations}
 The \textbf{FlightTask} coordinates both take-off and landing operations, acting as
 the intermediate layer between the system logic and the actuator control.  
-It operates through three main states: \texttt{IDLE}, \texttt{WAITING}, and
-\texttt{CHECKING}.  
-At system startup, the task intentionally begins in the \texttt{CHECKING} state,
-where it evaluates sensor readings to verify the current condition of the hangar and
-restore consistency between the software and physical environment.
+It operates through three main states: \texttt{IDLE}, \texttt{WAITING}, and \texttt{CHECKING}.  
+At system startup, the task intentionally begins in the \texttt{CHECKING} state, where
+it reads sensor data to determine whether the drone is inside or outside the hangar
+and restores consistency between the software logic and the physical configuration.
 
-When a flight command is received from the Drone Remote Unit (DRU), the FlightTask
-transitions to the \texttt{WAITING} state, initializing timers and preparing the
-actuators.  
-If valid conditions are detected within the timeout (\(T_5\))—for instance, a take-off
-message combined with sufficient clearance or a landing detected by the PIR sensor—the
-task moves to \texttt{CHECKING}.  
-Here it monitors distance measurements to confirm the progress of the operation.  
+During normal operation, the \texttt{IDLE} state represents a standby condition in
+which the system waits for commands from the Drone Remote Unit (DRU).  
+When a take-off command is received and the measured distance is below the threshold
+\(D_1\), the task transitions directly to \texttt{CHECKING}, activates LED~L2 blinking,
+displays the ``\texttt{TAKE OFF}'' message, and opens the gate.  
+If a landing command is received instead, the task moves to the \texttt{WAITING}
+state, where a timer is started to wait for the presence sensor (PIR) to detect the
+approaching drone.  
+If the drone is detected before the timeout period \(T_5\), the task transitions to
+\texttt{CHECKING}, starts LED blinking, displays ``\texttt{LANDING}'', and opens the
+gate.  
+If the timeout expires without detection, the system returns to \texttt{IDLE}.
+
+In the \texttt{CHECKING} state, the FlightTask monitors distance measurements to verify
+the progress of the current operation.  
 A take-off is completed when the measured distance remains greater than \(D_1\) for
 longer than \(T_3\), while a landing is confirmed when the distance stays below \(D_2\)
 for at least \(T_4\).  
-Once the operation ends, the gate closes, LED~L2 stops blinking, and the system
-returns to the \texttt{IDLE} state.
-
-This structure allows the FlightTask to manage both flight phases autonomously,
-maintaining a consistent and fault-tolerant coordination between the drone’s motion
-and the hangar’s actuators.
+Once the operation is complete, the gate closes automatically, LED~L2 stops blinking,
+and the task returns to the \texttt{IDLE} state.
 
 \section{Supporting Tasks and Context Interaction}
 Several supporting tasks ensure system responsiveness and modularity.  
@@ -422,7 +431,7 @@ FlightTask, while the ObserverTask records flight commands that will be processe
 the next scheduler cycle.
 
 \section{Global Workflow}
-The overall operation arises from the cooperation of all tasks under the scheduler’s
+The overall behaviour results from the cooperation of all tasks under the scheduler’s
 control.  
 The ObserverTask updates the Context with real-time sensor data, the SystemTask
 enforces safety conditions, and the FlightTask coordinates flight sequences by
