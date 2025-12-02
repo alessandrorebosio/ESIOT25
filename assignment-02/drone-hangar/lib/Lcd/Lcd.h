@@ -12,7 +12,7 @@
  */
 class Lcd final {
   private:
-    LiquidCrystal_I2C *lcd;
+    LiquidCrystal_I2C lcd;
 
     uint8_t cols;
     uint8_t rows;
@@ -36,7 +36,7 @@ class Lcd final {
      * @param y Row position (0-based)
      * @param text The string to be displayed
      */
-    void print(const uint8_t y, String text);
+    void print(const uint8_t y, const String &text);
 
     /**
      * @brief Sets the cursor position on the LCD display.

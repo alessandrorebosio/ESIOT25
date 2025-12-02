@@ -119,7 +119,6 @@ void setup(void) {
                          : context.shouldPrintAlarm()    ? "ALARM"
                                                          : nullptr;
             if (sys) {
-                hw.getLcd().clearLine(0);
                 hw.getLcd().print(0, "SYSTEM: " + sys);
                 message.send(sys);
             }
@@ -130,7 +129,6 @@ void setup(void) {
                            : context.shouldPrintLanding() ? "LANDING"
                                                           : nullptr;
             if (drone) {
-                hw.getLcd().clearLine(1);
                 hw.getLcd().print(1, "DRONE: " + drone);
                 message.send(drone);
             }

@@ -10,13 +10,9 @@
  * @param cols Number of columns in the display
  * @param rows Number of rows in the display
  */
-Lcd::Lcd(const uint8_t address, const uint8_t cols, const uint8_t rows) {
-    this->lcd = new LiquidCrystal_I2C(address, cols, rows);
-    this->lcd->init();
-    this->lcd->backlight();
-
-    this->cols = cols;
-    this->rows = rows;
+Lcd::Lcd(const uint8_t address, const uint8_t cols, const uint8_t rows) : lcd(address, cols, rows), cols(cols), rows(rows) {
+    this->lcd.init();
+    this->lcd.backlight();
 
     this->clear();
 }
@@ -30,9 +26,10 @@ Lcd::Lcd(const uint8_t address, const uint8_t cols, const uint8_t rows) {
  * @param y Row position (0-based)
  * @param text The string to be displayed
  */
-void Lcd::print(const uint8_t y, const String text) {
+void Lcd::print(const uint8_t y, const String &text) {
+    this->clearLine(y);
     this->setCursor(0, y);
-    this->lcd->print(text);
+    this->lcd.print(text);
 }
 
 /**
@@ -42,7 +39,7 @@ void Lcd::print(const uint8_t y, const String text) {
  * @param y Row position (0-based)
  */
 void Lcd::setCursor(const uint8_t x, const uint8_t y) {
-    this->lcd->setCursor(x, y);
+    this->lcd.setCursor(x, y);
 }
 
 /**
@@ -54,7 +51,7 @@ void Lcd::setCursor(const uint8_t x, const uint8_t y) {
  * be freed.
  */
 void Lcd::clear() {
-    this->lcd->clear();
+    this->lcd.clear();
 }
 
 /**
@@ -65,8 +62,9 @@ void Lcd::clear() {
  * @param y Row position to clear (0-based)
  */
 void Lcd::clearLine(const uint8_t y) {
+    this->setCursor(0, y);
     for (uint8_t i = 0; i < this->cols; i++) {
-        this->setCursor(i, y);
-        this->lcd->print(" ");
+        this->lcd.print(' ');
     }
+    this->setCursor(0, y);
 }
