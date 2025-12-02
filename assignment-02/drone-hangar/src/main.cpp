@@ -26,7 +26,7 @@
  * task scheduling, state management, and serial communication capabilities.
  */
 
-static Hardware hw(BTN_PIN, L1_PIN, L2_PIN, L3_PIN, SERVO_PIN, PIR_PIN, SNR_TRIG_PIN, SNR_TRIG_PIN, MAXTIME, TMP_PIN, LCD_ADDR, LCD_COLS, LCD_ROWS);
+static Hardware hw(BTN_PIN, L1_PIN, L2_PIN, L3_PIN, SERVO_PIN, PIR_PIN, SNR_TRIG_PIN, SNR_ECHO_PIN, MAXTIME, TMP_PIN, LCD_ADDR, LCD_COLS, LCD_ROWS);
 static Scheduler scheduler;
 static Message message;
 static Context context;
