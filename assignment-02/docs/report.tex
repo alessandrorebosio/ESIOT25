@@ -249,7 +249,7 @@ This mechanism ensures that the software remains synchronized with the physical 
 of the hangar even after a reset or power interruption.
 
 During normal operation, when a take-off message is received from the Drone Remote
-Unit (DRU) and the drone is detected inside the hangar (\(distance < D_1\)),
+Unit (DRU) and the drone is detected inside the hangar (\(distance <= D_1\)),
 the task transitions from \texttt{IDLE} to \texttt{CHECKING}.  
 In this state, the gate is opened, LED~L2 starts blinking, and the system monitors the
 distance to confirm that the drone has taken off.
