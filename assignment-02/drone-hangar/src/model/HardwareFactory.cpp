@@ -108,7 +108,7 @@ HWSystem *createHWSystem(Hardware &hw) {
         }
 
         void turnOnLed2(void) override {
-            this->hw.getLed3().off();
+            this->hw.getLed3().on();
         }
 
         void turnOffLed2(void) override {
