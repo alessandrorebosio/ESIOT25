@@ -3,30 +3,42 @@
 #include <Arduino.h>
 
 /**
- * @brief Button class for handling digital button input.
+ * @class Button
+ * @brief Handles digital button input with state tracking.
  *
- * This class provides a simple interface for reading the state of a digital button.
- * It handles pin initialization and state reading.
+ * The Button class manages the state of a physical button connected to a digital pin.
+ * It supports both pressed and clicked detection and requires periodic synchronization
+ * to update its internal state.
  */
 class Button final {
   private:
     uint8_t pin;
+    bool pressed;
+    bool clicked;
 
   public:
     /**
      * @brief Constructs a Button object and initializes the pin.
      *
-     * @param pin The digital pin number where the button is connected
-     * @param mode The pin mode (INPUT, INPUT_PULLUP, etc.)
+     * @param pin The digital pin number to which the button is connected.
+     * @param mode The pin mode (e.g., INPUT, INPUT_PULLUP).
      */
     explicit Button(uint8_t pin, uint8_t mode);
 
     /**
-     * @brief Checks if the button is currently pressed.
+     * @brief Returns whether the button is currently pressed.
      *
-     * @return true if the button is pressed, false otherwise
+     * @return true if the button is pressed, false otherwise.
      */
     bool isPressed(void);
+
+    /**
+     * @brief Synchronizes the internal button state with the physical pin.
+     *
+     * This method should be called periodically (e.g., in loop()) to update
+     * the pressed and clicked states based on the current digital reading.
+     */
+    void sync(void);
 
     /**
      * @brief Default destructor.
