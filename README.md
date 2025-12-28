@@ -61,3 +61,13 @@ This repository contains three assignments focused on Arduino, designed to help 
 
 </details>
 
+<details>
+  <summary>
+    Assignment #3
+  </summary>
+
+  ## Smart Tank Monitoring
+
+  The system monitors and automatically controls the level of a tank and provides tools for supervision, local control, and human intervention in case of anomalies. It periodically measures the level (TMS) and transmits reliable measurement data and heartbeat signals. It evaluates time-based level policies (CUS) and actuates the valve automatically at 50% or 100%, avoiding reactions to transients. Valve commands are executed by the valve control subsystem (WCS) supporting local MANUAL and AUTONOMOUS modes, converting percentage commands into actuator angles and providing acknowledgements and status. A dashboard (DBS) provides a graph of recent measurements, system status, and operator commands via a REST API. Robustness is ensured through timeouts, retry/reconnect mechanisms for MQTT and serial links, propagation of UNCONNECTED/NOT AVAILABLE states, logging, and recovery procedures. The system supports reproducible testing and validation with documented parameters and scenarios for data loss or serial disconnection.
+
+</details>
