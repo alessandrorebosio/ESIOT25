@@ -60,11 +60,190 @@
 
 \chapter{Analysis}
 
-This chapter analyses the functional behaviour and hardware structure of the Smart Tank Monitoring System, outlining its operating sequences, safety logic, and implementation requirements.  
-The objective is to define how the system reacts to flight commands and environmental conditions, and how each hardware element contributes to its autonomous operation.
+This chapter analyses the functional behaviour and hardware structure
+of the Smart Tank Monitoring System.
 
 \section{Description and Requirements}
+
+The Smart Tank Monitoring System is designed to monitor rainwater
+levels in a tank and automatically control the opening of a water
+channel based on those levels. The system operates in two modes:
+\texttt{AUTOMATIC} and \texttt{MANUAL}, with \texttt{AUTOMATIC} as
+the default startup mode.
+
+\vspace{\baselineskip}
+\noindent\textbf{Tank Monitoring Subsystem (TMS).}
+The TMS is an ESP32-based embedded system responsible for
+continuously monitoring the rainwater level using sonar sensors.
+Measurements are sampled at a configurable frequency $F$ and
+transmitted to the Control Unit Subsystem (CUS) via MQTT. When the
+system is operating correctly, the green LED is on and the red LED is
+off. If network connectivity is lost, the red LED turns on and the
+green LED turns off, signaling a communication failure.
+
+\vspace{\baselineskip}
+\noindent\textbf{Water Channel Subsystem (WCS).}
+The WCS is an Arduino-based embedded system that controls a water
+channel valve through a servo motor. The opening range spans from 0\%
+(channel closed, 0 degrees) to 100\% (channel fully open, 90
+degrees). The WCS includes a tactile button to switch between
+\texttt{AUTOMATIC} and \texttt{MANUAL} modes. In \texttt{MANUAL}
+mode, operators use a potentiometer to directly control the valve
+opening level. An LCD display shows the current valve opening
+percentage and the system mode (\texttt{AUTOMATIC}, \texttt{MANUAL},
+or \texttt{UNCONNECTED}).
+
+\vspace{\baselineskip}
+\noindent\textbf{Control Unit Subsystem (CUS).}
+The CUS is the main back-end system running on a PC that orchestrates
+the Smart Tank Monitoring System. It receives rainwater level data
+from the TMS via MQTT and implements the control logic. When the
+level exceeds $L_1$ for longer than $T_1$, the valve opens to 50\%;
+if it reaches $L_2$, the valve opens to 100\%. The CUS communicates
+with the WCS via serial connection and provides HTTP endpoints for
+the Dashboard Subsystem. If no data is received from the TMS for more
+than $T_2$ time units, the system enters \texttt{UNCONNECTED} mode.
+
+\newpage
+\vspace{\baselineskip}
+\noindent\textbf{Dashboard Subsystem (DBS).}
+The DBS is a web-based front-end accessible from any device connected
+via HTTP. It displays real-time graphs of the rainwater level over
+the last $N$ measurements, the current valve opening percentage, and
+the system state (\texttt{MANUAL}, \texttt{AUTOMATIC},
+\texttt{UNCONNECTED}, or \texttt{NOT AVAILABLE}). The dashboard
+includes GUI controls to switch between \texttt{MANUAL} and
+\texttt{AUTOMATIC} modes and a widget to manually adjust the valve
+opening level when in \texttt{MANUAL} mode.
+
+\vspace{\baselineskip}
+\noindent\textbf{System Architecture.}
+The four subsystems interact as follows:
+\begin{itemize}
+  \item TMS sends rainwater level data to CUS via MQTT.
+  \item CUS processes level data, enforces the control policy, and
+    commands the WCS via serial communication.
+  \item WCS receives commands from CUS and locally manages valve
+    control and operator interaction via the potentiometer and button.
+  \item DBS queries the CUS via HTTP to display real-time system
+    status and provides remote operators with monitoring and control
+    capabilities.
+\end{itemize}
+
 \section{Summary}
+
+The Smart Tank Monitoring System is a distributed embedded system
+that combines automatic and manual control over water channel
+management. At startup, the system initializes in \texttt{AUTOMATIC}
+mode, with the TMS continuously sampling the rainwater level and
+transmitting it to the CUS. The CUS evaluates the level against two
+thresholds: if it exceeds $L_1$ for longer than $T_1$, the valve
+opens to 50\% to begin draining; if it reaches $L_2$, the valve
+immediately opens to 100\%. This dual-threshold approach ensures
+proportional response to gradually rising levels while providing
+emergency drainage for critical conditions.
+
+Operators can switch to \texttt{MANUAL} mode by pressing the WCS
+button, allowing direct control o f the valve through a
+potentiometer. The LCD display on the WCS provides real-time feedback
+of the current opening percentage and mode.The DBS offers remote
+monitoring and control, displaying historical graphs of rainwater
+levels and system status.
+
+In case of network failures, the system gracefully degrades to
+\texttt{UNCONNECTED} mode, with the TMS signaling the problem via its
+red LED and the LCD showing the unavailable state. This design
+ensures continuous operation of the WCS in \texttt{MANUAL} mode, even
+when the CUS becomes unreachable, maintaining basic functionality
+during network outages. Once connectivity is restored, the system
+automatically returns to normal operation.
+
+The system achieves modularity through MQTT publish-subscribe
+communication, HTTP REST APIs, and serial protocols, allowing each
+subsystem to operate independently while coordinating through the
+CUS. This architecture supports scalability, fault tolerance, and
+ease of maintenance.
+
+\newpage
+\section{Wiring}
+
+Table~\ref{tab:tms-hardware} lists the essential hardware components
+required to build and test the Tank Monitoring Subsystem (TMS).
+Quantities, component types, and their function are summarized for
+procurement and wiring reference.
+
+\begin{table}[H]
+  \centering
+  \small
+  \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}r l p{0.6\textwidth}@{}}
+      \hline
+      Qty & Component & Notes \\ \hline
+      1 & ESP32 SoC board & Handles sensors, LEDs, and MQTT communication \\
+      1 & Sonar sensor & Measures rainwater level in the tank \\
+      1 & Green LED & Indicates normal operation and network connectivity \\
+      1 & Red LED & Signals network problems or communication failures \\
+      2 & Resistors 220\,$\Omega$ & Current-limiting resistors for
+      LEDs \\ \hline
+    \end{tabular}%
+  }
+  \caption{Essential hardware list for Tank Monitoring Subsystem
+  (TMS)}
+  \label{tab:tms-hardware}
+\end{table}
+
+\noindent Figure~\ref{fig:tms-wiring} shows the wiring diagram of the
+TMS, highlighting the main connections between the ESP32, sonar
+sensor, and status LEDs.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./img/tms-wiring.png}
+  \caption{Wiring diagram of the Tank Monitoring Subsystem (TMS).}
+  \label{fig:tms-wiring}
+\end{figure}
+
+\noindent\textit{Note: The wiring diagram shows an Arduino UNO for
+illustration purposes, but the actual implementation uses an ESP32 SoC board.}
+
+\newpage
+\noindent Table~\ref{tab:wcs-hardware} lists the essential hardware
+components required to build and test the Water Channel Subsystem
+(WCS).
+
+\begin{table}[H]
+  \centering
+  \small
+  \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}r l p{0.6\textwidth}@{}}
+      \hline
+      Qty & Component & Notes \\ \hline
+      1 & Arduino UNO board & Handles valve control, sensors, and
+      serial communication \\
+      1 & Servo motor & Controls the water channel valve opening
+      (0--90 degrees) \\
+      1 & Potentiometer & Allows manual control of valve opening in
+      MANUAL mode \\
+      1 & Tactile button & Switches between AUTOMATIC and MANUAL modes \\
+      1 & LCD display & Displays valve opening percentage and system mode \\
+      1 & Resistor 10\,k$\Omega$ & Pull-up / pull-down resistor for
+      the button \\ \hline
+    \end{tabular}%
+  }
+  \caption{Essential hardware list for Water Channel Subsystem (WCS)}
+  \label{tab:wcs-hardware}
+\end{table}
+
+\noindent Figure~\ref{fig:wcs-wiring} shows the wiring diagram of the
+WCS, highlighting the main connections between the Arduino, servo
+motor, potentiometer, button, and LCD display.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./img/wcs-wiring.png}
+  \caption{Wiring diagram of the Water Channel Subsystem (WCS).}
+  \label{fig:wcs-wiring}
+\end{figure}
 
 \chapter{Architecture}
 
@@ -82,11 +261,26 @@ The objective is to define how the system reacts to flight commands and environm
 
 \appendix
 \chapter{User Interface}
+\section{Overview}
+
+The user interface consists of a web-based dashboard that provides
+real-time monitoring and control of the Smart Tank Monitoring System.
+Through this interface, you can visualize system data, switch between
+automatic and manual operation modes, and manually control the valve
+when needed.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./img/app.png}
+  \caption{App view}
+  \label{fig:app}
+\end{figure}
 
 \chapter{User Guide}
 
 \section{Setting up the Python environment}
-Navigate to the control unit subsystem directory and create a Python virtual environment:
+Navigate to the control unit subsystem directory and create a Python
+virtual environment:
 \begin{Verbatim}[tabsize=4,xleftmargin=2em]
 > cd control-unit-subsystem
 > python3 -m venv venv
@@ -94,11 +288,11 @@ Navigate to the control unit subsystem directory and create a Python virtual env
 
 \noindent Activate the virtual environment:
 \begin{itemize}
-\item On macOS/Linux:
+  \item On macOS/Linux:
 \begin{Verbatim}[tabsize=4,xleftmargin=2em]
 > source venv/bin/activate
 \end{Verbatim}
-\item On Windows:
+  \item On Windows:
 \begin{Verbatim}[tabsize=4,xleftmargin=2em]
 > venv\Scripts\activate
 \end{Verbatim}
@@ -127,10 +321,12 @@ Navigate to the water channel subsystem and upload the firmware:
 \end{Verbatim}
 
 \section{Running the project}
-After setting up the Python environment and flashing the embedded devices, you can start the Smart Tank Monitoring System.
+After setting up the Python environment and flashing the embedded
+devices, you can start the Smart Tank Monitoring System.
 
 \subsection{Starting the Control Unit}
-From the control-unit-subsystem directory (with the virtual environment activated), run:
+From the control-unit-subsystem directory (with the virtual
+environment activated), run:
 \begin{Verbatim}[tabsize=4,xleftmargin=2em]
 > python control-unit-subsystem/main.py
 \end{Verbatim}
@@ -141,6 +337,7 @@ Open the dashboard in your web browser:
 > open ../dashboard-subsystem/index.html
 \end{Verbatim}
 
-\noindent Or navigate to the file location and open \texttt{index.html} in your preferred web browser.
+\noindent Or navigate to the file location and open
+\texttt{index.html} in your preferred web browser.
 
 \end{document}
