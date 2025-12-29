@@ -85,6 +85,62 @@ The objective is to define how the system reacts to flight commands and environm
 
 \chapter{User Guide}
 
-\section{Cloning the repository}
+\section{Setting up the Python environment}
+Navigate to the control unit subsystem directory and create a Python virtual environment:
+\begin{Verbatim}[tabsize=4,xleftmargin=2em]
+> cd control-unit-subsystem
+> python3 -m venv venv
+\end{Verbatim}
+
+\noindent Activate the virtual environment:
+\begin{itemize}
+\item On macOS/Linux:
+\begin{Verbatim}[tabsize=4,xleftmargin=2em]
+> source venv/bin/activate
+\end{Verbatim}
+\item On Windows:
+\begin{Verbatim}[tabsize=4,xleftmargin=2em]
+> venv\Scripts\activate
+\end{Verbatim}
+\end{itemize}
+
+\noindent Install the required dependencies:
+\begin{Verbatim}[tabsize=4,xleftmargin=2em]
+> pip install -r requirements.txt
+\end{Verbatim}
+
+\section{Flashing the embedded devices}
+The system requires flashing firmware to both the ESP32 and Arduino boards.
+
+\subsection{Tank Monitoring Subsystem (ESP32)}
+Navigate to the tank monitoring subsystem and upload the firmware:
+\begin{Verbatim}[tabsize=4,xleftmargin=2em]
+> cd ../tank-monitoring-subsystem
+> platformio run --target upload
+\end{Verbatim}
+
+\subsection{Water Channel Subsystem (Arduino)}
+Navigate to the water channel subsystem and upload the firmware:
+\begin{Verbatim}[tabsize=4,xleftmargin=2em]
+> cd ../water-channel-subsystem
+> platformio run --target upload
+\end{Verbatim}
+
+\section{Running the project}
+After setting up the Python environment and flashing the embedded devices, you can start the Smart Tank Monitoring System.
+
+\subsection{Starting the Control Unit}
+From the control-unit-subsystem directory (with the virtual environment activated), run:
+\begin{Verbatim}[tabsize=4,xleftmargin=2em]
+> python control-unit-subsystem/main.py
+\end{Verbatim}
+
+\subsection{Starting the Dashboard}
+Open the dashboard in your web browser:
+\begin{Verbatim}[tabsize=4,xleftmargin=2em]
+> open ../dashboard-subsystem/index.html
+\end{Verbatim}
+
+\noindent Or navigate to the file location and open \texttt{index.html} in your preferred web browser.
 
 \end{document}
