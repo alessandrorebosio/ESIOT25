@@ -32,5 +32,5 @@ class SystemTask final : public Task {
      *
      * Cleans up hardware and state objects to prevent memory leaks.
      */
-    ~SystemTask();
+    ~SystemTask() = default;
 };

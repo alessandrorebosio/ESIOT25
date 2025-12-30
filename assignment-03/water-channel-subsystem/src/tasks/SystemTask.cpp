@@ -8,6 +8,7 @@
  */
 SystemTask::SystemTask(Button &btn, Context &ctx, int period) : button(btn), context(ctx) {
     Task::init(period);
+    this->context.printAutomatic();
 }
 
 /**
@@ -27,12 +28,4 @@ void SystemTask::tick(void) {
             this->context.setAutomatic();
         }
     }
-}
-
-/**
- * @brief Destroy the System Task object
- *
- * Cleans up allocated hardware and state objects to prevent memory leaks.
- */
-SystemTask::~SystemTask() {
 }

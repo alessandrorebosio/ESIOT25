@@ -22,7 +22,7 @@ class Context final {
     void printAutomatic(void);
     void printManual(void);
 
-    void clearPrint(void);
+    void printDone(void);
 
     /**
      * @brief Get print request status.
@@ -34,6 +34,18 @@ class Context final {
     void setManual(void);
 
     bool isAutomatic(void);
+
+    /**
+     * @brief Check if AUTOMATIC status should be printed.
+     * @return true if systemPrint is AUTOMATIC.
+     */
+    bool shouldPrintAutomatic(void);
+
+    /**
+     * @brief Check if MANUAL status should be printed.
+     * @return true if systemPrint is MANUAL.
+     */
+    bool shouldPrintManual(void);
 
     void reset(void);
 };

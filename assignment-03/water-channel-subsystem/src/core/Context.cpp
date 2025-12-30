@@ -9,6 +9,7 @@ Context::Context() {
 
 void Context::reset(void) {
     this->setAutomatic();
+    this->printDone();
 }
 
 void Context::setToPrint(System::Print value) {
@@ -24,7 +25,7 @@ void Context::printManual(void) {
     this->setToPrint(System::Print::MANUAL);
 }
 
-void Context::clearPrint(void) {
+void Context::printDone(void) {
     this->systemPrint = System::Print::NONE;
     this->print = false;
 }
@@ -47,4 +48,20 @@ void Context::setManual(void) {
 
 bool Context::isAutomatic(void) {
     return this->automatic;
+}
+
+/**
+ * @brief Check if AUTOMATIC status should be printed.
+ * @return true if systemPrint is AUTOMATIC.
+ */
+bool Context::shouldPrintAutomatic(void) {
+    return this->systemPrint == System::Print::AUTOMATIC;
+}
+
+/**
+ * @brief Check if MANUAL status should be printed.
+ * @return true if systemPrint is MANUAL.
+ */
+bool Context::shouldPrintManual(void) {
+    return this->systemPrint == System::Print::MANUAL;
 }
