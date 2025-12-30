@@ -1,31 +1,20 @@
 #include <Arduino.h>
 
-#include "WiFi.h"
+#include "core/WaiFai.h"
+
 #include "config.h"
 
 const char *ssid = "";
 const char *password = "";
 
-void setup_wifi() {
-    Serial.println(String("Connecting to ") + ssid);
-
-    WiFi.mode(WIFI_STA);
-    WiFi.begin(ssid, password);
-
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-    }
-
-    Serial.println("");
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
-}
+static WaiFai wifi(ssid, password);
 
 void setup() {
-    setup_wifi();
+    Serial.begin(115200);
+    wifi.connect();
 }
 
 void loop() {
+    wifi.reconnect();
+    delay(5000);
 }
