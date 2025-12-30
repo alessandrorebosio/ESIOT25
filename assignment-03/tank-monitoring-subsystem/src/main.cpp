@@ -51,10 +51,6 @@ void loop() {
     // Reconnect MQTT if needed
     if (!mqtt.isConnected()) {
         mqtt.reconnect();
-        // Resubscribe after reconnection
-        char *topic = Mqtt::createTopic(backend, esp);
-        mqtt.subscribe(topic);
-        free(topic);
     }
 
     // Process MQTT messages
