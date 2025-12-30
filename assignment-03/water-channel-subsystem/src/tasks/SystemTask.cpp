@@ -20,8 +20,10 @@ void SystemTask::tick(void) {
     this->button.sync();
     if (this->button.isPressed()) {
         if (this->context.isAutomatic()) {
+            this->context.printManual();
             this->context.setManual();
         } else {
+            this->context.printAutomatic();
             this->context.setAutomatic();
         }
     }
