@@ -1,4 +1,4 @@
-#include "models/Hardware.h"
+#include "model/Hardware.h"
 
 /**
  * @brief Initialize all hardware components

@@ -2,7 +2,7 @@
 
 #include "core/Context.h"
 #include "core/Scheduler.h"
-#include "models/Hardware.h"
+#include "model/Hardware.h"
 
 #include "config.h"
 
