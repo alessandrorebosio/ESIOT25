@@ -21,9 +21,9 @@ class Hardware final {
     Potentiometer *potentiometer;
     Lcd *lcd;
 
+    uint8_t buttonPin;
     uint8_t motorPin;
     uint8_t potentiometerPin;
-    uint8_t buttonPin;
     uint8_t lcdAddr;
     uint8_t lcdCols;
     uint8_t lcdRows;
