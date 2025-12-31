@@ -144,7 +144,7 @@ proportional response to gradually rising levels while providing
 emergency drainage for critical conditions.
 
 Operators can switch to \texttt{MANUAL} mode by pressing the WCS
-button, allowing direct control o f the valve through a
+button, allowing direct control of the valve through a
 potentiometer. The LCD display on the WCS provides real-time feedback
 of the current opening percentage and mode.The DBS offers remote
 monitoring and control, displaying historical graphs of rainwater
@@ -246,6 +246,55 @@ motor, potentiometer, button, and LCD display.
 \end{figure}
 
 \chapter{Architecture}
+
+\section{Water Channel Subsystem (WCS)}
+The Water Channel Subsystem is organized according to a task-based architecture, 
+where each task is responsible for a well-defined functionality and 
+is periodically executed by a cooperative scheduler.
+A shared context is used to store the global system state and to 
+enable indirect communication among tasks.
+
+The following subsections describe the tasks composing the subsystem.
+
+% \subsection{Valve Task}
+
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=\textwidth]{./pdf/ValveTask.pdf}
+%   \caption{Valve Task state diagram.}
+%   \label{fig:ValveTask}
+% \end{figure}
+
+\subsection{System Task}
+The \textbf{SystemTask} manages the operating mode of the subsystem and 
+handles user interaction through the tactile button.
+At each execution, the task checks the button state and toggles the system mode 
+between \texttt{AUTOMATIC} and \texttt{MANUAL} when a press is detected.
+The task updates the shared system context to reflect the 
+current mode and to notify other tasks of the state change.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./pdf/SystemTask.pdf}
+  \caption{System Task state diagram.}
+  \label{fig:SystemTask}
+\end{figure}
+
+\subsection{Observer Task}
+The \textbf{ObserverTask} periodically evaluates a predicate function 
+to monitor sensors and communication channels.
+When the predicate evaluates to true, the associated callback is executed, 
+enabling the system to promptly react to events such as sensor updates 
+or incoming commands.
+This task provides a lightweight mechanism for asynchronous observation, 
+without interfering with the main control logic.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./pdf/ObserverTask.pdf}
+  \caption{Observer Task state diagram.}
+  \label{fig:ObserverTask}
+\end{figure}
 
 \chapter{Arduino Workflow}
 
