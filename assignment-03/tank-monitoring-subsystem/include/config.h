@@ -50,3 +50,38 @@
  * @note Setting this too high may cause long blocking waits.
  */
 #define MAXTIME 5000
+
+/**
+ * WiFi SSID (leave empty and set at deploy time)
+ */
+#define WIFI_SSID ""
+
+/**
+ * WiFi password (leave empty and set at deploy time)
+ */
+#define WIFI_PASSWORD ""
+
+/**
+ * MQTT broker hostname
+ */
+#define MQTT_SERVER "broker.mqtt-dashboard.com"
+
+/**
+ * MQTT broker port
+ */
+#define MQTT_PORT 1883
+
+/**
+ * Backend topic base
+ */
+#define BACKEND_TOPIC "backend"
+
+/**
+ * Name/ID for this ESP device
+ */
+#define ESP_NAME "esp32"
+
+/**
+ * Default update frequency (ms)
+ */
+#define DEFAULT_UPDATE_FREQUENCY 5000
