@@ -1,3 +1,9 @@
+
+/**
+ * Creates or updates a line chart showing water level history
+ * @param {Array<Object>} data - Array of data objects with time and waterLevel properties
+ * @param {CanvasRenderingContext2D} ctx - Canvas context for rendering the chart
+ */
 function plotDataHistory(data, ctx) {
     const xValues = data.map(x => new Date(x.time).toLocaleString());
     const yValues = data.map(y => y.waterLevel);
@@ -7,7 +13,9 @@ function plotDataHistory(data, ctx) {
             ctx._chartInstance.destroy();
             ctx._chartInstance = null;
         }
-    } catch (e) { /* ignore */ }
+    } catch (e) { 
+        /* ignore cleanup errors */ 
+    }
 
     const chart = new Chart(ctx, {
         type: 'line',
@@ -24,8 +32,19 @@ function plotDataHistory(data, ctx) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { x: { display: true }, y: { display: true } }
+            plugins: { 
+                legend: { 
+                    display: false 
+                } 
+            },
+            scales: { 
+                x: { 
+                    display: true 
+                }, 
+                y: { 
+                    display: true 
+                } 
+            }
         }
     });
 
