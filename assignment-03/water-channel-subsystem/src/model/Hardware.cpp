@@ -37,6 +37,14 @@ Motor &Hardware::getMotor(void) {
 }
 
 /**
+ * @brief Get reference to potentiometer instance
+ * @return Potentiometer& Reference to pot object
+ */
+Potentiometer &Hardware::getPotentiometer(void) {
+    return *this->potentiometer;
+}
+
+/**
  * @brief Get reference to LCD display
  * @return Lcd& Reference to LCD object
  */

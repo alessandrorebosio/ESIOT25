@@ -65,3 +65,11 @@ bool Context::shouldPrintAutomatic(void) {
 bool Context::shouldPrintManual(void) {
     return this->systemPrint == System::Print::MANUAL;
 }
+
+void Context::setValveOpening(float value) { 
+    this->valveOpening = value; 
+}
+
+float Context::getValveOpening(void) const { 
+    return this->valveOpening; 
+}

@@ -8,6 +8,7 @@ class Context final {
   private:
     bool automatic;
     bool print = true;
+    float valveOpening = 0.0;
 
     System::Print systemPrint : 2;
 
@@ -46,6 +47,10 @@ class Context final {
      * @return true if systemPrint is MANUAL.
      */
     bool shouldPrintManual(void);
+
+    void setValveOpening(float value);
+
+    float getValveOpening(void) const;
 
     void reset(void);
 };

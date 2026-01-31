@@ -6,6 +6,7 @@
 
 #include "tasks/ObserverTask.h"
 #include "tasks/SystemTask.h"
+#include "tasks/ValvTask.h"
 
 #include "config.h"
 
@@ -19,6 +20,8 @@ void setup(void) {
     context.reset();
 
     scheduler.addTask(new SystemTask(hardware.getButton(), context, 250));
+
+    scheduler.addTask(new ValvTask(hardware.getMotor(), hardware.getPotentiometer(), context, 100));
 
     /**
      * @brief Observer task for printing system and drone states.
