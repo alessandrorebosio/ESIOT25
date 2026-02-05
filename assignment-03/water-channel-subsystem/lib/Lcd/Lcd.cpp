@@ -50,7 +50,7 @@ void Lcd::setCursor(const uint8_t x, const uint8_t y) {
  * Without this explicit destructor, the dynamically allocated memory would not
  * be freed.
  */
-void Lcd::clear() {
+void Lcd::clear(void) {
     this->lcd.clear();
 }
 

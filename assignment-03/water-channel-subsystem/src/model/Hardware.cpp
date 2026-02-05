@@ -16,7 +16,7 @@ Hardware::Hardware(uint8_t buttonPin, uint8_t motorPin, uint8_t potentiometerPin
  * Allocates memory for hardware objects and initializes them with
  * the configured pin settings. Must be called after constructor.
  */
-void Hardware::init() {
+void Hardware::init(void) {
     button = new Button(this->buttonPin, INPUT);
     motor = new Motor(this->motorPin);
     lcd = new Lcd(this->lcdAddr, this->lcdCols, this->lcdRows);
@@ -27,7 +27,7 @@ void Hardware::init() {
  * Updates button state and returns current pressed status.
  * @return true if button is pressed, false otherwise.
  */
-bool Hardware::isPressed() {
+bool Hardware::isPressed(void) {
     this->button->sync();
     return this->button->isPressed();
 }

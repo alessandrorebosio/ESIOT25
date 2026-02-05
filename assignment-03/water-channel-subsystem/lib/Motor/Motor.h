@@ -25,12 +25,12 @@ class Motor final {
     /**
      * @brief Attaches the servo to the pin, enabling control.
      */
-    void on();
+    void on(void);
 
     /**
      * @brief Detaches the servo from the pin, disabling control.
      */
-    void off();
+    void off(void);
 
     /**
      * @brief Sets the servo to a specific angular position.

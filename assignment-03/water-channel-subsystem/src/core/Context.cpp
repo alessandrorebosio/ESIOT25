@@ -4,7 +4,7 @@
  * @brief Constructs a new Context object and initializes it to default state.
  * Calls reset() to set automatic mode and position 0.
  */
-Context::Context() {
+Context::Context(void) {
     this->reset();
 }
 

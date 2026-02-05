@@ -14,7 +14,7 @@ Motor::Motor(const uint8_t pin) : pin(pin) {
  * This method activates the servo by attaching it to the specified pin,
  * allowing it to receive position commands.
  */
-void Motor::on() {
+void Motor::on(void) {
     this->motor.attach(this->pin);
 }
 
@@ -24,7 +24,7 @@ void Motor::on() {
  * This method deactivates the servo, which can help save power when the servo
  * is not in use and prevent jittering.
  */
-void Motor::off() {
+void Motor::off(void) {
     this->motor.detach();
 }
 
@@ -56,6 +56,6 @@ void Motor::setPosition(uint8_t angle) {
  * when the Motor object is destroyed, preventing the servo from remaining
  * active and consuming power unnecessarily.
  */
-Motor::~Motor() {
+Motor::~Motor(void) {
     this->off();
 }

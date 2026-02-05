@@ -27,7 +27,7 @@ bool Button::isPressed(void) {
  * Updates the internal pressed and clicked flags based on the current digital read.
  * A click is registered when the button is released after being pressed.
  */
-void Button::sync() {
+void Button::sync(void) {
     bool wasPressed = pressed;
     pressed = digitalRead(pin) == HIGH;
     if (!pressed) {

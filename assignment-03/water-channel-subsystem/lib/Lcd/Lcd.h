@@ -49,7 +49,7 @@ class Lcd final {
     /**
      * @brief Clears the entire LCD display.
      */
-    void clear();
+    void clear(void);
 
     /**
      * @brief Clears a specific line of the LCD display
