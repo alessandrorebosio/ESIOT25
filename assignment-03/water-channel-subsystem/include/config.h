@@ -10,6 +10,12 @@
  */
 
 /**
+ * @brief Serial communication baud rate
+ * @details Baud rate for serial communication in bits per second
+ */
+#define BAUD 9600
+
+/**
  * @brief Analog pin connected to the potentiometer.
  *
  * Used to read analog values from a potentiometer for control input.

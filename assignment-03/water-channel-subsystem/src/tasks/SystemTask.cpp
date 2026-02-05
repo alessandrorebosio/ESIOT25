@@ -6,9 +6,8 @@
  * @param ctx Reference to application context
  * @param period System task execution period in milliseconds
  */
-SystemTask::SystemTask(Button &btn, Context &ctx, int period) : button(btn), context(ctx) {
+SystemTask::SystemTask(Hardware &hw, Context &ctx, int period) : hardware(hw), context(ctx) {
     Task::init(period);
-    this->context.printAutomatic();
 }
 
 /**
@@ -18,13 +17,12 @@ SystemTask::SystemTask(Button &btn, Context &ctx, int period) : button(btn), con
  * temperature monitoring, and potential transitions.
  */
 void SystemTask::tick(void) {
-    this->button.sync();
-    if (this->button.isPressed()) {
+    if (this->hardware.isPressed()) {
         if (this->context.isAutomatic()) {
-            this->context.printManual();
+            this->hardware.printOnLcd(0, "MODE: AUTOMATIC");
             this->context.setManual();
         } else {
-            this->context.printAutomatic();
+            this->hardware.printOnLcd(0, "MODE: MANUAL");
             this->context.setAutomatic();
         }
     }

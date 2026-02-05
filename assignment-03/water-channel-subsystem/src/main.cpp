@@ -4,9 +4,9 @@
 #include "core/Scheduler.h"
 #include "model/Hardware.h"
 
-#include "tasks/ObserverTask.h"
+#include "tasks/CommunicationTask.h"
 #include "tasks/SystemTask.h"
-#include "tasks/ValvTask.h"
+#include "tasks/ValveTask.h"
 
 #include "config.h"
 
@@ -17,29 +17,10 @@ static Context context;
 void setup(void) {
     scheduler.init(100);
     hardware.init();
-    context.reset();
 
-    scheduler.addTask(new SystemTask(hardware.getButton(), context, 250));
-
-    scheduler.addTask(new ValvTask(hardware.getMotor(), hardware.getPotentiometer(), context, 100));
-
-    /**
-     * @brief Observer task for printing system and drone states.
-     * Period: 500ms
-     * Updates LCD display..
-     */
-    scheduler.addTask(new ObserverTask(
-        context.shouldPrint(),
-        [] {
-            String sys = context.shouldPrintAutomatic() ? "AUTOMATIC" : context.shouldPrintManual() ? "MANUAL" : nullptr;
-
-            if (sys) {
-                hardware.getLcd().print(0, "MODE: " + sys);
-            }
-
-            context.printDone();
-        },
-        500));
+    scheduler.addTask(new SystemTask(hardware, context, 250));
+    scheduler.addTask(new ValveTask(hardware, context, 100));
+    scheduler.addTask(new CommunicationTask(hardware, context, BAUD, 100));
 }
 
 void loop(void) {

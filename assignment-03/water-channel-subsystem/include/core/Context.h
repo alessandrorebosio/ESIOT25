@@ -1,56 +1,59 @@
 #pragma once
 
-namespace System {
-enum Print { NONE, AUTOMATIC, MANUAL };
-}
+#include <Arduino.h>
 
+/**
+ * @brief System context and state manager.
+ *
+ * This class maintains the operational mode (automatic/manual) and current
+ * valve position state for the entire system. It provides a centralized
+ * interface for state management and control mode transitions.
+ */
 class Context final {
   private:
     bool automatic;
-    bool print = true;
-    float valveOpening = 0.0;
-
-    System::Print systemPrint : 2;
-
-    void setToPrint(System::Print value);
+    uint8_t position;
 
   public:
     /**
      * @brief Constructs a new Context object.
+     * Initializes with default state (automatic mode, position 0).
      */
     Context(void);
 
-    void printAutomatic(void);
-    void printManual(void);
-
-    void printDone(void);
+    /**
+     * @brief Sets the system to automatic control mode.
+     * In automatic mode, valve position is controlled by system logic.
+     */
+    void setAutomatic(void);
 
     /**
-     * @brief Get print request status.
-     * @return Constant reference to print flag.
+     * @brief Sets the system to manual control mode.
+     * In manual mode, valve position is controlled by user input.
      */
-    const bool &shouldPrint(void);
-
-    void setAutomatic(void);
     void setManual(void);
 
+    /**
+     * @brief Checks if the system is in automatic mode.
+     * @return true if in automatic mode, false if in manual mode.
+     */
     bool isAutomatic(void);
 
     /**
-     * @brief Check if AUTOMATIC status should be printed.
-     * @return true if systemPrint is AUTOMATIC.
+     * @brief Sets the current valve position.
+     * @param position The valve position value (0-255).
      */
-    bool shouldPrintAutomatic(void);
+    void setPosition(uint8_t position);
 
     /**
-     * @brief Check if MANUAL status should be printed.
-     * @return true if systemPrint is MANUAL.
+     * @brief Gets the current valve position.
+     * @return Current valve position (0-255).
      */
-    bool shouldPrintManual(void);
+    uint8_t getPosition(void);
 
-    void setValveOpening(float value);
-
-    float getValveOpening(void) const;
-
+    /**
+     * @brief Resets the context to default state.
+     * Sets automatic mode and position to 0.
+     */
     void reset(void);
 };

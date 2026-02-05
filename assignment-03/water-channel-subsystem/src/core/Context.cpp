@@ -1,75 +1,58 @@
 #include "core/Context.h"
 
 /**
- * @brief Constructs a new Context object and initializes it.
+ * @brief Constructs a new Context object and initializes it to default state.
+ * Calls reset() to set automatic mode and position 0.
  */
 Context::Context() {
     this->reset();
 }
 
+/**
+ * @brief Resets the context to default state.
+ * Sets operation mode to automatic and position to 0.
+ */
 void Context::reset(void) {
     this->setAutomatic();
-    this->printDone();
-}
-
-void Context::setToPrint(System::Print value) {
-    this->systemPrint = value;
-    this->print = true;
-}
-
-void Context::printAutomatic(void) {
-    this->setToPrint(System::Print::AUTOMATIC);
-}
-
-void Context::printManual(void) {
-    this->setToPrint(System::Print::MANUAL);
-}
-
-void Context::printDone(void) {
-    this->systemPrint = System::Print::NONE;
-    this->print = false;
+    this->position = 0;
 }
 
 /**
- * @brief Get print request status.
- * @return Constant reference to print flag.
+ * @brief Sets the system to automatic control mode.
+ * Valve position will be controlled by system logic.
  */
-const bool &Context::shouldPrint(void) {
-    return this->print;
-}
-
 void Context::setAutomatic(void) {
     this->automatic = true;
 }
 
+/**
+ * @brief Sets the system to manual control mode.
+ * Valve position will be controlled by user input.
+ */
 void Context::setManual(void) {
     this->automatic = false;
 }
 
+/**
+ * @brief Checks if the system is in automatic mode.
+ * @return true if in automatic mode, false if in manual mode.
+ */
 bool Context::isAutomatic(void) {
     return this->automatic;
 }
 
 /**
- * @brief Check if AUTOMATIC status should be printed.
- * @return true if systemPrint is AUTOMATIC.
+ * @brief Sets the current valve position.
+ * @param position The valve position value (0-255).
  */
-bool Context::shouldPrintAutomatic(void) {
-    return this->systemPrint == System::Print::AUTOMATIC;
+void Context::setPosition(uint8_t position) {
+    this->position = position;
 }
 
 /**
- * @brief Check if MANUAL status should be printed.
- * @return true if systemPrint is MANUAL.
+ * @brief Gets the current valve position.
+ * @return Current valve position (0-255).
  */
-bool Context::shouldPrintManual(void) {
-    return this->systemPrint == System::Print::MANUAL;
-}
-
-void Context::setValveOpening(float value) { 
-    this->valveOpening = value; 
-}
-
-float Context::getValveOpening(void) const { 
-    return this->valveOpening; 
+uint8_t Context::getPosition(void) {
+    return this->position;
 }

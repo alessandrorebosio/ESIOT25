@@ -1,7 +1,7 @@
 #include "model/Hardware.h"
 
 /**
- * @brief Initialize all hardware components
+ * @brief Initialize all hardware components.
  *
  * Creates and configures all hardware objects using pin definitions
  * from config.h. Must be called before using any hardware components.
@@ -13,6 +13,8 @@ Hardware::Hardware(uint8_t buttonPin, uint8_t motorPin, uint8_t potentiometerPin
 
 /**
  * @brief Initialize all hardware components.
+ * Allocates memory for hardware objects and initializes them with
+ * the configured pin settings. Must be called after constructor.
  */
 void Hardware::init() {
     button = new Button(this->buttonPin, INPUT);
@@ -21,40 +23,42 @@ void Hardware::init() {
 }
 
 /**
- * @brief Get reference to button instance
- * @return Button& Reference to button object
+ * @brief Check if the button is currently pressed.
+ * Updates button state and returns current pressed status.
+ * @return true if button is pressed, false otherwise.
  */
-Button &Hardware::getButton(void) {
-    return *this->button;
+bool Hardware::isPressed() {
+    this->button->sync();
+    return this->button->isPressed();
 }
 
 /**
- * @brief Get reference to motor for gate control
- * @return Motor& Reference to motor object
+ * @brief Read the current potentiometer value.
+ * @return Potentiometer reading (0-1023 typically).
  */
-Motor &Hardware::getMotor(void) {
-    return *this->motor;
+int Hardware::getPotValue(void) {
+    return this->potentiometer->read();
 }
 
 /**
- * @brief Get reference to potentiometer instance
- * @return Potentiometer& Reference to pot object
+ * @brief Set the motor to a specific position.
+ * @param value Target position value (implementation dependent).
  */
-Potentiometer &Hardware::getPotentiometer(void) {
-    return *this->potentiometer;
+void Hardware::setMotorPosition(int value) {
+    this->motor->setPosition(value);
 }
 
 /**
- * @brief Get reference to LCD display
- * @return Lcd& Reference to LCD object
+ * @brief Print a message on the LCD display.
+ * @param y Row position (0-indexed) for the message.
+ * @param msg Message string to display.
  */
-Lcd &Hardware::getLcd(void) {
-    return *this->lcd;
+void Hardware::printOnLcd(uint8_t y, String msg) {
+    this->lcd->print(y, msg);
 }
 
 /**
- * @brief Destroy the Hardware object and clean up all components
- *
+ * @brief Destroy the Hardware object and clean up all components.
  * Deletes all allocated hardware objects to prevent memory leaks.
  * Automatically called when Hardware object goes out of scope.
  */

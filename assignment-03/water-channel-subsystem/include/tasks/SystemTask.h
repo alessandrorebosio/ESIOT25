@@ -2,12 +2,11 @@
 
 #include "Task.h"
 #include "core/Context.h"
-
-#include <Button.h>
+#include "model/Hardware.h"
 
 class SystemTask final : public Task {
   private:
-    Button &button;
+    Hardware &hardware;
     Context &context;
 
   public:
@@ -17,7 +16,7 @@ class SystemTask final : public Task {
      * @param ctx Reference to application context
      * @param period System task execution period in milliseconds
      */
-    explicit SystemTask(Button &btn, Context &ctx, int period);
+    explicit SystemTask(Hardware &hw, Context &ctx, int period);
 
     /**
      * @brief Execute one tick of the system state machine
