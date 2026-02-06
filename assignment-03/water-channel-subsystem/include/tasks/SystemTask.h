@@ -8,6 +8,7 @@ class SystemTask final : public Task {
   private:
     Hardware &hardware;
     Context &context;
+    enum { AUTOMATIC, MANUAL, UNCONNECTED } state;
 
   public:
     /**

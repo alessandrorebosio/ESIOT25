@@ -3,8 +3,7 @@
 /**
  * @brief Initialize communication task
  */
-CommunicationTask::CommunicationTask(Hardware &hw, Context &ctx, int baud, int period) 
-    : hardware(hw), context(ctx) {
+CommunicationTask::CommunicationTask(Hardware &hw, Context &ctx, int baud, int period) : hardware(hw), context(ctx) {
     Task::init(period);
     Serial.begin(baud);
 }
@@ -14,26 +13,18 @@ CommunicationTask::CommunicationTask(Hardware &hw, Context &ctx, int baud, int p
  */
 void CommunicationTask::tick(void) {
     if (Serial.available() > 0) {
-        String input = Serial.readStringUntil('\n');
-        input.trim();
-        if (input.length() == 0) return;
-
+        String input = Serial.readString();
         this->context.updateLastMsgTime();
 
         if (isDigit(input[0])) {
             int val = input.toInt();
-            if (val >= 0 && val <= 100 && this->context.isAutomatic()) {
+            if (val >= 0 && val <= 90 && this->context.isAutomatic()) {
                 this->context.setPosition(val);
-                this->hardware.printValvValue(val);
             }
         } else {
             input.toUpperCase();
-            if (input == "MANUAL") {
-                this->context.setManual();
-                this->hardware.printManual();
-            } else if (input == "AUTOMATIC") {
-                this->context.setAutomatic();
-                this->hardware.printAutomatic();
+            if (input.equals("C")) {
+                this->context.changeTo();
             }
         }
     }

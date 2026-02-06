@@ -14,6 +14,7 @@ Context::Context(void) {
  */
 void Context::reset(void) {
     this->setAutomatic();
+    this->lastMsgTime = 0;
     this->position = 0;
 }
 
@@ -31,28 +32,6 @@ void Context::setAutomatic(void) {
  */
 void Context::setManual(void) {
     this->automatic = false;
-}
-
-/**
- * @brief Sets the system to unconnected state.
- */
-void Context::setUnconnected(void) {
-    this->unconnected = true;
-}
-
-/**
- * @brief Resets the unconnected state.
- */
-void Context::resetUnconnected() {
-    this->unconnected = false;
-}
-
-/**
- * @brief Checks if the system is in unconnected state.
- * @return true if in unconnected state, false otherwise.
- */
-bool Context::isUnconnected() {
-    return this->unconnected;
 }
 
 /**
@@ -83,14 +62,24 @@ uint8_t Context::getPosition(void) {
  * @brief Updates the timestamp of the last received message.
  * Should be called whenever a valid message is received to reset the network timeout timer.
  */
-void Context::updateLastMsgTime(void) { 
-    this->lastMsgTimestamp = millis();
+void Context::updateLastMsgTime(void) {
+    this->lastMsgTime = millis();
 }
 
 /**
  * @brief Gets the timestamp of the last received message.
  * @return Timestamp (in milliseconds) of the last received message.
  */
-unsigned long Context::getLastMsgTime(void) { 
-    return this->lastMsgTimestamp; 
+unsigned long Context::getLastMsgTime(void) {
+    return this->lastMsgTime;
+}
+
+void Context::changeTo(void) {
+    this->change = true;
+}
+
+bool Context::needChange(void) {
+    bool result = this->change;
+    this->change = false;
+    return result;
 }

@@ -6,11 +6,8 @@
  * Creates and configures all hardware objects using pin definitions
  * from config.h. Must be called before using any hardware components.
  */
-Hardware::Hardware(uint8_t buttonPin, uint8_t motorPin,
-                   uint8_t potentiometerPin, uint8_t lcdAddr, uint8_t lcdCols,
-                   uint8_t lcdRows)
-    : button(nullptr), motor(nullptr), potentiometer(nullptr), lcd(nullptr),
-      buttonPin(buttonPin), motorPin(motorPin), lcdAddr(lcdAddr),
+Hardware::Hardware(uint8_t buttonPin, uint8_t motorPin, uint8_t potentiometerPin, uint8_t lcdAddr, uint8_t lcdCols, uint8_t lcdRows)
+    : button(nullptr), motor(nullptr), potentiometer(nullptr), lcd(nullptr), buttonPin(buttonPin), motorPin(motorPin), lcdAddr(lcdAddr),
       lcdCols(lcdCols), lcdRows(lcdRows) {
 }
 
@@ -87,8 +84,8 @@ void Hardware::printUnconnected() {
 /**
  * @brief Print the percentual of valve opening on the LCD display.
  */
-void Hardware::printValvValue(uint8_t value) {
-    this->lcd->print(1, "Valv: " + String(value) + "% ");
+void Hardware::printValveValue(uint8_t value) {
+    this->lcd->print(1, "Valve: " + String(value) + "%");
 }
 
 /**

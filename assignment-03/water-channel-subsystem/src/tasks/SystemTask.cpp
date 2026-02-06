@@ -1,6 +1,6 @@
 #include "tasks/SystemTask.h"
 
-#define TIMEOUT_MS 5000 //prob da mettere altrove
+#define TIMEOUT_MS 5000 // prob da mettere altrove
 
 /**
  * @brief Construct a new System Task object
@@ -10,7 +10,10 @@
  */
 SystemTask::SystemTask(Hardware &hw, Context &ctx, int period) : hardware(hw), context(ctx) {
     Task::init(period);
-    this->context.isAutomatic() ? this->hardware.printAutomatic() : this->hardware.printManual();
+
+    this->hardware.printAutomatic();
+    this->context.setAutomatic();
+    this->state = AUTOMATIC;
 }
 
 /**
@@ -22,24 +25,37 @@ SystemTask::SystemTask(Hardware &hw, Context &ctx, int period) : hardware(hw), c
 void SystemTask::tick(void) {
     bool isNetworkOk = (millis() - this->context.getLastMsgTime() < TIMEOUT_MS);
 
-    if (this->hardware.isPressed()) {
-        if (this->context.isAutomatic()) {
-            this->context.setManual();
-            this->hardware.printManual();
-            this->context.resetUnconnected();
-        } else {
-            this->context.setAutomatic();
-            this->hardware.printAutomatic();
-        }
-    }
+    switch (state) {
+        case AUTOMATIC:
+            if (!isNetworkOk) {
+                this->hardware.printUnconnected();
+                this->context.setManual();
 
-    if (this->context.isAutomatic()) {
-        if (!isNetworkOk && !this->context.isUnconnected()) {
-            this->context.setUnconnected();
-            this->hardware.printUnconnected();
-        } else if (isNetworkOk && this->context.isUnconnected()) {
-            this->context.resetUnconnected();
-            this->hardware.printAutomatic();
-        }
+                state = UNCONNECTED;
+                return;
+            }
+
+            if (this->hardware.isPressed() || this->context.needChange()) {
+                this->hardware.printManual();
+                this->context.setManual();
+
+                state = MANUAL;
+            }
+            break;
+        case MANUAL:
+            if (this->hardware.isPressed() || this->context.needChange()) {
+                this->hardware.printAutomatic();
+                this->context.setAutomatic();
+
+                state = AUTOMATIC;
+            }
+            break;
+        case UNCONNECTED:
+            if (isNetworkOk) {
+                this->hardware.printAutomatic();
+                this->context.setAutomatic();
+                state = AUTOMATIC;
+            }
+            break;
     }
 }

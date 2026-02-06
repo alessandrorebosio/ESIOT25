@@ -92,7 +92,7 @@ class Hardware final {
     /**
      * @brief Print the percentual of valve opening on the LCD display.
      */
-    void printValvValue(uint8_t value);
+    void printValveValue(uint8_t value);
 
     /**
      * @brief Destroy the Hardware object and clean up all components.
