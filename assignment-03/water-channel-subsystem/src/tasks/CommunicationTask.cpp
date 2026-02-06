@@ -16,29 +16,24 @@ void CommunicationTask::tick(void) {
     if (Serial.available() > 0) {
         String input = Serial.readStringUntil('\n');
         input.trim();
+        if (input.length() == 0) return;
 
-        if (input.length() > 0 && (isDigit(input[0]) || input[0] == '-')) {
+        this->context.updateLastMsgTime();
+
+        if (isDigit(input[0])) {
             int val = input.toInt();
-
-            if (val == -1) {
-                this->context.setUnconnected(); 
-                this->hardware.printUnconnected();
-            } else if (val >= 0 && val <= 100) {
-                if (this->context.isUnconnected()) {
-                    this->context.resetUnconnected();
-                }
-
-                if (this->context.isAutomatic()) {
-                    this->context.setPosition(val);
-                    this->hardware.printValvValue(val);
-                }
+            if (val >= 0 && val <= 100 && this->context.isAutomatic()) {
+                this->context.setPosition(val);
+                this->hardware.printValvValue(val);
             }
-        } 
-        else {
+        } else {
             input.toUpperCase();
             if (input == "MANUAL") {
                 this->context.setManual();
                 this->hardware.printManual();
+            } else if (input == "AUTOMATIC") {
+                this->context.setAutomatic();
+                this->hardware.printAutomatic();
             }
         }
     }

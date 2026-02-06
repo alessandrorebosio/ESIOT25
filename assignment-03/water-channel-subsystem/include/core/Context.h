@@ -15,6 +15,8 @@ class Context final {
     bool unconnected;
     uint8_t position;
 
+    unsigned long lastMsgTimestamp;
+
   public:
     /**
      * @brief Constructs a new Context object.
@@ -67,6 +69,18 @@ class Context final {
      * @return Current valve position (0-255).
      */
     uint8_t getPosition(void);
+
+    /**
+     * @brief Updates the timestamp of the last received message.
+     * Should be called whenever a valid message is received to reset the network timeout timer.
+     */
+    void updateLastMsgTime(void);
+
+    /**
+     * @brief Gets the timestamp of the last received message.
+     * @return Timestamp (in milliseconds) of the last received message.
+     */
+    unsigned long getLastMsgTime(void);
 
     /**
      * @brief Resets the context to default state.

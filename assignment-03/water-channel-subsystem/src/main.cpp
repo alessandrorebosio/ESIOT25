@@ -19,7 +19,7 @@ void setup(void) {
     hardware.init();
 
     scheduler.addTask(new SystemTask(hardware, context, 250));
-    scheduler.addTask(new ValveTask(hardware, context, 100));
+    scheduler.addTask(new ValveTask(hardware, context, 200));
     scheduler.addTask(new CommunicationTask(hardware, context, BAUD, 100));
 }
 

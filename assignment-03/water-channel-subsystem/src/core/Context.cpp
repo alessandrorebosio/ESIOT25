@@ -78,3 +78,19 @@ void Context::setPosition(uint8_t position) {
 uint8_t Context::getPosition(void) {
     return this->position;
 }
+
+/**
+ * @brief Updates the timestamp of the last received message.
+ * Should be called whenever a valid message is received to reset the network timeout timer.
+ */
+void Context::updateLastMsgTime(void) { 
+    this->lastMsgTimestamp = millis();
+}
+
+/**
+ * @brief Gets the timestamp of the last received message.
+ * @return Timestamp (in milliseconds) of the last received message.
+ */
+unsigned long Context::getLastMsgTime(void) { 
+    return this->lastMsgTimestamp; 
+}
