@@ -6,8 +6,11 @@
  * Creates and configures all hardware objects using pin definitions
  * from config.h. Must be called before using any hardware components.
  */
-Hardware::Hardware(uint8_t buttonPin, uint8_t motorPin, uint8_t potentiometerPin, uint8_t lcdAddr, uint8_t lcdCols, uint8_t lcdRows)
-    : button(nullptr), motor(nullptr), potentiometer(nullptr), lcd(nullptr), buttonPin(buttonPin), motorPin(motorPin), lcdAddr(lcdAddr),
+Hardware::Hardware(uint8_t buttonPin, uint8_t motorPin,
+                   uint8_t potentiometerPin, uint8_t lcdAddr, uint8_t lcdCols,
+                   uint8_t lcdRows)
+    : button(nullptr), motor(nullptr), potentiometer(nullptr), lcd(nullptr),
+      buttonPin(buttonPin), motorPin(motorPin), lcdAddr(lcdAddr),
       lcdCols(lcdCols), lcdRows(lcdRows) {
 }
 
@@ -20,6 +23,9 @@ void Hardware::init(void) {
     button = new Button(this->buttonPin, INPUT);
     motor = new Motor(this->motorPin);
     lcd = new Lcd(this->lcdAddr, this->lcdCols, this->lcdRows);
+    potentiometer = new Potentiometer(this->potentiometerPin);
+
+    this->motor->on();
 }
 
 /**
@@ -55,6 +61,34 @@ void Hardware::setMotorPosition(int value) {
  */
 void Hardware::printOnLcd(uint8_t y, String msg) {
     this->lcd->print(y, msg);
+}
+
+/**
+ * @brief Print "MANUAL" on the LCD display.
+ */
+void Hardware::printManual() {
+    this->lcd->print(0, "Mode: MANUAL");
+}
+
+/**
+ * @brief Print "AUTOMATIC" on the LCD display.
+ */
+void Hardware::printAutomatic() {
+    this->lcd->print(0, "Mode: AUTOMATIC");
+}
+
+/**
+ * @brief Print "UNCONNECTED" on the LCD display.
+ */
+void Hardware::printUnconnected() {
+    this->lcd->print(0, "Mode:UNCONNECTED");
+}
+
+/**
+ * @brief Print the percentual of valve opening on the LCD display.
+ */
+void Hardware::printValvValue(uint8_t value) {
+    this->lcd->print(1, "Valv: " + String(value) + "% ");
 }
 
 /**

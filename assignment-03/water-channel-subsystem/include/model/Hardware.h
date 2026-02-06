@@ -75,6 +75,26 @@ class Hardware final {
     void printOnLcd(uint8_t y, String msg);
 
     /**
+     * @brief Print "MANUAL" on the LCD display.
+     */
+    void printManual();
+
+    /**
+     * @brief Print "AUTOMATIC" on the LCD display.
+     */
+    void printAutomatic();
+
+    /**
+     * @brief Print "UNCONNECTED" on the LCD display.
+     */
+    void printUnconnected();
+
+    /**
+     * @brief Print the percentual of valve opening on the LCD display.
+     */
+    void printValvValue(uint8_t value);
+
+    /**
      * @brief Destroy the Hardware object and clean up all components.
      * Deletes all allocated hardware objects to prevent memory leaks.
      * Automatically called when Hardware object goes out of scope.

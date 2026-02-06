@@ -19,7 +19,8 @@ void ValveTask::tick(void) {
     if (this->context.isAutomatic()) {
         perc = this->context.getPosition();
     } else {
-        perc = map(this->hardware.getPotValue(), 0, 1023, 0, 90);
+        perc = map(this->hardware.getPotValue(), 0, 1023, 0, 100);
+        this->hardware.printValvValue(perc);
     }
 
     this->hardware.setMotorPosition(perc);

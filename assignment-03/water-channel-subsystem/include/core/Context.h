@@ -12,6 +12,7 @@
 class Context final {
   private:
     bool automatic;
+    bool unconnected;
     uint8_t position;
 
   public:
@@ -32,6 +33,22 @@ class Context final {
      * In manual mode, valve position is controlled by user input.
      */
     void setManual(void);
+
+    /**
+     * @brief Sets the system to unconnected state.
+     */
+    void setUnconnected(void);
+
+    /**
+     * @brief Resets the unconnected state.
+     */
+    void resetUnconnected();
+
+    /**
+     * @brief Checks if the system is in unconnected state.
+     * @return true if in unconnected state, false otherwise.
+    */
+    bool isUnconnected(void);
 
     /**
      * @brief Checks if the system is in automatic mode.
