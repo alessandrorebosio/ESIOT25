@@ -14,12 +14,13 @@ ValveTask::ValveTask(Hardware &hw, Context &ctx, int period) : hardware(hw), con
  * Automatic mode: context target sets position
  * Converts percentage (0-100%) to motor degrees (0-90°)
  */
-void ValveTask::tick() {
+void ValveTask::tick(void) {
     uint8_t perc = 0;
     if (this->context.isAutomatic()) {
         perc = this->context.getPosition();
     } else {
-        perc = map(this->hardware.getPotValue(), 0, 1023, 0, 90);
+        perc = map(this->hardware.getPotValue(), 0, 1023, 0, 100);
+        this->hardware.printValvValue(perc);
     }
 
     this->hardware.setMotorPosition(perc);

@@ -34,6 +34,28 @@ void Context::setManual(void) {
 }
 
 /**
+ * @brief Sets the system to unconnected state.
+ */
+void Context::setUnconnected(void) {
+    this->unconnected = true;
+}
+
+/**
+ * @brief Resets the unconnected state.
+ */
+void Context::resetUnconnected() {
+    this->unconnected = false;
+}
+
+/**
+ * @brief Checks if the system is in unconnected state.
+ * @return true if in unconnected state, false otherwise.
+ */
+bool Context::isUnconnected() {
+    return this->unconnected;
+}
+
+/**
  * @brief Checks if the system is in automatic mode.
  * @return true if in automatic mode, false if in manual mode.
  */

@@ -8,6 +8,7 @@
  */
 SystemTask::SystemTask(Hardware &hw, Context &ctx, int period) : hardware(hw), context(ctx) {
     Task::init(period);
+    this->context.isAutomatic() ? this->hardware.printAutomatic() : this->hardware.printManual();
 }
 
 /**
@@ -19,11 +20,11 @@ SystemTask::SystemTask(Hardware &hw, Context &ctx, int period) : hardware(hw), c
 void SystemTask::tick(void) {
     if (this->hardware.isPressed()) {
         if (this->context.isAutomatic()) {
-            this->hardware.printOnLcd(0, "MODE: AUTOMATIC");
             this->context.setManual();
+            this->hardware.printManual();
         } else {
-            this->hardware.printOnLcd(0, "MODE: MANUAL");
             this->context.setAutomatic();
+            this->hardware.printAutomatic();
         }
     }
 }
