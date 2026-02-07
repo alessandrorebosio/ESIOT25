@@ -248,29 +248,22 @@ motor, potentiometer, button, and LCD display.
 \chapter{Architecture}
 
 \section{Water Channel Subsystem (WCS)}
-The Water Channel Subsystem is organized according to a task-based architecture, 
-where each task is responsible for a well-defined functionality and 
+The Water Channel Subsystem is organized according to a task-based architecture,
+where each task is responsible for a well-defined functionality and
 is periodically executed by a cooperative scheduler.
-A shared context is used to store the global system state and to 
+A shared context is used to store the global system state and to
 enable indirect communication among tasks.
 
 The following subsections describe the tasks composing the subsystem.
 
-% \subsection{Valve Task}
-
-% \begin{figure}[H]
-%   \centering
-%   \includegraphics[width=\textwidth]{./pdf/ValveTask.pdf}
-%   \caption{Valve Task state diagram.}
-%   \label{fig:ValveTask}
-% \end{figure}
-
 \subsection{System Task}
-The \textbf{SystemTask} manages the operating mode of the subsystem and 
+The \textbf{SystemTask} manages the operating mode of the subsystem and
 handles user interaction through the tactile button.
-At each execution, the task checks the button state and toggles the system mode 
-between \texttt{AUTOMATIC} and \texttt{MANUAL} when a press is detected.
-The task updates the shared system context to reflect the 
+At each execution, the task checks the button state and toggles the system mode
+between \texttt{AUTOMATIC}, \texttt{MANUAL}, and \texttt{UNCONNECTED} when appropriate.
+The task monitors network connectivity by checking the timestamp of the last received message from the CUS;
+if no message is received within $T_2$ milliseconds, the system transitions to \texttt{UNCONNECTED} mode.
+The task updates the shared system context to reflect the
 current mode and to notify other tasks of the state change.
 
 \begin{figure}[H]
@@ -280,34 +273,36 @@ current mode and to notify other tasks of the state change.
   \label{fig:SystemTask}
 \end{figure}
 
-\newpage 
-\subsection{Observer Task}
-The \textbf{ObserverTask} periodically evaluates a predicate function 
-to monitor sensors and communication channels.
-When the predicate evaluates to true, the associated callback is executed, 
-enabling the system to promptly react to events such as sensor updates 
-or incoming commands.
-This task provides a lightweight mechanism for asynchronous observation, 
-without interfering with the main control logic.
+\subsection{Valve Task}
+The \textbf{ValveTask} is responsible for controlling the servo motor that operates the water channel valve.
+At each execution cycle, the task reads the current system mode from the shared context:
+\begin{itemize}
+  \item In \texttt{AUTOMATIC} mode, the valve position is set according to the target position specified by the CUS through serial communication.
+  \item In \texttt{MANUAL} mode, the valve position is directly controlled by the potentiometer analog input, providing operators with immediate feedback and direct control over the valve.
+\end{itemize}
+The task converts the position value (0--100\%) to servo motor angle (0--90 degrees) and updates the LCD display with the current valve opening percentage.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=.6\textwidth]{./pdf/ObserverTask.pdf}
-  \caption{Observer Task state diagram.}
-  \label{fig:ObserverTask}
+  \includegraphics[width=\textwidth]{./pdf/ValveTask.pdf}
+  \caption{Valve Task state diagram.}
+  \label{fig:ValveTask}
 \end{figure}
 
-\chapter{Arduino Workflow}
+\subsection{Communication Task}
+The \textbf{CommunicationTask} manages serial communication with the Control Unit Subsystem (CUS).
+This task periodically checks the serial port for incoming commands and processes them to update the system state.
+When a new command is received from the CUS, the task updates the context with the target valve position
+and records the timestamp of the last received message.
+This timestamp is used by the SystemTask to detect communication losses and trigger the transition to \texttt{UNCONNECTED} mode.
+The task also outputs status information and current sensor readings back to the CUS via the serial interface.
 
-\section{Overview}
-
-\section{System Dynamics}
-
-\section{Coordination of Operations}
-
-\section{Supporting Tasks and Context Interaction}
-
-\section{Global Workflow}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./pdf/CommunicationTask.pdf}
+  \caption{Communication Task state diagram.}
+  \label{fig:CommunicationTask}
+\end{figure}
 
 \appendix
 \chapter{User Interface}

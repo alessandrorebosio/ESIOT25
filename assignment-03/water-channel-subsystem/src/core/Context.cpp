@@ -73,13 +73,3 @@ void Context::updateLastMsgTime(void) {
 unsigned long Context::getLastMsgTime(void) {
     return this->lastMsgTime;
 }
-
-void Context::changeTo(void) {
-    this->change = true;
-}
-
-bool Context::needChange(void) {
-    bool result = this->change;
-    this->change = false;
-    return result;
-}

@@ -21,11 +21,6 @@ void CommunicationTask::tick(void) {
             if (val >= 0 && val <= 90) {
                 this->context.setPosition(val);
             }
-        } else {
-            input.toUpperCase();
-            if (input.equals("C")) {
-                this->context.changeTo();
-            }
         }
     }
 }

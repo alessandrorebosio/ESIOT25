@@ -66,10 +66,6 @@ class Context final {
      */
     unsigned long getLastMsgTime(void);
 
-    void changeTo(void);
-
-    bool needChange(void);
-
     /**
      * @brief Resets the context to default state.
      * Sets automatic mode and position to 0.

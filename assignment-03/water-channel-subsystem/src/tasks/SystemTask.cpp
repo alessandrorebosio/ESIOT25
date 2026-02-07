@@ -35,7 +35,7 @@ void SystemTask::tick(void) {
                 return;
             }
 
-            if (this->hardware.isPressed() || this->context.needChange()) {
+            if (this->hardware.isPressed()) {
                 this->hardware.printManual();
                 this->context.setManual();
 
@@ -43,7 +43,7 @@ void SystemTask::tick(void) {
             }
             break;
         case MANUAL:
-            if (this->hardware.isPressed() || this->context.needChange()) {
+            if (this->hardware.isPressed()) {
                 this->hardware.printAutomatic();
                 this->context.setAutomatic();
 
