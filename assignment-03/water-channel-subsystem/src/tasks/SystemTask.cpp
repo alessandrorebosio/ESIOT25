@@ -1,6 +1,6 @@
 #include "tasks/SystemTask.h"
 
-#define TIMEOUT_MS 5000 // prob da mettere altrove
+#define TIMEOUT_MS 5000
 
 /**
  * @brief Construct a new System Task object

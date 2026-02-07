@@ -85,7 +85,7 @@ void Hardware::printUnconnected() {
  * @brief Print the percentual of valve opening on the LCD display.
  */
 void Hardware::printValveValue(uint8_t value) {
-    this->lcd->print(1, "Valve: " + String(value) + "%");
+    this->lcd->print(1, "Valve: " + String(map(value, 0, 90, 0, 100)) + "%");
 }
 
 /**
