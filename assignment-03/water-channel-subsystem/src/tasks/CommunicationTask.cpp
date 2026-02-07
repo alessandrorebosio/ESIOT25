@@ -18,7 +18,7 @@ void CommunicationTask::tick(void) {
 
         if (isDigit(input[0])) {
             int val = input.toInt();
-            if (val >= 0 && val <= 90 && this->context.isAutomatic()) {
+            if (val >= 0 && val <= 90) {
                 this->context.setPosition(val);
             }
         } else {
