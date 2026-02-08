@@ -5,7 +5,6 @@
 
 #include "config.h"
 
-extern bool working;         ///< Global flag indicating if the system is working
 extern double waterLevel;    ///< Global variable storing current water level distance
 extern long updateFrequency; ///< Global variable storing measurement update frequency
 
