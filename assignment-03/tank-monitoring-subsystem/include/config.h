@@ -54,12 +54,12 @@
 /**
  * WiFi SSID (leave empty and set at deploy time)
  */
-#define WIFI_SSID "iPhone di Grazia"
+#define WIFI_SSID ""
 
 /**
  * WiFi password (leave empty and set at deploy time)
  */
-#define WIFI_PASSWORD "ciaoneciaone"
+#define WIFI_PASSWORD ""
 
 /**
  * MQTT broker hostname
