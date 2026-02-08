@@ -72,11 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
             plotDataHistory(data, waterCtx);
             
             if (systemStateEl) {
-                systemStateEl.innerText = 'State of System: ' + data[0].state;
+                systemStateEl.innerText = '' + data[0].state;
             }
             
             if (valveValueEl) {
-                valveValueEl.innerText = 'Valve Opening Level: ' + data[0].valveLevel;
+                valveValueEl.innerText = '' + data[0].valveLevel;
             }
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
