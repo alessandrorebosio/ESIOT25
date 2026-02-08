@@ -22,7 +22,7 @@
  * Used to indicate warnings, errors, or critical conditions.
  * Should be connected with appropriate current-limiting resistor.
  */
-#define RED_LED 3
+#define RED_LED 13
 
 /**
  * @brief Echo pin for the ultrasonic distance sensor.
@@ -54,12 +54,12 @@
 /**
  * WiFi SSID (leave empty and set at deploy time)
  */
-#define WIFI_SSID ""
+#define WIFI_SSID "iPhone di Grazia"
 
 /**
  * WiFi password (leave empty and set at deploy time)
  */
-#define WIFI_PASSWORD ""
+#define WIFI_PASSWORD "ciaoneciaone"
 
 /**
  * MQTT broker hostname
