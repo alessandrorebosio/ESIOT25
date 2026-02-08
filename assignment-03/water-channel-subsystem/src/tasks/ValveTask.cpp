@@ -1,5 +1,8 @@
 #include "tasks/ValveTask.h"
 
+#define MIN 0
+#define MAX 90
+
 /**
  * @brief Initialize valve control task
  */
@@ -17,9 +20,9 @@ ValveTask::ValveTask(Hardware &hw, Context &ctx, int period) : hardware(hw), con
 void ValveTask::tick(void) {
     uint8_t pos = 0;
     if (this->context.isAutomatic()) {
-        pos = this->context.getPosition();
+        pos = map(this->context.getPosition(), MIN, 100, MIN, MAX);
     } else {
-        pos = map(this->hardware.getPotValue(), 0, 1023, 0, 90);
+        pos = map(this->hardware.getPotValue(), MIN, 1023, MIN, MAX);
     }
 
     this->hardware.setMotorPosition(pos);

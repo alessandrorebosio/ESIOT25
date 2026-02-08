@@ -34,10 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateUI();
         if (this.value === 'auto') {
             window.alert('You have successfully changed the control type to automatic. The system will now be controlled by the water level sensor.');
-            try { 
-                await sendData('SWITCH_TO_AUTO', -1, -1, ''); 
-            } catch (e) { 
-                console.error(e); 
+            try {
+                await sendData('SWITCH_TO_AUTO', -1, -1, '');
+            } catch (e) {
+                console.error(e);
             }
             await loadData();
         }
@@ -53,8 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 await sendData('SET', valveInput.value, -1, '');
                 await loadData();
-            } catch (err) { 
-                console.error(err); 
+            } catch (err) {
+                console.error(err);
             }
         });
     }
@@ -66,15 +66,27 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadData() {
         try {
             const raw = await fetchData();
+
+            if (raw.error === 'NOT AVAILABLE') {
+                if (systemStateEl) {
+                    systemStateEl.innerText = 'NOT AVAILABLE';
+                }
+                if (valveValueEl) {
+                    valveValueEl.innerText = 'NOT AVAILABLE';
+                }
+                console.error('Server not available:', raw.message);
+                return;
+            }
+
             const data = Array.isArray(raw) ? raw.filter(el => el.controlType === 'DATA') : [];
             if (!data.length) return;
-            
+
             plotDataHistory(data, waterCtx);
-            
+
             if (systemStateEl) {
                 systemStateEl.innerText = '' + data[0].state;
             }
-            
+
             if (valveValueEl) {
                 valveValueEl.innerText = '' + data[0].valveLevel;
             }
@@ -85,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateUI();
     loadData();
-    
+
     const refreshInterval = 10000;
     setInterval(loadData, refreshInterval);
 });

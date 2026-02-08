@@ -13,6 +13,7 @@ class Context final {
   private:
     bool automatic;
     bool change;
+    String response;
     uint8_t position;
 
     unsigned long lastMsgTime;
@@ -65,6 +66,59 @@ class Context final {
      * @return Timestamp (in milliseconds) of the last received message.
      */
     unsigned long getLastMsgTime(void);
+
+    /**
+     * @brief Signals that a mode change is pending.
+     *
+     * This method sets an internal flag indicating that the system needs to
+     * switch between automatic and manual modes. The change will be processed
+     * by the appropriate tasks when they check for pending changes.
+     */
+    void changeTo(void);
+
+    /**
+     * @brief Checks if a mode change is pending.
+     *
+     * This method returns whether a mode change has been requested and
+     * automatically clears the change flag. This ensures each change request
+     * is only processed once.
+     *
+     * @return true if a mode change is pending, false otherwise.
+     */
+    bool needChange(void);
+
+    /**
+     * @brief Sets a response message to be sent via communication interface.
+     *
+     * This method stores a response string that will be sent through the
+     * communication interface. It's typically used for acknowledging commands
+     * or sending status updates to external controllers.
+     *
+     * @param response The response string to be sent.
+     */
+    void setResponse(String response);
+
+    /**
+     * @brief Gets the current response message.
+     *
+     * This method retrieves the response string that was previously set
+     * to be sent via the communication interface.
+     *
+     * @return The current response string. Returns empty string if no
+     *         response is pending.
+     */
+    String getResponse(void);
+
+    /**
+     * @brief Checks if a response message is pending.
+     *
+     * This method checks whether there is a response message waiting to be
+     * sent through the communication interface. It does not clear the
+     * response string.
+     *
+     * @return true if a response message is pending, false otherwise.
+     */
+    bool needResponse(void);
 
     /**
      * @brief Resets the context to default state.

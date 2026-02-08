@@ -14,6 +14,8 @@ Context::Context(void) {
  */
 void Context::reset(void) {
     this->setAutomatic();
+    this->setResponse("");
+    this->change = false;
     this->lastMsgTime = 0;
     this->position = 0;
 }
@@ -72,4 +74,72 @@ void Context::updateLastMsgTime(void) {
  */
 unsigned long Context::getLastMsgTime(void) {
     return this->lastMsgTime;
+}
+
+/**
+ * @brief Signals that a mode change is pending.
+ *
+ * Sets an internal flag to indicate that the system should switch between
+ * automatic and manual modes. The actual mode change is determined by the
+ * current state and will be applied when `needChange()` is called and
+ * returns true.
+ */
+void Context::changeTo(void) {
+    this->change = true;
+}
+
+/**
+ * @brief Checks if a mode change is pending.
+ *
+ * Returns the current state of the change flag and automatically resets it
+ * to false. This ensures that each change request is processed exactly once
+ * by the calling task.
+ *
+ * @return true if a mode change was requested, false otherwise.
+ */
+bool Context::needChange(void) {
+    bool result = this->change;
+    this->change = false;
+    return result;
+}
+
+/**
+ * @brief Sets a response message to be sent via communication interface.
+ *
+ * Stores the provided response string in the context. The CommunicationTask
+ * should regularly check for pending responses using `needResponse()` and
+ * send them through the appropriate communication channel.
+ *
+ * @param response The response string to be sent. Can be empty to clear
+ *                 pending responses.
+ */
+void Context::setResponse(String response) {
+    this->response = response;
+}
+
+/**
+ * @brief Gets the current response message.
+ *
+ * Retrieves the response string that was previously set. This method does
+ * not clear the response - it remains available for multiple retrievals
+ * until explicitly cleared by `setResponse("")`.
+ *
+ * @return The current response string. Returns empty string if no response
+ *         is set.
+ */
+String Context::getResponse(void) {
+    return this->response;
+}
+
+/**
+ * @brief Checks if a response message is pending.
+ *
+ * Determines whether there is a non-empty response string waiting to be
+ * sent. This method only checks the presence of a response without
+ * modifying it, allowing multiple tasks to check the same response.
+ *
+ * @return true if a non-empty response string exists, false otherwise.
+ */
+bool Context::needResponse(void) {
+    return this->response.length() > 0;
 }

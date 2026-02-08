@@ -4,6 +4,9 @@
 # Ignore Visual Studio Code configuration folder
 .vscode/
 
+# Ignore python cache
+__pycache__/
+
 # Ingore LaTeX file
 *.toc
 *.synctex.gz

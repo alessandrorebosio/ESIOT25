@@ -22,7 +22,7 @@ extern long updateFrequency; ///< Global variable storing measurement update fre
 void MonitoringTask::exec(void *parameter) {
     Sonar sonar(DIST_TRIG_PIN, DIST_ECHO_PIN, MAXTIME);
 
-    while (working) {
+    while (true) {
         waterLevel = sonar.readDistance();
         delay(updateFrequency);
     }

@@ -17,10 +17,17 @@ void CommunicationTask::tick(void) {
         this->context.updateLastMsgTime();
 
         if (isDigit(input[0])) {
-            int val = input.toInt();
-            if (val >= 0 && val <= 90) {
-                this->context.setPosition(val);
+            this->context.setPosition(constrain(input.toInt(), 0, 100));
+        } else {
+            input.toUpperCase();
+            if (input.equals("C")) {
+                this->context.changeTo();
             }
         }
+    }
+
+    if (this->context.needResponse()) {
+        Serial.println(this->context.getResponse());
+        this->context.setResponse("");
     }
 }

@@ -11,6 +11,9 @@ function fetchData() {
         .then(res => {
             if (!res.ok) throw new Error('Network response was not ok');
             return res.json();
+        })
+        .catch(error => {
+            return { error: 'NOT AVAILABLE', message: error.message };
         });
 }
 
