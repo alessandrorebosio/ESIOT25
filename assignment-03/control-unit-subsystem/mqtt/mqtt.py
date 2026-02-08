@@ -44,7 +44,11 @@ class MQTTClient:
         Converts message to JSON and calls user's handler in a separate thread.
         """
         try:
-            payload = json.loads(msg.payload.decode())
+            content = json.loads(msg.payload.decode())
+            if not isinstance(content, dict):
+                payload = {"value": content, "raw": str(content)}
+            else:
+                payload = content
         except Exception:
             payload = {"raw": msg.payload.decode(errors="ignore")}
         if self._on_message:
