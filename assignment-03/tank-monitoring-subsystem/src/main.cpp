@@ -46,7 +46,7 @@ void callback(char *topic, byte *payload, unsigned int length) {
  * and creates two FreeRTOS tasks for LED control and water level monitoring.
  */
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(9600);
     wifi.connect();
 
     randomSeed(micros());
@@ -79,7 +79,7 @@ void loop() {
         lastMsgTime = now;
 
         char msg[50];
-        dtostrf(waterLevel, 10, 2, msg);
+        dtostrf(100-waterLevel, 10, 2, msg);
 
         char *topic = Mqtt::createTopic(ESP_NAME, BACKEND_TOPIC);
         mqtt.publish(topic, msg);
