@@ -43,13 +43,13 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="text-center">
-                                    <strong>Valve Status:</strong>
+                                    <strong>Valve Value:</strong>
                                     <div class="fs-5 text-info" id="valveValue">—</div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="text-center">
-                                    <strong>Connection:</strong>
+                                    <strong>Status:</strong>
                                     <div class="fs-5" id="connectionStatus">—</div>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 mt-3 mt-lg-0">
+            <aside class="col-lg-4 mt-3 mt-lg-0">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="bi bi-sliders"></i> Controls</h5>
@@ -75,7 +75,7 @@
                             <div id="controllerContainer">
                                 <div class="mb-3">
                                     <label for="valveLevelInput" class="form-label">Valve Opening (%)</label>
-                                    <input type="number" id="valveLevelInput" name="valveLevel" class="form-control"
+                                    <input type="range" id="valveLevelInput" name="valveLevel" class="form-range"
                                         min="0" max="100" step="1" value="50">
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100">Update</button>
@@ -87,7 +87,7 @@
                 <div class="mt-3 text-muted small">
                     <i class="bi bi-info-circle"></i> Auto refresh every 60s
                 </div>
-            </div>
+            </aside>
         </div>
     </main>
 

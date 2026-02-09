@@ -12,7 +12,7 @@ last_message_time = time.time()
 automatic = False
 connected = False
 
-L1, L2 = 40, 90
+L1, L2 = 20, 5
 T1 = 10
 above_L1_since = None
 
@@ -80,10 +80,10 @@ def serial_worker(port, baudrate):
                         try:
                             water_level = int(config["waterLevel"])
 
-                            if water_level > L2:
+                            if water_level < L2:
                                 valve_cmd = b"100\n"
                                 above_L1_since = None
-                            elif water_level > L1:
+                            elif water_level < L1:
                                 if above_L1_since is None:
                                     above_L1_since = time.time()
 

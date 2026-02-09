@@ -1,7 +1,7 @@
 
 const CUS_URL = 'http://localhost:8080';
 
-document.addEventListener("DOMContentLoaded", () => {
+const updateDashboard = () => {
     fetch(CUS_URL + "/api/data", {
         method: 'GET',
         mode: 'cors'
@@ -11,10 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
             return res.json();
         })
         .then(data => {
+            console.log(data)
             document.getElementById("waterLevelValue").textContent = data.waterLevel;
             document.getElementById("valveValue").textContent = data.valveValue;
+            document.getElementById("valveLevelInput").value = data.valveValue;
             document.getElementById("connectionStatus").textContent = data.state;
-            console.log(data)
         })
         .catch(() => {
             document.getElementById("connectionStatus").textContent = "NOT AVAILABLE";
@@ -23,6 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("valveLevelInput").disabled = true;
             document.querySelector("#controllerForm button[type='submit']").disabled = true;
         });
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+    updateDashboard();
+
+    setInterval(updateDashboard, 1000);
 });
 
 const plotDataHistory = (data, ctx) => {
