@@ -73,7 +73,9 @@ def serial_worker(port, baudrate):
                         config["state"] = line
 
                     if line.isdigit():
-                        config["valveValue"] = line
+                        config["waterLevel"] = (
+                            0 if config["state"] == "UNCONNECTED" else line
+                        )
 
                     ser.write(b"C\n" if connected else b"U\n")
 

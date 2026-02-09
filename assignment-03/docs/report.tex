@@ -257,17 +257,21 @@ enable indirect communication among tasks.
 The following subsections describe the tasks composing the subsystem.
 
 \subsection{System Task}
-The \textbf{SystemTask} manages the operating mode of the subsystem and
-handles user interaction through the tactile button.
-At each execution, the task checks the button state and toggles the system mode
-between \texttt{AUTOMATIC}, \texttt{MANUAL}, and \texttt{UNCONNECTED}
-when appropriate.
-The task monitors network connectivity by checking the timestamp of
-the last received message from the CUS;
-if no message is received within $T_2$ milliseconds, the system
-transitions to \texttt{UNCONNECTED} mode.
-The task updates the shared system context to reflect the
-current mode and to notify other tasks of the state change.
+The \textbf{SystemTask} manages the operating mode of the subsystem
+and handles user interaction through the tactile button and Dashboard
+commands. At each execution, the task checks for button presses and
+incoming serial messages to update the system mode. The task can
+transition between \texttt{AUTOMATIC} and \texttt{MANUAL} modes
+either when the tactile button is pressed or when a mode-switch
+command is received from the Dashboard via the communication layer.
+The system transitions to \texttt{UNCONNECTED} mode when a network
+loss notification (message \texttt{U}) is received via serial
+communication from the CUS, signaling that the Tank Monitoring
+Subsystem is offline. The task monitors for recovery messages
+(message \texttt{C}) to transition back from \texttt{UNCONNECTED} to
+\texttt{AUTOMATIC} mode when connectivity is restored. The task
+updates the shared system context to reflect the current mode and to
+notify other tasks of the state change.
 
 \begin{figure}[H]
   \centering
@@ -278,21 +282,11 @@ current mode and to notify other tasks of the state change.
 
 \subsection{Valve Task}
 The \textbf{ValveTask} is responsible for controlling the servo motor
-that operates the water channel valve. At each execution cycle, the
-task reads the current system mode from the shared context:
-
-\begin{itemize}
-  \item In \texttt{AUTOMATIC} mode, the valve position is set
-    according to the target position specified by the CUS through
-    serial communication.
-  \item In \texttt{MANUAL} mode, the valve position is directly
-    controlled by the potentiometer analog input, providing operators
-    with immediate feedback and direct control over the valve.
-\end{itemize}
+that operates the water channel valve. 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{./pdf/ValveTask.pdf}
+  \includegraphics[width=0.6\textwidth]{./pdf/ValveTask.pdf}
   \caption{Valve Task state diagram.}
   \label{fig:ValveTask}
 \end{figure}
@@ -303,9 +297,7 @@ Control Unit Subsystem (CUS). This task periodically checks the
 serial port for incoming commands and processes them to update the
 system state. When a new command is received from the CUS, the task
 updates the context with the target valve position and records the
-timestamp of the last received message. This timestamp is used by the
-SystemTask to detect communication losses and trigger the transition
-to \texttt{UNCONNECTED} mode. The task also outputs status
+timestamp of the last received message. The task also outputs status
 information and current sensor readings back to the CUS via the
 serial interface.
 
@@ -385,7 +377,7 @@ devices, you can start the Smart Tank Monitoring System.
 From the control-unit-subsystem directory (with the virtual
 environment activated), run:
 \begin{Verbatim}[tabsize=4,xleftmargin=2em]
-> python control-unit-subsystem/main.py
+> python control-unit-subsystem/main.py <port>
 \end{Verbatim}
 
 \subsection{Starting the Dashboard}
