@@ -20,7 +20,7 @@ void CommunicationTask::tick(void) {
             this->context.setPosition(constrain(input.toInt(), 0, 100));
         } else {
             input.toUpperCase();
-            if (input.equals("M")) {
+            if (input.equals("M") && this->context.isConnected()) {
                 this->context.changeTo();
             }
             if (input.equals("U")) {
