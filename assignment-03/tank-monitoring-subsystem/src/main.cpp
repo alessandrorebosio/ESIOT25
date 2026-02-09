@@ -79,7 +79,7 @@ void loop() {
         lastMsgTime = now;
 
         char msg[50];
-        dtostrf(100 - waterLevel, 10, 2, msg);
+        dtostrf(constrain(100 - waterLevel, 0, 100), 10, 2, msg);
 
         char *topic = Mqtt::createTopic(ESP_NAME, BACKEND_TOPIC);
         mqtt.publish(topic, msg);
