@@ -1,7 +1,5 @@
 #include "tasks/SystemTask.h"
 
-#define TIMEOUT_MS 5000
-
 /**
  * @brief Construct a new System Task object
  * @param btn Reference to button
@@ -10,7 +8,7 @@
  */
 SystemTask::SystemTask(Hardware &hw, Context &ctx, int period) : hardware(hw), context(ctx) {
     Task::init(period);
-    this->transitionToAutomatic();
+    this->transitionToUnconnected();
 }
 
 /**
@@ -20,11 +18,9 @@ SystemTask::SystemTask(Hardware &hw, Context &ctx, int period) : hardware(hw), c
  * temperature monitoring, and potential transitions.
  */
 void SystemTask::tick(void) {
-    bool isNetworkOk = (millis() - this->context.getLastMsgTime() < TIMEOUT_MS);
-
     switch (state) {
         case AUTOMATIC:
-            if (!isNetworkOk) {
+            if (!this->context.isConnected()) {
                 this->transitionToUnconnected();
             }
 
@@ -38,13 +34,19 @@ void SystemTask::tick(void) {
             }
             break;
         case UNCONNECTED:
-            if (isNetworkOk) {
+            if (this->context.isConnected()) {
                 this->transitionToAutomatic();
             }
             break;
     }
 }
 
+/**
+ * @brief Transition to automatic mode
+ *
+ * Updates the context response, prints automatic mode status to hardware,
+ * sets the system to automatic mode, and updates the internal state.
+ */
 void SystemTask::transitionToAutomatic() {
     this->context.setResponse("AUTOMATIC");
     this->hardware.printAutomatic();
@@ -52,6 +54,12 @@ void SystemTask::transitionToAutomatic() {
     this->state = AUTOMATIC;
 }
 
+/**
+ * @brief Transition to manual mode
+ *
+ * Updates the context response, prints manual mode status to hardware,
+ * sets the system to manual mode, and updates the internal state.
+ */
 void SystemTask::transitionToManual() {
     this->context.setResponse("MANUAL");
     this->hardware.printManual();
@@ -59,6 +67,12 @@ void SystemTask::transitionToManual() {
     this->state = MANUAL;
 }
 
+/**
+ * @brief Transition to unconnected mode
+ *
+ * Updates the context response, prints unconnected status to hardware,
+ * sets the system to manual mode (safe fallback), and updates the internal state.
+ */
 void SystemTask::transitionToUnconnected() {
     this->context.setResponse("UNCONNECTED");
     this->hardware.printUnconnected();

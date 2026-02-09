@@ -18,6 +18,7 @@ void Context::reset(void) {
     this->setPosition(0);
     this->responseQueue.clear();
     this->change = false;
+    this->connected = false;
 }
 
 /**
@@ -142,4 +143,30 @@ String Context::popResponse(void) {
  */
 bool Context::needResponse(void) {
     return !this->responseQueue.isEmpty();
+}
+
+/**
+ * @brief Sets the system to unconnected state
+ * 
+ * Marks the system as disconnected from network/communication.
+ */
+void Context::setUnconnected(void) {
+    this->connected = false;
+}
+
+/**
+ * @brief Sets the system to connected state
+ * 
+ * Marks the system as connected to network/communication.
+ */
+void Context::setConnected(void) {
+    this->connected = true;
+}
+
+/**
+ * @brief Checks if the system is connected
+ * @return true if the system is connected, false otherwise
+ */
+bool Context::isConnected(void) {
+    return this->connected;
 }

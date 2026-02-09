@@ -16,6 +16,7 @@ class Context final {
   private:
     bool automatic;
     bool change;
+    bool connected;
     Queue<String> responseQueue;
     uint8_t position;
 
@@ -135,6 +136,28 @@ class Context final {
      * @return true if at least one response is queued, false otherwise.
      */
     bool needResponse(void);
+
+    /**
+     * @brief Sets the system to unconnected state
+     * 
+     * Marks the system as disconnected from network/communication.
+     * This state is typically used when network communication is lost.
+     */
+    void setUnconnected(void);
+
+    /**
+     * @brief Sets the system to connected state
+     * 
+     * Marks the system as connected to network/communication.
+     * This state indicates that normal communication is established.
+     */
+    void setConnected(void);
+
+    /**
+     * @brief Checks if the system is connected
+     * @return true if the system is connected, false otherwise
+     */
+    bool isConnected(void);
 
     /**
      * @brief Resets the context to default state.

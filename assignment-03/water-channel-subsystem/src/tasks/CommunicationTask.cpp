@@ -20,9 +20,14 @@ void CommunicationTask::tick(void) {
             this->context.setPosition(constrain(input.toInt(), 0, 100));
         } else {
             input.toUpperCase();
-            if (input.equals("C")) {
-                Serial.println(input);
+            if (input.equals("M")) {
                 this->context.changeTo();
+            }
+            if (input.equals("U")) {
+                this->context.setUnconnected();
+            }
+            if (input.equals("C")) {
+                this->context.setConnected();
             }
         }
     }
