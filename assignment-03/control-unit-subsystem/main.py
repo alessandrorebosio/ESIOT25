@@ -12,7 +12,7 @@ last_message_time = time.time()
 automatic = False
 connected = False
 
-L1, L2 = 20, 5
+L1, L2 = 70, 90
 T1 = 10
 above_L1_since = None
 
@@ -25,7 +25,7 @@ def mqtt_worker(broker, topic):
         with config_lock:
             last_message_time = time.time()
             connected = True
-            config["waterLevel"] = msg.payload.decode(errors="ignore")
+            config["waterLevel"] = msg.payload.decode(errors="ignore").strip()
 
     while True:
         client = None
@@ -73,17 +73,17 @@ def serial_worker(port, baudrate):
                     if line.isdigit():
                         config["valveValue"] = line
 
-                    ser.write(b"C\n")
+                    ser.write(b"C\n" if connected else b"U\n")
 
                 if automatic and connected:
                     with config_lock:
                         try:
-                            water_level = int(config["waterLevel"])
+                            water_level = float(config["waterLevel"])
 
-                            if water_level < L2 and water_level > 0:
+                            if water_level >= L2:
                                 valve_cmd = b"100\n"
                                 above_L1_since = None
-                            elif water_level < L1 and water_level > 0:
+                            elif water_level >= L1:
                                 if above_L1_since is None:
                                     above_L1_since = time.time()
 
