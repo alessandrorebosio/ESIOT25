@@ -2,6 +2,7 @@
 const UPDATE_INTERVAL = 2000;
 
 let isConnected = false;
+let lastState = null;
 
 function toggleValveControl() {
     const controlType = document.getElementById('controlTypeInput').value;
@@ -15,12 +16,18 @@ function toggleValveControl() {
 }
 
 function updateUI(data) {
-    document.getElementById('systemState').textContent = data.state || '—';
-    document.getElementById('valveValue').textContent = data.valveLevel || '—';
+    const currentState = data.state || '—';
+    document.getElementById('systemState').textContent = currentState;
+    document.getElementById('valveValue').textContent = (data.valveLevel !== undefined) ? data.valveLevel : '—';
 
-    document.getElementById('controlTypeInput').value = data.controlType || 'auto';
-    if (data.valveLevel !== undefined) {
-        document.getElementById('valveLevelInput').value = data.valveLevel;
+    if (currentState !== lastState) {
+        const controlTypeInput = document.getElementById('controlTypeInput');
+        if (currentState === 'AUTOMATIC') {
+            controlTypeInput.value = 'auto';
+        } else if (currentState === 'MANUAL') {
+            controlTypeInput.value = 'manual';
+        }
+        lastState = currentState;
     }
 
     toggleValveControl();
@@ -43,7 +50,8 @@ function setConnectionStatus(connected) {
 async function fetchAndUpdate() {
     try {
         const data = await fetchData();
-        setConnectionStatus(true);
+        const hasServer = data && data.state !== undefined;
+        setConnectionStatus(!!hasServer);
         updateUI(data);
     } catch (error) {
         setConnectionStatus(false);
@@ -69,12 +77,41 @@ async function handleFormSubmit(e) {
     }
 }
 
+async function sendCurrentSettings() {
+    if (!isConnected) {
+        return;
+    }
+
+    const controlType = document.getElementById('controlTypeInput').value;
+    const valveLevel = parseInt(document.getElementById('valveLevelInput').value);
+
+    try {
+        await sendData(controlType, valveLevel, 0, '');
+    } catch (error) {
+        console.error('Error sending data:', error);
+    }
+}
+
+function updateValveValueDisplay() {
+    const valveLevel = parseInt(document.getElementById('valveLevelInput').value);
+    if (!Number.isNaN(valveLevel)) {
+        document.getElementById('valveValue').textContent = valveLevel;
+    }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
     initChart();
     setConnectionStatus(false);
     fetchAndUpdate();
 
-    document.getElementById('controlTypeInput').addEventListener('change', toggleValveControl);
+    document.getElementById('controlTypeInput').addEventListener('change', () => {
+        toggleValveControl();
+        sendCurrentSettings();
+    });
+    document.getElementById('valveLevelInput').addEventListener('input', () => {
+        updateValveValueDisplay();
+        sendCurrentSettings();
+    });
     document.getElementById('controllerForm').addEventListener('submit', handleFormSubmit);
 
     toggleValveControl();
