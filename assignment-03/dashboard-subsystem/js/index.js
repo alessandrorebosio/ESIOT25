@@ -13,37 +13,31 @@ const updateDashboard = () => {
             return res.json();
         })
         .then(data => {
-            console.log(data)
-            const controllerContainer = document.getElementById("controllerContainer");
-            const modeSelector = document.getElementById("modeSelector");
+            dataHistory.push({ time: new Date(), waterLevel: data.waterLevel });
+            if (dataHistory.length > MAX_DATA_POINTS) dataHistory.shift();
+            plotDataHistory(dataHistory, document.getElementById('waterLevelTrend'));
 
-            if (data.state === "UNCONNECTED") {
-                document.getElementById("waterLevelValue").textContent = "—";
-                toggleInputs(true);
-                modeSelector.style.display = "none";
-                controllerContainer.style.display = "none";
-            } else {
-                document.getElementById("waterLevelValue").textContent = data.waterLevel;
-                toggleInputs(false);
-                modeSelector.style.display = "block";
-                controllerContainer.style.display = (data.state === "AUTOMATIC") ? "none" : "block";
+            document.getElementById("waterLevelValue").textContent = data.waterLevel;
+            document.getElementById("connectionStatus").textContent = data.state;
+            document.getElementById("valveValue").textContent = data.valveValue;
 
-                dataHistory.push({ time: new Date(), waterLevel: data.waterLevel });
-                if (dataHistory.length > MAX_DATA_POINTS) dataHistory.shift();
-
-                plotDataHistory(dataHistory, document.getElementById('waterLevelTrend'));
+            const controlTypeInput = document.getElementById("controlTypeInput");
+            if (data.state === "AUTOMATIC" || data.state === "MANUAL") {
+                if (controlTypeInput.value !== data.state) {
+                    controlTypeInput.value = data.state;
+                }
             }
 
-            document.getElementById("valveValue").textContent = data.valveValue;
-            document.getElementById("connectionStatus").textContent = data.state;
-            document.getElementById("controlTypeInput").value = data.state;
+            document.getElementById("controllerContainer").style.display =
+                (controlTypeInput.value === "AUTOMATIC") ? "none" : "block";
         })
         .catch(() => {
             document.getElementById("connectionStatus").textContent = "NOT AVAILABLE";
-            toggleInputs(true);
             document.getElementById("modeSelector").style.display = "none";
             document.getElementById("controllerContainer").style.display = "none";
+            toggleInputs(true);
         });
+    document.getElementById("controllerContainer").style.display = (document.getElementById("controlTypeInput").value == "AUTOMATIC") ? "none" : "block";
 };
 
 const toggleInputs = (disabled) => {
@@ -93,10 +87,9 @@ const plotDataHistory = (data, canvas) => {
     }
 };
 
-// Aggiunto Header JSON per la POST
-function sendData(controlType, valveLevel, waterLevel, state) {
-    const data = { controlType, valveLevel, waterLevel, state };
-    fetch(CUS_URL + "/api/data", {
+function sendModeChange(state, valveValue) {
+    const data = { state, valveValue };
+    fetch(CUS_URL + "/api/mode", {
         method: "POST",
         mode: "cors",
         headers: { "Content-Type": "application/json" },
@@ -105,6 +98,23 @@ function sendData(controlType, valveLevel, waterLevel, state) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("controlTypeInput").addEventListener("change", function () {
+        if (this.value === "AUTOMATIC") {
+            window.alert("You have successfully changed the control type to automatic. The system will now be controlled by the water level sensor.");
+        }
+        document.getElementById("controllerContainer").style.display = (this.value === "AUTOMATIC") ? "none" : "block";
+        const valveValue = document.getElementById("valveLevelInput").value;
+        sendModeChange(this.value, valveValue);
+    });
+
+    document.getElementById("controllerForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const controlType = document.getElementById("controlTypeInput").value;
+        const valveValue = document.getElementById("valveLevelInput").value;
+        document.getElementById("valveValue").textContent = valveValue;
+        sendModeChange(controlType, valveValue);
+    });
+
     updateDashboard();
     setInterval(updateDashboard, 1000);
 });

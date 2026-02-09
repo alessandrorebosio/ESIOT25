@@ -1,6 +1,7 @@
 import time, sys, threading, serial, json
+from collections import deque
 import paho.mqtt.client as mqtt
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -11,6 +12,7 @@ config = {"waterLevel": 0, "valveValue": 0, "state": "UNCONNECTED"}
 last_message_time = time.time()
 automatic = False
 connected = False
+serial_outbox = deque()
 
 L1, L2 = 70, 90
 T1 = 10
@@ -75,6 +77,12 @@ def serial_worker(port, baudrate):
 
                     ser.write(b"C\n" if connected else b"U\n")
 
+                    pending = list(serial_outbox)
+                    serial_outbox.clear()
+
+                for cmd in pending:
+                    ser.write(cmd)
+
                 if automatic and connected:
                     with config_lock:
                         try:
@@ -111,6 +119,22 @@ def serial_worker(port, baudrate):
 def get_data():
     with config_lock:
         return jsonify(config)
+
+
+@app.route("/api/mode", methods=["POST"])
+def set_mode():
+    payload = request.get_json(silent=True) or {}
+    state = payload.get("state")
+
+    if state not in {"AUTOMATIC", "MANUAL"}:
+        return jsonify({"error": "invalid state"}), 400
+
+    with config_lock:
+        config["state"] = state
+
+        serial_outbox.append(b"M\n")
+
+    return jsonify({"ok": True})
 
 
 def run(
