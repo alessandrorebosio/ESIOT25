@@ -97,6 +97,22 @@ function sendModeChange(state, valveValue) {
     }).catch(err => console.error("Send failed", err));
 }
 
+const rangeInput = document.getElementById('valveLevelInput');
+
+function updateRangeStyle() {
+    const val = rangeInput.value;
+    const rangeValue = document.getElementById('rangeValue');
+    const min = rangeInput.min || 0;
+    const max = rangeInput.max || 100;
+    const percentage = (val - min) * 100 / (max - min);
+    
+    rangeValue.textContent = val + '%';
+    
+    rangeInput.style.backgroundSize = percentage + '% 100%';
+}
+
+rangeInput.addEventListener('input', updateRangeStyle);
+
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("controlTypeInput").addEventListener("change", function () {
         if (this.value === "AUTOMATIC") {
@@ -116,5 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     updateDashboard();
+    updateRangeStyle();
     setInterval(updateDashboard, 1000);
 });
