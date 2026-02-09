@@ -1,5 +1,10 @@
-import time, sys, threading, serial
+import time, sys, threading, serial, json
 import paho.mqtt.client as mqtt
+from flask import Flask, jsonify
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
 
 config_lock = threading.Lock()
 config = {"waterLevel": 0, "valveValue": 0, "state": "UNCONNECTED"}
@@ -102,6 +107,12 @@ def serial_worker(port, baudrate):
                 ser.close()
 
 
+@app.route("/api/data", methods=["GET"])
+def get_data():
+    with config_lock:
+        return jsonify(config)
+
+
 def run(
     port,
     baud=9600,
@@ -111,8 +122,7 @@ def run(
     try:
         threading.Thread(target=serial_worker, args=(port, baud), daemon=True).start()
         threading.Thread(target=mqtt_worker, args=(broker, topic), daemon=True).start()
-        while True:
-            pass
+        app.run(host="0.0.0.0", port=8080, threaded=True)
     except KeyboardInterrupt:
         print("\nShutting down...")
 
