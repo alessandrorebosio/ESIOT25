@@ -17,7 +17,7 @@ Hardware::Hardware(uint8_t buttonPin, uint8_t motorPin, uint8_t potentiometerPin
  * the configured pin settings. Must be called after constructor.
  */
 void Hardware::init(void) {
-    button = new Button(this->buttonPin, INPUT);
+    button = new Button(this->buttonPin, INPUT_PULLUP);
     motor = new Motor(this->motorPin);
     lcd = new Lcd(this->lcdAddr, this->lcdCols, this->lcdRows);
     potentiometer = new Potentiometer(this->potentiometerPin);

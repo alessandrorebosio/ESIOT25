@@ -17,7 +17,7 @@ void CommunicationTask::tick(void) {
         this->context.updateLastMsgTime();
 
         if (isDigit(input[0])) {
-            this->context.setPosition(constrain(input.toInt(), 0, 100));
+            this->context.setMotorPerc(constrain(input.toInt(), 0, 100));
         } else {
             input.toUpperCase();
             if (input.equals("M") && this->context.isConnected()) {

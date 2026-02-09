@@ -15,8 +15,9 @@ Context::Context(void) : responseQueue(10) {
 void Context::reset(void) {
     this->setAutomatic();
     this->updateLastMsgTime();
-    this->setPosition(0);
+    this->setMotorPerc(0);
     this->responseQueue.clear();
+    this->virtualPerc = false;
     this->change = false;
     this->connected = false;
 }
@@ -49,16 +50,23 @@ bool Context::isAutomatic(void) {
  * @brief Sets the current valve position.
  * @param position The valve position value (0-255).
  */
-void Context::setPosition(uint8_t position) {
+void Context::setMotorPerc(uint8_t position) {
     this->position = position;
+    this->virtualPerc = true;
 }
 
 /**
  * @brief Gets the current valve position.
  * @return Current valve position (0-255).
  */
-uint8_t Context::getPosition(void) {
+uint8_t Context::getMotorPerc(void) {
     return this->position;
+}
+
+bool Context::isVirtualPerc(void) {
+    bool result = this->virtualPerc;
+    this->virtualPerc = false;
+    return result;
 }
 
 /**
@@ -147,7 +155,7 @@ bool Context::needResponse(void) {
 
 /**
  * @brief Sets the system to unconnected state
- * 
+ *
  * Marks the system as disconnected from network/communication.
  */
 void Context::setUnconnected(void) {
@@ -156,7 +164,7 @@ void Context::setUnconnected(void) {
 
 /**
  * @brief Sets the system to connected state
- * 
+ *
  * Marks the system as connected to network/communication.
  */
 void Context::setConnected(void) {

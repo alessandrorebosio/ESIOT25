@@ -16,7 +16,6 @@ const updateDashboard = () => {
             console.log(data)
             const controllerContainer = document.getElementById("controllerContainer");
             const modeSelector = document.getElementById("modeSelector");
-            let waterLevel = Math.max(0, Math.min(100, Number(data.waterLevel)));
 
             if (data.state === "UNCONNECTED") {
                 document.getElementById("waterLevelValue").textContent = "—";
@@ -24,12 +23,12 @@ const updateDashboard = () => {
                 modeSelector.style.display = "none";
                 controllerContainer.style.display = "none";
             } else {
-                document.getElementById("waterLevelValue").textContent = waterLevel;
+                document.getElementById("waterLevelValue").textContent = data.waterLevel;
                 toggleInputs(false);
                 modeSelector.style.display = "block";
                 controllerContainer.style.display = (data.state === "AUTOMATIC") ? "none" : "block";
 
-                dataHistory.push({ time: new Date(), waterLevel: waterLevel });
+                dataHistory.push({ time: new Date(), waterLevel: data.waterLevel });
                 if (dataHistory.length > MAX_DATA_POINTS) dataHistory.shift();
 
                 plotDataHistory(dataHistory, document.getElementById('waterLevelTrend'));

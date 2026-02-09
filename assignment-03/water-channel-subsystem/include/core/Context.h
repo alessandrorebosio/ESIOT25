@@ -15,6 +15,7 @@
 class Context final {
   private:
     bool automatic;
+    bool virtualPerc;
     bool change;
     bool connected;
     Queue<String> responseQueue;
@@ -51,13 +52,15 @@ class Context final {
      * @brief Sets the current valve position.
      * @param position The valve position value (0-255).
      */
-    void setPosition(uint8_t position);
+    void setMotorPerc(uint8_t position);
+
+    bool isVirtualPerc(void);
 
     /**
      * @brief Gets the current valve position.
      * @return Current valve position (0-255).
      */
-    uint8_t getPosition(void);
+    uint8_t getMotorPerc(void);
 
     /**
      * @brief Updates the timestamp of the last received message.
@@ -139,7 +142,7 @@ class Context final {
 
     /**
      * @brief Sets the system to unconnected state
-     * 
+     *
      * Marks the system as disconnected from network/communication.
      * This state is typically used when network communication is lost.
      */
@@ -147,7 +150,7 @@ class Context final {
 
     /**
      * @brief Sets the system to connected state
-     * 
+     *
      * Marks the system as connected to network/communication.
      * This state indicates that normal communication is established.
      */
