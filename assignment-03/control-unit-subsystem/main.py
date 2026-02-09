@@ -125,15 +125,18 @@ def get_data():
 def set_mode():
     payload = request.get_json(silent=True) or {}
     state = payload.get("state")
+    valveValue = payload.get("valveValue")
 
     if state not in {"AUTOMATIC", "MANUAL"}:
         return jsonify({"error": "invalid state"}), 400
 
     with config_lock:
-        config["state"] = state
+        if config["state"] != state:
+            config["state"] = state
+            config["valveValue"] = valveValue
+            serial_outbox.append(b"M\n")
 
-        serial_outbox.append(b"M\n")
-
+        serial_outbox.append(valveValue.encode() + b"\n")
     return jsonify({"ok": True})
 
 

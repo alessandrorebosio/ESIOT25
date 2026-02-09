@@ -105,9 +105,9 @@ function updateRangeStyle() {
     const min = rangeInput.min || 0;
     const max = rangeInput.max || 100;
     const percentage = (val - min) * 100 / (max - min);
-    
+
     rangeValue.textContent = val + '%';
-    
+
     rangeInput.style.backgroundSize = percentage + '% 100%';
 }
 
@@ -127,7 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
         const controlType = document.getElementById("controlTypeInput").value;
         const valveValue = document.getElementById("valveLevelInput").value;
-        document.getElementById("valveValue").textContent = valveValue;
         sendModeChange(controlType, valveValue);
     });
 
