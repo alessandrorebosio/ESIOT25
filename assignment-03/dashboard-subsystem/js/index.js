@@ -104,7 +104,24 @@ function sendData(controlType, valveLevel, waterLevel, state) {
     }).catch(err => console.error("Send failed", err));
 }
 
+const rangeInput = document.getElementById('valveLevelInput');
+
+function updateRangeStyle() {
+    const val = rangeInput.value;
+    const rangeValue = document.getElementById('rangeValue');
+    const min = rangeInput.min || 0;
+    const max = rangeInput.max || 100;
+    const percentage = (val - min) * 100 / (max - min);
+    
+    rangeValue.textContent = val + '%';
+    
+    rangeInput.style.backgroundSize = percentage + '% 100%';
+}
+
+rangeInput.addEventListener('input', updateRangeStyle);
+
 document.addEventListener("DOMContentLoaded", () => {
     updateDashboard();
+    updateRangeStyle();
     setInterval(updateDashboard, 1000);
 });
