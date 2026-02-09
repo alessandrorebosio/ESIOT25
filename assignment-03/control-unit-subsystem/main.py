@@ -73,7 +73,7 @@ def serial_worker(port, baudrate):
                     if line.isdigit():
                         config["valveValue"] = line
 
-                    ser.write(b"C\n" if connected else b"U\n")
+                    ser.write(b"C\n")
 
                 if automatic and connected:
                     with config_lock:
