@@ -13,7 +13,7 @@ CommunicationTask::CommunicationTask(Hardware &hw, Context &ctx, int baud, int p
  */
 void CommunicationTask::tick(void) {
     if (Serial.available() > 0) {
-        String input = Serial.readString();
+        String input = Serial.readStringUntil('\n');
         this->context.updateLastMsgTime();
 
         if (isDigit(input[0])) {
@@ -21,13 +21,13 @@ void CommunicationTask::tick(void) {
         } else {
             input.toUpperCase();
             if (input.equals("C")) {
+                Serial.println(input);
                 this->context.changeTo();
             }
         }
     }
 
     if (this->context.needResponse()) {
-        Serial.println(this->context.getResponse());
-        this->context.setResponse("");
+        Serial.println(this->context.popResponse());
     }
 }

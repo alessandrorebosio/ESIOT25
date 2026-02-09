@@ -21,7 +21,9 @@ void Hardware::init(void) {
     motor = new Motor(this->motorPin);
     lcd = new Lcd(this->lcdAddr, this->lcdCols, this->lcdRows);
     potentiometer = new Potentiometer(this->potentiometerPin);
+}
 
+void Hardware::motorOn(void) {
     this->motor->on();
 }
 
@@ -52,40 +54,31 @@ void Hardware::setMotorPosition(int value) {
 }
 
 /**
- * @brief Print a message on the LCD display.
- * @param y Row position (0-indexed) for the message.
- * @param msg Message string to display.
- */
-void Hardware::printOnLcd(uint8_t y, String msg) {
-    this->lcd->print(y, msg);
-}
-
-/**
  * @brief Print "MANUAL" on the LCD display.
  */
 void Hardware::printManual() {
-    this->lcd->print(0, "Mode: MANUAL");
+    this->lcd->print(0, "MODE: MANUAL");
 }
 
 /**
  * @brief Print "AUTOMATIC" on the LCD display.
  */
 void Hardware::printAutomatic() {
-    this->lcd->print(0, "Mode: AUTOMATIC");
+    this->lcd->print(0, "MODE: AUTOMATIC");
 }
 
 /**
  * @brief Print "UNCONNECTED" on the LCD display.
  */
 void Hardware::printUnconnected() {
-    this->lcd->print(0, "Mode:UNCONNECTED");
+    this->lcd->print(0, "MODE:UNCONNECTED");
 }
 
 /**
  * @brief Print the percentual of valve opening on the LCD display.
  */
 void Hardware::printValveValue(uint8_t value) {
-    this->lcd->print(1, "Valve: " + String(map(value, 0, 90, 0, 100)) + "%");
+    this->lcd->print(1, "Valve: " + String(value) + "%");
 }
 
 /**

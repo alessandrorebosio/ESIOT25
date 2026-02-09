@@ -49,6 +49,8 @@ class Hardware final {
      */
     void init(void);
 
+    void motorOn(void);
+
     /**
      * @brief Check if the button is currently pressed.
      * @return true if button is pressed, false otherwise.

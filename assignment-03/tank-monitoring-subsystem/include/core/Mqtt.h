@@ -74,7 +74,7 @@ class Mqtt {
     /**
      * @brief Creates a formatted MQTT topic string.
      *
-     * Creates a topic in the format: "RiverMonitoring/<source>/<destination>"
+     * Creates a topic in the format: "SmartTank/<source>/<destination>"
      *
      * @param source Source identifier
      * @param destination Destination identifier

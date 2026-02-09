@@ -10,10 +10,7 @@
  */
 SystemTask::SystemTask(Hardware &hw, Context &ctx, int period) : hardware(hw), context(ctx) {
     Task::init(period);
-
-    this->hardware.printAutomatic();
-    this->context.setAutomatic();
-    this->state = AUTOMATIC;
+    this->transitionToAutomatic();
 }
 
 /**
@@ -28,36 +25,43 @@ void SystemTask::tick(void) {
     switch (state) {
         case AUTOMATIC:
             if (!isNetworkOk) {
-                this->hardware.printUnconnected();
-                this->context.setManual();
-
-                state = UNCONNECTED;
-                return;
+                this->transitionToUnconnected();
             }
 
             if (this->hardware.isPressed() || this->context.needChange()) {
-                this->context.setResponse("MANUAL");
-                this->hardware.printManual();
-                this->context.setManual();
-
-                state = MANUAL;
+                this->transitionToManual();
             }
             break;
         case MANUAL:
             if (this->hardware.isPressed() || this->context.needChange()) {
-                this->context.setResponse("AUTOMATIC");
-                this->hardware.printAutomatic();
-                this->context.setAutomatic();
-
-                state = AUTOMATIC;
+                this->transitionToAutomatic();
             }
             break;
         case UNCONNECTED:
             if (isNetworkOk) {
-                this->hardware.printAutomatic();
-                this->context.setAutomatic();
-                state = AUTOMATIC;
+                this->transitionToAutomatic();
             }
             break;
     }
+}
+
+void SystemTask::transitionToAutomatic() {
+    this->context.setResponse("AUTOMATIC");
+    this->hardware.printAutomatic();
+    this->context.setAutomatic();
+    this->state = AUTOMATIC;
+}
+
+void SystemTask::transitionToManual() {
+    this->context.setResponse("MANUAL");
+    this->hardware.printManual();
+    this->context.setManual();
+    this->state = MANUAL;
+}
+
+void SystemTask::transitionToUnconnected() {
+    this->context.setResponse("UNCONNECTED");
+    this->hardware.printUnconnected();
+    this->context.setManual();
+    this->state = UNCONNECTED;
 }

@@ -1,106 +1,80 @@
-import time
-import threading
-from flask import Flask, request, jsonify
+import serial, time, sys, threading
+import paho.mqtt.client as mqtt
+from flask import Flask, jsonify
 from flask_cors import CORS
-from serialConn.serialConn import SerialDevice
-from mqtt.mqtt import MQTTClient
 
-L1, L2, T1, T2 = 40.0, 70.0, 5.0, 10.0
-N = 20
+mqtt_client = mqtt.Client()
 
 app = Flask(__name__)
 CORS(app)
-cus = None
 
-class ControlUnit:
-    def __init__(self):
-        self.wcs = SerialDevice("COM3", 9600, timeout=0.1)
-        self.tms = MQTTClient(broker="broker.mqtt-dashboard.com", topic="RiverMonitoring/esp32/backend")
-        
-        self.water_level = 0.0
-        self.last_tms_time = time.time()
-        self.l1_start_time = None
-        self.override_active = False
-        self.current_valve_level = 0
-        
-        self.history = [] 
-
-    def on_tms_message(self, topic, payload):
-        try:
-            valore = payload.get("value") or payload.get("raw", "0")
-            self.water_level = float(str(valore).strip())
-            self.last_tms_time = time.time()
-            
-            data_point = {
-                "time": time.strftime("%Y-%m-%dT%H:%M:%S"),
-                "waterLevel": self.water_level,
-                "valveLevel": self.current_valve_level,
-                "controlType": "DATA",
-                "state": self.get_system_state()
-            }
-            self.history.insert(0, data_point)
-            if len(self.history) > N:
-                self.history.pop()
-                
-        except Exception as e:
-            print(f"[ERROR] Failed to process TMS message: {e}")
-
-    def get_system_state(self):
-        if (time.time() - self.last_tms_time) > T2: return "UNCONNECTED"
-        if self.override_active: return "MANUAL"
-        return "AUTOMATIC"
-
-    def run_logic(self):
-        self.wcs.open()
-        self.tms.set_message_handler(self.on_tms_message)
-        self.tms.connect()
-        
+def mqtt_connect(mqtt_broker, mqtt_topic):
+    try:
         while True:
-            now = time.time()
-            if not self.override_active:
-                if (now - self.last_tms_time) < T2:
-                    if self.water_level > L2:
-                        angle = 90
-                        self.l1_start_time = None
-                    elif self.water_level > L1:
-                        if self.l1_start_time is None: self.l1_start_time = now
-                        angle = 45 if (now - self.l1_start_time) > T1 else 0
-                    else:
-                        angle = 0
-                        self.l1_start_time = None
-                    
-                    self.current_valve_level = int((angle * 100) / 90)
-                    self.wcs.send(str(angle))
+            try:
+                mqtt_client.connect(mqtt_broker, 1883, 60)
+                mqtt_client.subscribe(mqtt_topic)
+                mqtt_client.loop_start()
+                print(f"Connected to MQTT broker: {mqtt_broker}")
+                print(f"Subscribed to topic: {mqtt_topic}")
+                return
+            except Exception as e:
+                print(f"MQTT connection failed: {e}")
+                time.sleep(1)
+    finally:
+        mqtt_client.loop_stop()
+        mqtt_client.disconnect()
+
+def connect(port, baudrate):
+    while True:
+        try:
+            ser = serial.Serial(port, baudrate, timeout=1)
+            time.sleep(2)
+            print(f"Connected to {port}")
+            return ser
+        except Exception as e:
+            print(f"Connection attempt failed: {e}")
             time.sleep(1)
 
-@app.route('/api/data', methods=['GET'])
-def get_data():
-    return jsonify(cus.history if cus.history else [{
-        "time": time.strftime("%Y-%m-%dT%H:%M:%S"),
-        "waterLevel": cus.water_level,
-        "valveLevel": cus.current_valve_level,
-        "controlType": "DATA",
-        "state": cus.get_system_state()
-    }])
-
-@app.route('/api/data', methods=['POST'])
-def post_data():
-    data = request.json
-    control_type = data.get("controlType")
+def serial_listener(port, baudrate):
+    ser = connect(port, baudrate)
     
-    if control_type == "SWITCH_TO_AUTO":
-        cus.override_active = False
-        
-    elif control_type == "SET":
-        cus.override_active = True
-        valve_level = int(data.get("valveLevel", 0))
-        angle = int((valve_level * 90) / 100)
-        cus.current_valve_level = valve_level
-        cus.wcs.send(str(angle))
-        
-    return jsonify({"status": "ok"})
+    try:
+        while True:
+            try:
+                line = ser.readline().decode(errors="ignore").strip()
+                if line:
+                    print(f"Received: {line}")
+            except (serial.SerialException, OSError):
+                print("Device disconnected. Reconnecting...")
+                ser.close()
+                ser = connect(port, baudrate)
+    finally:
+        ser.close()
+
+
+@app.route("/")
+def index():
+    return "Serial Web Server active"
+
+@app.route("/data")
+def get_data():
+    return jsonify({"latest": ""})
 
 if __name__ == "__main__":
-    cus = ControlUnit()
-    threading.Thread(target=cus.run_logic, daemon=True).start()
-    app.run(port=8080, debug=False, use_reloader=False)
+    if len(sys.argv) < 3:
+        print("Usage: python main.py <port> <baudrate>")
+        sys.exit(1)
+
+    L1, L2, T1, T2 = 40.0, 70.0, 5.0, 10.0
+
+    threading.Thread(target=mqtt_connect, args=("broker.mqtt-dashboard.com", "SmartTank/esp32/backend"), daemon=True).start()
+    threading.Thread(target=serial_listener, args=(sys.argv[1], int(sys.argv[2])), daemon=True).start()
+    
+    print("Starting Flask server...")
+    try:
+        app.run(host="0.0.0.0", port=8080, debug=False, use_reloader=False)
+    except KeyboardInterrupt:
+        print("\nShutting down...")
+    finally:
+        time.sleep(0.5)

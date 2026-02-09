@@ -8,6 +8,7 @@
  */
 ValveTask::ValveTask(Hardware &hw, Context &ctx, int period) : hardware(hw), context(ctx) {
     Task::init(period);
+    this->hardware.motorOn();
 }
 
 /**
@@ -16,15 +17,16 @@ ValveTask::ValveTask(Hardware &hw, Context &ctx, int period) : hardware(hw), con
  * Manual mode: potentiometer sets position
  * Automatic mode: context target sets position
  * Converts percentage (0-100%) to motor degrees (0-90°)
+ * Updates motor position only if different from current position
  */
 void ValveTask::tick(void) {
-    uint8_t pos = 0;
-    if (this->context.isAutomatic()) {
-        pos = map(this->context.getPosition(), MIN, 100, MIN, MAX);
-    } else {
-        pos = map(this->hardware.getPotValue(), MIN, 1023, MIN, MAX);
-    }
+    uint8_t perc = this->context.isAutomatic() ? this->context.getPosition() : map(this->hardware.getPotValue(), 0, 1023, 0, 100);
+    uint8_t targetPos = map(perc, 0, 100, MIN, MAX);
 
-    this->hardware.setMotorPosition(pos);
-    this->hardware.printValveValue(pos);
+    if (targetPos != this->lastMotorPos) {
+        this->lastMotorPos = targetPos;
+        this->hardware.setMotorPosition(targetPos);
+        this->hardware.printValveValue(perc);
+        this->context.setResponse(String(perc));
+    }
 }

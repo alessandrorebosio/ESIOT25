@@ -1,103 +1,82 @@
 
-/**
- * Main initialization function that runs when the DOM is fully loaded
- * Sets up event listeners and periodic data refreshing
- */
-document.addEventListener('DOMContentLoaded', () => {
-    const controllerForm = document.getElementById('controllerForm');
-    const controlType = document.getElementById('controlTypeInput');
-    const controllerContainer = document.getElementById('controllerContainer');
-    const valveInput = document.getElementById('valveLevelInput');
-    const submitBtn = document.querySelector('#controllerForm button[type="submit"]');
-    const waterCtx = document.getElementById('waterLevelTrend');
-    const systemStateEl = document.getElementById('systemState');
-    const valveValueEl = document.getElementById('valveValue');
+const UPDATE_INTERVAL = 2000;
 
-    if (!controlType || !controllerContainer || !valveInput) return;
+let isConnected = false;
 
-    /**
-     * Updates the UI based on the current control type selection
-     * Hides/shows manual controller and disables/enables inputs
-     */
-    const updateUI = () => {
-        const isAuto = controlType.value === 'auto';
-        controllerContainer.style.display = isAuto ? 'none' : 'block';
-        valveInput.disabled = isAuto;
-        if (submitBtn) submitBtn.disabled = isAuto;
-    };
+function toggleValveControl() {
+    const controlType = document.getElementById('controlTypeInput').value;
+    const valveControl = document.getElementById('valveLevelControl');
 
-    /**
-     * Event handler for control type changes
-     * @param {Event} e - The change event
-     */
-    controlType.addEventListener('change', async function () {
-        updateUI();
-        if (this.value === 'auto') {
-            window.alert('You have successfully changed the control type to automatic. The system will now be controlled by the water level sensor.');
-            try {
-                await sendData('SWITCH_TO_AUTO', -1, -1, '');
-            } catch (e) {
-                console.error(e);
-            }
-            await loadData();
-        }
-    });
+    if (controlType === 'auto') {
+        valveControl.style.display = 'none';
+    } else {
+        valveControl.style.display = 'block';
+    }
+}
 
-    /**
-     * Form submission handler for manual control
-     * @param {Event} e - The submit event
-     */
-    if (controllerForm) {
-        controllerForm.addEventListener('submit', async e => {
-            e.preventDefault();
-            try {
-                await sendData('SET', valveInput.value, -1, '');
-                await loadData();
-            } catch (err) {
-                console.error(err);
-            }
-        });
+function updateUI(data) {
+    document.getElementById('systemState').textContent = data.state || '—';
+    document.getElementById('valveValue').textContent = data.valveLevel || '—';
+
+    document.getElementById('controlTypeInput').value = data.controlType || 'auto';
+    if (data.valveLevel !== undefined) {
+        document.getElementById('valveLevelInput').value = data.valveLevel;
     }
 
-    /**
-     * Loads and displays the latest data from the server
-     * Updates the chart, system state, and valve value display
-     */
-    async function loadData() {
-        try {
-            const raw = await fetchData();
+    toggleValveControl();
+    updateChart(data.waterLevel);
+}
 
-            if (raw.error === 'NOT AVAILABLE') {
-                if (systemStateEl) {
-                    systemStateEl.innerText = 'NOT AVAILABLE';
-                }
-                if (valveValueEl) {
-                    valveValueEl.innerText = 'NOT AVAILABLE';
-                }
-                console.error('Server not available:', raw.message);
-                return;
-            }
+function setConnectionStatus(connected) {
+    isConnected = connected;
+    const form = document.getElementById('controllerForm');
+    const inputs = form.querySelectorAll('input, select, button');
 
-            const data = Array.isArray(raw) ? raw.filter(el => el.controlType === 'DATA') : [];
-            if (!data.length) return;
+    if (connected) {
+        inputs.forEach(input => input.disabled = false);
+    } else {
+        inputs.forEach(input => input.disabled = true);
+        document.getElementById('systemState').textContent = 'NOT AVAILABLE';
+    }
+}
 
-            plotDataHistory(data, waterCtx);
+async function fetchAndUpdate() {
+    try {
+        const data = await fetchData();
+        setConnectionStatus(true);
+        updateUI(data);
+    } catch (error) {
+        setConnectionStatus(false);
+    }
+}
 
-            if (systemStateEl) {
-                systemStateEl.innerText = '' + data[0].state;
-            }
+async function handleFormSubmit(e) {
+    e.preventDefault();
 
-            if (valveValueEl) {
-                valveValueEl.innerText = '' + data[0].valveLevel;
-            }
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-        }
+    if (!isConnected) {
+        alert('Cannot update: not connected to server');
+        return;
     }
 
-    updateUI();
-    loadData();
+    const controlType = document.getElementById('controlTypeInput').value;
+    const valveLevel = parseInt(document.getElementById('valveLevelInput').value);
 
-    const refreshInterval = 10000;
-    setInterval(loadData, refreshInterval);
+    try {
+        await sendData(controlType, valveLevel, 0, '');
+    } catch (error) {
+        console.error('Error sending data:', error);
+        alert('Failed to update settings');
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    initChart();
+    setConnectionStatus(false);
+    fetchAndUpdate();
+
+    document.getElementById('controlTypeInput').addEventListener('change', toggleValveControl);
+    document.getElementById('controllerForm').addEventListener('submit', handleFormSubmit);
+
+    toggleValveControl();
+    setInterval(fetchAndUpdate, UPDATE_INTERVAL);
 });

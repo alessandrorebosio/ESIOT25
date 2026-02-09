@@ -4,7 +4,7 @@
  * @brief Constructs a new Context object and initializes it to default state.
  * Calls reset() to set automatic mode and position 0.
  */
-Context::Context(void) {
+Context::Context(void) : responseQueue(10) {
     this->reset();
 }
 
@@ -14,10 +14,10 @@ Context::Context(void) {
  */
 void Context::reset(void) {
     this->setAutomatic();
-    this->setResponse("");
+    this->updateLastMsgTime();
+    this->setPosition(0);
+    this->responseQueue.clear();
     this->change = false;
-    this->lastMsgTime = 0;
-    this->position = 0;
 }
 
 /**
@@ -104,42 +104,42 @@ bool Context::needChange(void) {
 }
 
 /**
- * @brief Sets a response message to be sent via communication interface.
+ * @brief Sets a response message to be added to the response queue.
  *
- * Stores the provided response string in the context. The CommunicationTask
- * should regularly check for pending responses using `needResponse()` and
- * send them through the appropriate communication channel.
+ * Stores the provided response string in a FIFO queue. If the queue is full,
+ * the oldest response will be discarded to make room for the new one.
  *
- * @param response The response string to be sent. Can be empty to clear
- *                 pending responses.
+ * @param response The response string to be queued.
  */
 void Context::setResponse(String response) {
-    this->response = response;
+    this->responseQueue.push(response);
 }
 
 /**
- * @brief Gets the current response message.
+ * @brief Gets the oldest queued response without removing it.
  *
- * Retrieves the response string that was previously set. This method does
- * not clear the response - it remains available for multiple retrievals
- * until explicitly cleared by `setResponse("")`.
- *
- * @return The current response string. Returns empty string if no response
- *         is set.
+ * @return The oldest queued response string. Returns empty string if queue is empty.
  */
 String Context::getResponse(void) {
-    return this->response;
+    return this->responseQueue.peek();
+}
+
+/**
+ * @brief Retrieves and removes the oldest queued response.
+ *
+ * Atomically returns the response at the front of the queue and removes it.
+ *
+ * @return The oldest queued response string. Returns empty string if queue is empty.
+ */
+String Context::popResponse(void) {
+    return this->responseQueue.pop();
 }
 
 /**
  * @brief Checks if a response message is pending.
  *
- * Determines whether there is a non-empty response string waiting to be
- * sent. This method only checks the presence of a response without
- * modifying it, allowing multiple tasks to check the same response.
- *
- * @return true if a non-empty response string exists, false otherwise.
+ * @return true if at least one response is queued, false otherwise.
  */
 bool Context::needResponse(void) {
-    return this->response.length() > 0;
+    return !this->responseQueue.isEmpty();
 }

@@ -2,18 +2,21 @@
 
 #include <Arduino.h>
 
+#include <Queue.h>
+
 /**
  * @brief System context and state manager.
  *
  * This class maintains the operational mode (automatic/manual) and current
  * valve position state for the entire system. It provides a centralized
  * interface for state management and control mode transitions.
+ * Response messages are managed as a FIFO queue to avoid losing messages.
  */
 class Context final {
   private:
     bool automatic;
     bool change;
-    String response;
+    Queue<String> responseQueue;
     uint8_t position;
 
     unsigned long lastMsgTime;
@@ -88,35 +91,48 @@ class Context final {
     bool needChange(void);
 
     /**
-     * @brief Sets a response message to be sent via communication interface.
+     * @brief Sets a response message to be added to the response queue.
      *
-     * This method stores a response string that will be sent through the
-     * communication interface. It's typically used for acknowledging commands
-     * or sending status updates to external controllers.
+     * Stores the provided response string in a FIFO queue. If the queue is full,
+     * the oldest response will be discarded to make room for the new one.
+     * The CommunicationTask should regularly check for pending responses using
+     * `needResponse()` and retrieve them using `popResponse()`.
      *
-     * @param response The response string to be sent.
+     * @param response The response string to be queued. Can be empty to queue
+     *                 empty messages.
      */
     void setResponse(String response);
 
     /**
-     * @brief Gets the current response message.
+     * @brief Gets the oldest queued response without removing it.
      *
-     * This method retrieves the response string that was previously set
-     * to be sent via the communication interface.
+     * Retrieves the response string at the front of the queue. This method
+     * does not remove the response from the queue. Use `popResponse()` to
+     * get and remove a response atomically.
      *
-     * @return The current response string. Returns empty string if no
-     *         response is pending.
+     * @return The oldest queued response string. Returns empty string if queue
+     *         is empty.
      */
     String getResponse(void);
 
     /**
+     * @brief Retrieves and removes the oldest queued response.
+     *
+     * Atomically returns the response at the front of the queue and removes it.
+     * This is the preferred method for processing queued responses.
+     *
+     * @return The oldest queued response string. Returns empty string if queue
+     *         is empty.
+     */
+    String popResponse(void);
+
+    /**
      * @brief Checks if a response message is pending.
      *
-     * This method checks whether there is a response message waiting to be
-     * sent through the communication interface. It does not clear the
-     * response string.
+     * Determines whether there is at least one non-empty response in the queue.
+     * This method only checks the presence of responses without modifying them.
      *
-     * @return true if a response message is pending, false otherwise.
+     * @return true if at least one response is queued, false otherwise.
      */
     bool needResponse(void);
 

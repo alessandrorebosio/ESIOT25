@@ -1,54 +1,60 @@
+let chart;
 
-/**
- * Creates or updates a line chart showing water level history
- * @param {Array<Object>} data - Array of data objects with time and waterLevel properties
- * @param {CanvasRenderingContext2D} ctx - Canvas context for rendering the chart
- */
-function plotDataHistory(data, ctx) {
-    const xValues = data.map(x => new Date(x.time).toLocaleString());
-    const yValues = data.map(y => y.waterLevel);
-
-    try {
-        if (ctx && ctx._chartInstance) {
-            ctx._chartInstance.destroy();
-            ctx._chartInstance = null;
-        }
-    } catch (e) { 
-        /* ignore cleanup errors */ 
-    }
-
-    const chart = new Chart(ctx, {
+function initChart() {
+    const ctx = document.getElementById('waterLevelTrend').getContext('2d');
+    chart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: xValues,
+            labels: [],
             datasets: [{
-                backgroundColor: 'rgba(0,0,0,0.05)',
-                borderColor: 'rgba(0,0,0,0.6)',
-                fill: true,
-                tension: 0.2,
-                data: yValues
+                label: 'Water Level (%)',
+                data: [],
+                borderColor: 'rgb(13, 110, 253)',
+                backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                tension: 0.4,
+                fill: true
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { 
-                legend: { 
-                    display: false 
-                } 
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'Water Level (%)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    }
+                }
             },
-            scales: { 
-                x: { 
-                    display: true 
-                }, 
-                y: { 
-                    display: true 
-                } 
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
             }
         }
     });
-
-    ctx._chartInstance = chart;
 }
 
-window.plotDataHistory = plotDataHistory;
+function updateChart(waterLevel) {
+    if (!chart) return;
+
+    const now = new Date().toLocaleTimeString();
+
+    if (chart.data.labels.length > 20) {
+        chart.data.labels.shift();
+        chart.data.datasets[0].data.shift();
+    }
+
+    chart.data.labels.push(now);
+    chart.data.datasets[0].data.push(waterLevel || 0);
+    chart.update();
+}

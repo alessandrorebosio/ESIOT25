@@ -105,7 +105,7 @@ void Mqtt::loop() {
 /**
  * @brief Creates a formatted MQTT topic string.
  *
- * Creates a topic in the format: "RiverMonitoring/<source>/<destination>"
+ * Creates a topic in the format: "SmartTank/<source>/<destination>"
  * Memory is dynamically allocated and must be freed by the caller.
  *
  * @param source Source identifier
@@ -114,7 +114,7 @@ void Mqtt::loop() {
  */
 char *Mqtt::createTopic(const char *source, const char *destination) {
     // Calculate the length of the resulting string
-    size_t length = strlen("RiverMonitoring/") + strlen(source) + strlen("/") + strlen(destination) + 1;
+    size_t length = strlen("SmartTank/") + strlen(source) + strlen("/") + strlen(destination) + 1;
 
     // Allocate memory for the resulting string
     char *result = (char *)malloc(length);
@@ -126,6 +126,6 @@ char *Mqtt::createTopic(const char *source, const char *destination) {
     }
 
     // Construct the resulting string
-    snprintf(result, length, "RiverMonitoring/%s/%s", source, destination);
+    snprintf(result, length, "SmartTank/%s/%s", source, destination);
     return result;
 }

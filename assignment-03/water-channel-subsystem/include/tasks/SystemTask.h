@@ -10,6 +10,10 @@ class SystemTask final : public Task {
     Context &context;
     enum { AUTOMATIC, MANUAL, UNCONNECTED } state;
 
+    void transitionToAutomatic();
+    void transitionToManual();
+    void transitionToUnconnected();
+
   public:
     /**
      * @brief Construct a new System Task object

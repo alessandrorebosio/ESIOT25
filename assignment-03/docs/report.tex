@@ -260,9 +260,12 @@ The following subsections describe the tasks composing the subsystem.
 The \textbf{SystemTask} manages the operating mode of the subsystem and
 handles user interaction through the tactile button.
 At each execution, the task checks the button state and toggles the system mode
-between \texttt{AUTOMATIC}, \texttt{MANUAL}, and \texttt{UNCONNECTED} when appropriate.
-The task monitors network connectivity by checking the timestamp of the last received message from the CUS;
-if no message is received within $T_2$ milliseconds, the system transitions to \texttt{UNCONNECTED} mode.
+between \texttt{AUTOMATIC}, \texttt{MANUAL}, and \texttt{UNCONNECTED}
+when appropriate.
+The task monitors network connectivity by checking the timestamp of
+the last received message from the CUS;
+if no message is received within $T_2$ milliseconds, the system
+transitions to \texttt{UNCONNECTED} mode.
 The task updates the shared system context to reflect the
 current mode and to notify other tasks of the state change.
 
@@ -274,13 +277,18 @@ current mode and to notify other tasks of the state change.
 \end{figure}
 
 \subsection{Valve Task}
-The \textbf{ValveTask} is responsible for controlling the servo motor that operates the water channel valve.
-At each execution cycle, the task reads the current system mode from the shared context:
+The \textbf{ValveTask} is responsible for controlling the servo motor
+that operates the water channel valve. At each execution cycle, the
+task reads the current system mode from the shared context:
+
 \begin{itemize}
-  \item In \texttt{AUTOMATIC} mode, the valve position is set according to the target position specified by the CUS through serial communication.
-  \item In \texttt{MANUAL} mode, the valve position is directly controlled by the potentiometer analog input, providing operators with immediate feedback and direct control over the valve.
+  \item In \texttt{AUTOMATIC} mode, the valve position is set
+    according to the target position specified by the CUS through
+    serial communication.
+  \item In \texttt{MANUAL} mode, the valve position is directly
+    controlled by the potentiometer analog input, providing operators
+    with immediate feedback and direct control over the valve.
 \end{itemize}
-The task converts the position value (0--100\%) to servo motor angle (0--90 degrees) and updates the LCD display with the current valve opening percentage.
 
 \begin{figure}[H]
   \centering
@@ -290,12 +298,16 @@ The task converts the position value (0--100\%) to servo motor angle (0--90 degr
 \end{figure}
 
 \subsection{Communication Task}
-The \textbf{CommunicationTask} manages serial communication with the Control Unit Subsystem (CUS).
-This task periodically checks the serial port for incoming commands and processes them to update the system state.
-When a new command is received from the CUS, the task updates the context with the target valve position
-and records the timestamp of the last received message.
-This timestamp is used by the SystemTask to detect communication losses and trigger the transition to \texttt{UNCONNECTED} mode.
-The task also outputs status information and current sensor readings back to the CUS via the serial interface.
+The \textbf{CommunicationTask} manages serial communication with the
+Control Unit Subsystem (CUS). This task periodically checks the
+serial port for incoming commands and processes them to update the
+system state. When a new command is received from the CUS, the task
+updates the context with the target valve position and records the
+timestamp of the last received message. This timestamp is used by the
+SystemTask to detect communication losses and trigger the transition
+to \texttt{UNCONNECTED} mode. The task also outputs status
+information and current sensor readings back to the CUS via the
+serial interface.
 
 \begin{figure}[H]
   \centering

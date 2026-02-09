@@ -16,6 +16,7 @@ class ValveTask final : public Task {
   private:
     Hardware &hardware;
     Context &context;
+    uint8_t lastMotorPos;
 
   public:
     /**
