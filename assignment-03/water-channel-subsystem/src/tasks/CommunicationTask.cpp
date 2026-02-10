@@ -14,17 +14,21 @@ CommunicationTask::CommunicationTask(Hardware &hw, Context &ctx, int baud, int p
 void CommunicationTask::tick(void) {
     if (Serial.available() > 0) {
         String input = Serial.readStringUntil('\n');
-        this->context.updateLastMsgTime();
+        input.trim();
+        if (input.length() == 0) {
+            return;
+        }
+        this->context.recordLastMessageTime();
 
         if (isDigit(input[0])) {
-            this->context.setMotorPerc(constrain(input.toInt(), 0, 100));
+            this->context.setValvePercentage(constrain(input.toInt(), 0, 100));
         } else {
             input.toUpperCase();
             if (input.equals("M") && this->context.isConnected()) {
-                this->context.changeTo();
+                this->context.requestModeToggle();
             }
             if (input.equals("U")) {
-                this->context.setUnconnected();
+                this->context.setDisconnected();
             }
             if (input.equals("C")) {
                 this->context.setConnected();

@@ -50,23 +50,27 @@ class Context final {
 
     /**
      * @brief Sets the current valve position.
-     * @param position The valve position value (0-255).
+     * @param position The valve position percentage (0-100).
      */
-    void setMotorPerc(uint8_t position);
+    void setValvePercentage(uint8_t position);
 
-    bool needSetPerc(void);
+    /**
+     * @brief Checks if a new valve percentage was received and clears the flag.
+     * @return true if a new percentage was set since the last check.
+     */
+    bool consumePendingValvePercentage(void);
 
     /**
      * @brief Gets the current valve position.
-     * @return Current valve position (0-255).
+     * @return Current valve position percentage (0-100).
      */
-    uint8_t getMotorPerc(void);
+    uint8_t getValvePercentage(void);
 
     /**
      * @brief Updates the timestamp of the last received message.
      * Should be called whenever a valid message is received to reset the network timeout timer.
      */
-    void updateLastMsgTime(void);
+    void recordLastMessageTime(void);
 
     /**
      * @brief Gets the timestamp of the last received message.
@@ -81,7 +85,7 @@ class Context final {
      * switch between automatic and manual modes. The change will be processed
      * by the appropriate tasks when they check for pending changes.
      */
-    void changeTo(void);
+    void requestModeToggle(void);
 
     /**
      * @brief Checks if a mode change is pending.
@@ -92,7 +96,7 @@ class Context final {
      *
      * @return true if a mode change is pending, false otherwise.
      */
-    bool needChange(void);
+    bool consumeModeToggleRequest(void);
 
     /**
      * @brief Sets a response message to be added to the response queue.
@@ -146,7 +150,7 @@ class Context final {
      * Marks the system as disconnected from network/communication.
      * This state is typically used when network communication is lost.
      */
-    void setUnconnected(void);
+    void setDisconnected(void);
 
     /**
      * @brief Sets the system to connected state

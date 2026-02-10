@@ -24,12 +24,12 @@ void SystemTask::tick(void) {
                 this->transitionToUnconnected();
             }
 
-            if (this->hardware.isPressed() || this->context.needChange()) {
+            if (this->hardware.isPressed() || this->context.consumeModeToggleRequest()) {
                 this->transitionToManual();
             }
             break;
         case MANUAL:
-            if (this->hardware.isPressed() || this->context.needChange()) {
+            if (this->hardware.isPressed() || this->context.consumeModeToggleRequest()) {
                 this->transitionToAutomatic();
             }
             break;

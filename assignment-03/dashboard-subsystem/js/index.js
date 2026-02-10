@@ -35,16 +35,7 @@ const updateDashboard = () => {
             document.getElementById("connectionStatus").textContent = "NOT AVAILABLE";
             document.getElementById("modeSelector").style.display = "none";
             document.getElementById("controllerContainer").style.display = "none";
-            toggleInputs(true);
         });
-    document.getElementById("controllerContainer").style.display = (document.getElementById("controlTypeInput").value == "AUTOMATIC") ? "none" : "block";
-};
-
-const toggleInputs = (disabled) => {
-    document.getElementById("controlTypeInput").disabled = disabled;
-    document.getElementById("valveLevelInput").disabled = disabled;
-    const btn = document.querySelector("#controllerForm button[type='submit']");
-    if (btn) btn.disabled = disabled;
 };
 
 const plotDataHistory = (data, canvas) => {
@@ -125,9 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("controllerForm").addEventListener("submit", (event) => {
         event.preventDefault();
-        const controlType = document.getElementById("controlTypeInput").value;
-        const valveValue = document.getElementById("valveLevelInput").value;
-        sendModeChange(controlType, valveValue);
+        sendModeChange(document.getElementById("controlTypeInput").value, document.getElementById("valveLevelInput").value);
     });
 
     updateDashboard();

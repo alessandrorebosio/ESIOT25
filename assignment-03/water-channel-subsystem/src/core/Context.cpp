@@ -14,8 +14,8 @@ Context::Context(void) : responseQueue(10) {
  */
 void Context::reset(void) {
     this->setAutomatic();
-    this->updateLastMsgTime();
-    this->setMotorPerc(0);
+    this->recordLastMessageTime();
+    this->setValvePercentage(0);
     this->responseQueue.clear();
     this->virtualPerc = false;
     this->change = false;
@@ -48,22 +48,22 @@ bool Context::isAutomatic(void) {
 
 /**
  * @brief Sets the current valve position.
- * @param position The valve position value (0-255).
+ * @param position The valve position percentage (0-100).
  */
-void Context::setMotorPerc(uint8_t position) {
+void Context::setValvePercentage(uint8_t position) {
     this->position = position;
     this->virtualPerc = true;
 }
 
 /**
  * @brief Gets the current valve position.
- * @return Current valve position (0-255).
+ * @return Current valve position percentage (0-100).
  */
-uint8_t Context::getMotorPerc(void) {
+uint8_t Context::getValvePercentage(void) {
     return this->position;
 }
 
-bool Context::needSetPerc(void) {
+bool Context::consumePendingValvePercentage(void) {
     bool result = this->virtualPerc;
     this->virtualPerc = false;
     return result;
@@ -73,7 +73,7 @@ bool Context::needSetPerc(void) {
  * @brief Updates the timestamp of the last received message.
  * Should be called whenever a valid message is received to reset the network timeout timer.
  */
-void Context::updateLastMsgTime(void) {
+void Context::recordLastMessageTime(void) {
     this->lastMsgTime = millis();
 }
 
@@ -90,10 +90,10 @@ unsigned long Context::getLastMsgTime(void) {
  *
  * Sets an internal flag to indicate that the system should switch between
  * automatic and manual modes. The actual mode change is determined by the
- * current state and will be applied when `needChange()` is called and
+ * current state and will be applied when `consumeModeToggleRequest()` is called and
  * returns true.
  */
-void Context::changeTo(void) {
+void Context::requestModeToggle(void) {
     this->change = true;
 }
 
@@ -106,7 +106,7 @@ void Context::changeTo(void) {
  *
  * @return true if a mode change was requested, false otherwise.
  */
-bool Context::needChange(void) {
+bool Context::consumeModeToggleRequest(void) {
     bool result = this->change;
     this->change = false;
     return result;
@@ -158,7 +158,7 @@ bool Context::needResponse(void) {
  *
  * Marks the system as disconnected from network/communication.
  */
-void Context::setUnconnected(void) {
+void Context::setDisconnected(void) {
     this->connected = false;
 }
 
