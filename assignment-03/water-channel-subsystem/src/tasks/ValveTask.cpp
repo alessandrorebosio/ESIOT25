@@ -24,13 +24,11 @@ ValveTask::ValveTask(Hardware &hw, Context &ctx, int period) : hardware(hw), con
 void ValveTask::tick(void) {
     int potRaw = this->hardware.getPotValue();
     uint8_t perc = this->lastPerc;
-    bool hasNewSerialValue = this->context.consumePendingValvePercentage();
 
     if (this->context.isAutomatic()) {
         perc = this->context.getValvePercentage();
-    } else if (hasNewSerialValue) {
+    } else if (this->context.consumePendingValvePercentage()) {
         perc = this->context.getValvePercentage();
-        this->lastPotValue = potRaw;
     } else if (abs(potRaw - this->lastPotValue) > 10) {
         perc = map(potRaw, 0, 1023, 0, 100);
         this->lastPotValue = potRaw;
