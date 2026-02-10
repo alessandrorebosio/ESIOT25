@@ -9,8 +9,6 @@
 ValveTask::ValveTask(Hardware &hw, Context &ctx, int period) : hardware(hw), context(ctx) {
     Task::init(period);
     this->hardware.motorOn();
-    this->lastPerc = this->context.getValvePercentage();
-    this->lastPotValue = this->hardware.getPotValue();
 }
 
 /**
@@ -25,18 +23,15 @@ void ValveTask::tick(void) {
     int potRaw = this->hardware.getPotValue();
     uint8_t perc = this->lastPerc;
 
-    if (this->context.isAutomatic()) {
-        perc = this->context.getValvePercentage();
-    } else if (this->context.consumePendingValvePercentage()) {
+    if (this->context.isAutomatic() || this->context.consumePendingValvePercentage()) {
         perc = this->context.getValvePercentage();
     } else if (abs(potRaw - this->lastPotValue) > 10) {
         perc = map(potRaw, 0, 1023, 0, 100);
         this->lastPotValue = potRaw;
     }
 
-    uint8_t targetPos = map(constrain(perc, 0, 100), 0, 100, MIN, MAX);
-
     if (this->lastPerc != perc) {
+        uint8_t targetPos = map(constrain(perc, 0, 100), 0, 100, MIN, MAX);
         this->hardware.setMotorPosition(targetPos);
         this->hardware.printValveValue(perc);
         this->context.setResponse(String(perc));
@@ -44,3 +39,4 @@ void ValveTask::tick(void) {
         this->lastPerc = perc;
     }
 }
+ 
