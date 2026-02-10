@@ -63,7 +63,7 @@ uint8_t Context::getMotorPerc(void) {
     return this->position;
 }
 
-bool Context::isVirtualPerc(void) {
+bool Context::needSetPerc(void) {
     bool result = this->virtualPerc;
     this->virtualPerc = false;
     return result;

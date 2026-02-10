@@ -54,7 +54,7 @@ class Context final {
      */
     void setMotorPerc(uint8_t position);
 
-    bool isVirtualPerc(void);
+    bool needSetPerc(void);
 
     /**
      * @brief Gets the current valve position.

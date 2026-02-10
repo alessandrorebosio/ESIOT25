@@ -20,22 +20,25 @@ ValveTask::ValveTask(Hardware &hw, Context &ctx, int period) : hardware(hw), con
  * Updates motor position only if different from current position
  */
 void ValveTask::tick(void) {
-    uint8_t perc = this->lastPerc;
     int potRaw = this->hardware.getPotValue();
+    uint8_t perc = this->lastPerc;
+    bool changed = false;
 
-    if (this->context.isAutomatic() || this->context.isVirtualPerc()) {
+    if (this->context.needSetPerc()) {
         perc = this->context.getMotorPerc();
-    } else if (abs((int)potRaw - (int)this->lastPotValue) > 10) {
+        changed = (perc != this->lastPerc);
+    } else if (abs(potRaw - this->lastPotValue) > 10) {
         perc = map(potRaw, 0, 1023, 0, 100);
         this->lastPotValue = potRaw;
+        changed = (perc != this->lastPerc);
     }
 
-    uint8_t targetPos = map(perc, 0, 100, MIN, MAX);
+    if (changed) {
+        uint8_t targetPos = map(perc, 0, 100, MIN, MAX);
 
-    if (perc != this->lastPerc) {
-        this->lastPerc = perc;
         this->hardware.setMotorPosition(targetPos);
         this->hardware.printValveValue(perc);
         this->context.setResponse(String(perc));
+        this->lastPerc = perc;
     }
 }
