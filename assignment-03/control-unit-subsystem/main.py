@@ -7,15 +7,21 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+# Configuration constants
+CONFIG_CONSTANTS = {
+    "L1": 70,  # Lower water level threshold
+    "L2": 90,  # Upper water level threshold
+    "T1": 10,  # Time threshold for valve adjustment
+    "MQTT_TIMEOUT": 6,  # MQTT connection timeout
+    "MQTT_KEEPALIVE": 60,
+}
+
 config_lock = threading.Lock()
 config = {"waterLevel": 0, "valveValue": 0, "state": "UNCONNECTED"}
 last_message_time = time.time()
 automatic = False
 connected = False
 serial_outbox = deque()
-
-L1, L2 = 70, 90
-T1 = 10
 above_L1_since = None
 
 
@@ -33,15 +39,18 @@ def mqtt_worker(broker, topic):
         client = None
         try:
             client = mqtt.Client()
-            client.connect(broker, 1883, 60)
+            client.on_message = on_message  # Set callback before connecting
+            client.connect(broker, 1883, CONFIG_CONSTANTS["MQTT_KEEPALIVE"])
             client.subscribe(topic)
             client.loop_start()
             print("MQTT connected.")
 
-            client.on_message = on_message
             while True:
                 with config_lock:
-                    if time.time() - last_message_time > 6:
+                    if (
+                        time.time() - last_message_time
+                        > CONFIG_CONSTANTS["MQTT_TIMEOUT"]
+                    ):
                         if connected:
                             connected = False
 
@@ -58,6 +67,10 @@ def mqtt_worker(broker, topic):
 
 def serial_worker(port, baudrate):
     global config, automatic, connected, config_lock, above_L1_since
+    L1 = CONFIG_CONSTANTS["L1"]
+    L2 = CONFIG_CONSTANTS["L2"]
+    T1 = CONFIG_CONSTANTS["T1"]
+
     while True:
         ser = None
         try:
@@ -66,7 +79,9 @@ def serial_worker(port, baudrate):
             while True:
                 line = ser.readline().decode(errors="ignore").strip()
 
+                # Acquire lock once for all state updates
                 with config_lock:
+                    is_connected = connected
                     if line in {"UNCONNECTED", "AUTOMATIC", "MANUAL"}:
                         automatic = True if line == "AUTOMATIC" else False
                         config["state"] = line
@@ -74,15 +89,17 @@ def serial_worker(port, baudrate):
                     if line.isdigit():
                         config["valveValue"] = line
 
-                    ser.write(b"C\n" if connected else b"U\n")
-
                     pending = list(serial_outbox)
                     serial_outbox.clear()
+
+                # Write operations outside lock (ser.write is not thread-safe with config anyway)
+                ser.write(b"C\n" if is_connected else b"U\n")
 
                 for cmd in pending:
                     ser.write(cmd)
 
-                if automatic and connected:
+                # Automatic mode logic with consolidated lock
+                if automatic and is_connected:
                     with config_lock:
                         try:
                             water_level = float(config["waterLevel"])
@@ -128,6 +145,15 @@ def set_mode():
 
     if state not in {"AUTOMATIC", "MANUAL"}:
         return jsonify({"error": "invalid state"}), 400
+
+    # Validate valveValue if provided and not -1
+    if valveValue not in ("-1", None):
+        try:
+            valve_int = int(valveValue)
+            if not 0 <= valve_int <= 100:
+                return jsonify({"error": "valveValue must be between 0 and 100"}), 400
+        except (ValueError, TypeError):
+            return jsonify({"error": "valveValue must be a number"}), 400
 
     with config_lock:
         if config["state"] != state:
