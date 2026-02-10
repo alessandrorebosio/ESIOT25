@@ -89,78 +89,86 @@
 
 \chapter{Analysis}
 
-This chapter analyses the functional behaviour and hardware structure of the Smart Drone Hangar, outlining its operating sequences, safety logic, and implementation requirements.  
-The objective is to define how the system reacts to flight commands and environmental conditions, and how each hardware element contributes to its autonomous operation.
+This chapter analyses the functional behaviour and hardware structure
+of the Smart Drone Hangar, outlining its operating sequences, safety
+logic, and implementation requirements. The objective is to define
+how the system reacts to flight commands and environmental
+conditions, and how each hardware element contributes to its
+autonomous operation.
 
 \section{Description and Requirements}
 
-At startup, the system initializes all components and reads the sensors to determine
-the current position of the drone.  
-Depending on the measurements from the distance sensor (DDD) and the presence sensor
-(DPD), the Context is set to either \texttt{DRONE INSIDE} or \texttt{DRONE OUTSIDE}.  
-Once the state is established, LED~L1 turns on if the drone is detected inside, while
-LEDs~L2 and~L3 remain off, and the LCD displays the corresponding status message.
+At startup, the system initializes all components and reads the
+sensors to determine the current position of the drone. Depending on
+the measurements from the distance sensor (DDD) and the presence
+sensor (DPD), the Context is set to either \texttt{DRONE INSIDE} or
+\texttt{DRONE OUTSIDE}. Once the state is established, LED~L1 turns
+on if the drone is detected inside, while LEDs~L2 and~L3 remain off,
+and the LCD displays the corresponding status message.
 
 \vspace{\baselineskip}
-\noindent\textbf{Take-off Sequence.}  
-When a take-off command is received from the Drone Remote Unit (DRU), the hangar gate
-opens and the LCD displays ``\texttt{TAKE OFF}''.  
-The system then waits for the drone to exit the hangar. Exit is confirmed when the
-distance measured by the DDD exceeds $D_1$ for longer than $T_1$.  
-At that moment, the gate closes automatically and the LCD updates to
-``\texttt{DRONE OUTSIDE}''.
+\noindent\textbf{Take-off Sequence.}
+When a take-off command is received from the Drone Remote Unit (DRU),
+the hangar gate opens and the LCD displays ``\texttt{TAKE OFF}''. The
+system then waits for the drone to exit the hangar. Exit is confirmed
+when the distance measured by the DDD exceeds $D_1$ for longer than
+$T_1$. At that moment, the gate closes automatically and the LCD
+updates to ``\texttt{DRONE OUTSIDE}''.
 
 \vspace{\baselineskip}
-\noindent\textbf{Landing Sequence.}  
-When the drone requests landing through the DRU, the presence sensor (DPD) detects
-its approach. The hangar gate opens and  
-landing is confirmed when the DDD measures a distance below $D_2$ for longer than
-$T_2$. Once the drone is safely inside, the gate closes and the display returns to
-``\texttt{DRONE INSIDE}''.
+\noindent\textbf{Landing Sequence.}
+When the drone requests landing through the DRU, the presence sensor
+(DPD) detects its approach. The hangar gate opens and landing is
+confirmed when the DDD measures a distance below $D_2$ for longer
+than $T_2$. Once the drone is safely inside, the gate closes and the
+display returns to ``\texttt{DRONE INSIDE}''.
 
 \vspace{\baselineskip}
-\noindent\textbf{Indicators and Lighting.}  
-During take-off and landing operations, LED~L2 blinks with a 0.5\,s period to indicate
-activity. In all other states it remains off.  
-LED~L1 indicates the presence of the drone inside the hangar, while LED~L3 signals
-an alarm condition.
+\noindent\textbf{Indicators and Lighting.}
+During take-off and landing operations, LED~L2 blinks with a 0.5\,s
+period to indicate activity. In all other states it remains off.
+LED~L1 indicates the presence of the drone inside the hangar, while
+LED~L3 signals an alarm condition.
 
 \vspace{\baselineskip}
-\noindent\textbf{Temperature Monitoring and Safety Conditions.}  
-Temperature control is active whenever the drone is inside the hangar.  
-If the internal temperature exceeds \texttt{Temp1} for more than \texttt{T3}, the
-system enters a \textbf{pre-alarm} condition: new take-offs or landings are suspended,
-but ongoing operations are allowed to finish.  
-If the temperature rises above \texttt{Temp2} (\texttt{Temp2 > Temp1}) for longer than
-\texttt{T4}, the system switches to \textbf{alarm} mode.  
-In this state, the gate closes (if open), LED~L3 turns on, and the LCD displays
-``\texttt{ALARM}''.  
-If the drone is outside during an alarm, the same message is sent through the DRU.  
-All operations remain suspended until the \textbf{RESET} button is pressed, restoring
-normal operation.
+\noindent\textbf{Temperature Monitoring and Safety Conditions.}
+Temperature control is active whenever the drone is inside the
+hangar. If the internal temperature exceeds \texttt{Temp1} for more
+than \texttt{T3}, the system enters a \textbf{pre-alarm} condition:
+new take-offs or landings are suspended, but ongoing operations are
+allowed to finish. If the temperature rises above \texttt{Temp2}
+(\texttt{Temp2 > Temp1}) for longer than \texttt{T4}, the system
+switches to \textbf{alarm} mode. In this state, the gate closes (if
+open), LED~L3 turns on, and the LCD displays ``\texttt{ALARM}''. If
+the drone is outside during an alarm, the same message is sent
+through the DRU. All operations remain suspended until the
+\textbf{RESET} button is pressed, restoring normal operation.
 
 \vspace{\baselineskip}
-\noindent\textbf{Configurable Parameters and GUI Requirements.}  
-The parameters $D_1$, $D_2$, $T_1$, $T_2$, $T_3$, $T_4$, \texttt{Temp1}, and
-\texttt{Temp2} are configurable for testing and calibration.  
-The Drone Remote Unit (DRU) graphical interface allows the user to send take-off and
-landing commands, monitor the current drone and hangar states (\emph{rest},
-\emph{taking off}, \emph{operating}, \emph{landing}), and view real-time data such as
-temperature and distance from the ground.
+\noindent\textbf{Configurable Parameters and GUI Requirements.} The
+parameters $D_1$, $D_2$, $T_1$, $T_2$, $T_3$, $T_4$, \texttt{Temp1},
+and \texttt{Temp2} are configurable for testing and calibration. The
+Drone Remote Unit (DRU) graphical interface allows the user to send
+take-off and landing commands, monitor the current drone and hangar
+states (\emph{rest}, \emph{taking off}, \emph{operating},
+\emph{landing}), and view real-time data such as temperature and
+distance from the ground.
 
 \section{Summary}
 
-The Smart Drone Hangar operates as an autonomous system that controls flight access,
-monitors temperature and safety conditions, and coordinates all flight operations.  
-At startup, the sensors determine whether the drone is inside or outside the hangar,
-ensuring that the system state always matches the physical configuration.  
-During normal operation, take-off and landing are managed automatically: the gate
-opens, LED~L2 blinks to indicate activity, and sensor readings confirm the drone’s
-movement before closing the gate.  
-Temperature thresholds ensure that flights occur only under safe conditions, while
-the alarm mode provides full protection in case of overheating.  
-All operational parameters can be configured and monitored through the DRU interface,
-resulting in a reliable, modular, and self-contained control system.
+The Smart Drone Hangar operates as an autonomous system that controls
+flight access, monitors temperature and safety conditions, and
+coordinates all flight operations. At startup, the sensors determine
+whether the drone is inside or outside the hangar, ensuring that the
+system state always matches the physical configuration. During normal
+operation, take-off and landing are managed automatically: the gate
+opens, LED~L2 blinks to indicate activity, and sensor readings
+confirm the drone's movement before closing the gate. Temperature
+thresholds ensure that flights occur only under safe conditions,
+while the alarm mode provides full protection in case of overheating.
+All operational parameters can be configured and monitored through
+the DRU interface, resulting in a reliable, modular, and
+self-contained control system.
 
 \newpage
 \section{Wiring}
@@ -175,16 +183,21 @@ their function are summarized for procurement and wiring reference.
     \begin{tabular}{@{}r l p{0.6\textwidth}@{}}
       \hline
       Qty & Component & Notes \\ \hline
-      1 & Microcontroller & Handles sensors, actuators, and serial communication \\
+      1 & Microcontroller & Handles sensors, actuators, and serial
+      communication \\
       1 & Servo motor & Used as the hangar door actuator \\
-      1 & Distance sensor (DDD) & Measures the drone's distance inside the hangar \\
+      1 & Distance sensor (DDD) & Measures the drone's distance
+      inside the hangar \\
       1 & Presence sensor (DPD) & Detects the drone approaching the hangar \\
       1 & Temperature sensor & Monitors internal hangar temperature \\
-      3 & LEDs (L1, L2, L3) & System status indicators (normal, activity, alarm) \\
-      3 & Resistors 220\,$\Omega$ & Current-limiting resistors for LEDs L1--L3 \\
+      3 & LEDs (L1, L2, L3) & System status indicators (normal,
+      activity, alarm) \\
+      3 & Resistors 220\,$\Omega$ & Current-limiting resistors for
+      LEDs L1--L3 \\
       1 & LCD display & Displays system messages \\
       1 & RESET button & Clears alarms and restores normal operation \\
-      1 & Resistor 10\,k$\Omega$ & Pull-up / pull-down resistor for the RESET button \\ \hline
+      1 & Resistor 10\,k$\Omega$ & Pull-up / pull-down resistor for
+      the RESET button \\ \hline
     \end{tabular}%
   }
   \caption{Essential hardware list}
@@ -236,29 +249,33 @@ which returns it to \texttt{NORMAL}.
 \end{figure}
 
 \section{Flight Task}
-The \textbf{FlightTask} manages take-off and landing operations, acting as the interface 
-between system logic and actuator control. It operates through three states: 
-\texttt{IDLE}, \texttt{WAITING}, and \texttt{CHECKING}.
+The \textbf{FlightTask} manages take-off and landing operations,
+acting as the interface between system logic and actuator control. It
+operates through three states: \texttt{IDLE}, \texttt{WAITING}, and
+\texttt{CHECKING}.
 
-At startup, the task begins in \texttt{CHECKING}, verifying sensor data to determine 
-whether a flight is in progress. This ensures synchronization between software status 
-and the hangar’s physical condition after resets or power loss.
+At startup, the task begins in \texttt{CHECKING}, verifying sensor
+data to determine whether a flight is in progress. This ensures
+synchronization between software status and the hangar's physical
+condition after resets or power loss.
 
-During operation, when a take-off command is received and the drone is inside the 
-hangar (\(distance \le D_1\)), the task moves from \texttt{IDLE} to \texttt{CHECKING}. 
-Here, the gate opens, LED~L2 blinks, and the distance is monitored to confirm departure.
+During operation, when a take-off command is received and the drone
+is inside the hangar (\(distance \le D_1\)), the task moves from
+\texttt{IDLE} to \texttt{CHECKING}. Here, the gate opens, LED~L2
+blinks, and the distance is monitored to confirm departure.
 
-For a landing command, the system enters \texttt{WAITING}, starts a timer, and waits for 
-the PIR sensor to detect the drone. If detection occurs before timeout \(T_5\), it 
-transitions to \texttt{CHECKING}; otherwise, it returns to \texttt{IDLE}.
+For a landing command, the system enters \texttt{WAITING}, starts a
+timer, and waits for the PIR sensor to detect the drone. If detection
+occurs before timeout \(T_5\), it transitions to \texttt{CHECKING};
+otherwise, it returns to \texttt{IDLE}.
 
-In \texttt{CHECKING}, the task supervises both phases: take-off is confirmed when 
-\(distance > D_1\) for longer than \(T_3\), and landing when \(distance < D_2\) for at 
-least \(T_4\). Once completed, the gate closes, LED~L2 turns off, and the system returns 
-to \texttt{IDLE}.
+In \texttt{CHECKING}, the task supervises both phases: take-off is
+confirmed when \(distance > D_1\) for longer than \(T_3\), and
+landing when \(distance < D_2\) for at least \(T_4\). Once completed,
+the gate closes, LED~L2 turns off, and the system returns to \texttt{IDLE}.
 
-This unified design enables automatic state recovery and consistent alignment between 
-logic, sensors, and the physical hangar.
+This unified design enables automatic state recovery and consistent
+alignment between logic, sensors, and the physical hangar.
 
 \begin{figure}[H]
   \centering
@@ -337,85 +354,89 @@ simplifying message routing and scalability.
 \chapter{Arduino Workflow}
 
 \section{Overview}
-This chapter describes the dynamic behaviour of the Smart Drone Hangar once deployed
-on the Arduino platform.  
-Each system function is implemented as an independent task, periodically activated by
-a cooperative scheduler.  
-Although tasks are executed sequentially, their high activation rate makes the system
-respond as if all processes were concurrent, continuously reacting to inputs and
+This chapter describes the dynamic behaviour of the Smart Drone
+Hangar once deployed on the Arduino platform. Each system function is
+implemented as an independent task, periodically activated by a
+cooperative scheduler. Although tasks are executed sequentially,
+their high activation rate makes the system respond as if all
+processes were concurrent, continuously reacting to inputs and
 updating outputs in real time.
 
-All components share a common data structure, the \textbf{Context}, which represents
-the global state of the hangar.  
-Through this structure, tasks communicate indirectly by setting and reading Boolean
-flags that describe the hangar’s condition, the drone’s position, and the current
-operating mode.
+All components share a common data structure, the \textbf{Context},
+which represents the global state of the hangar. Through this
+structure, tasks communicate indirectly by setting and reading
+Boolean flags that describe the hangar's condition, the drone's
+position, and the current operating mode.
 
 \section{System Dynamics}
-At startup, the system initializes all hardware components and performs a sensor
-check to determine the drone’s position.  
-Depending on the readings from the distance (DDD) and presence (DPD) sensors, the
-Context is initialized to either \texttt{DRONE INSIDE} or \texttt{DRONE OUTSIDE}.  
-This ensures that the software state is immediately aligned with the physical
-situation, even after a reset or power interruption.
+At startup, the system initializes all hardware components and
+performs a sensor check to determine the drone's position. Depending
+on the readings from the distance (DDD) and presence (DPD) sensors,
+the Context is initialized to either \texttt{DRONE INSIDE} or
+\texttt{DRONE OUTSIDE}. This ensures that the software state is
+immediately aligned with the physical situation, even after a reset
+or power interruption.
 
-The scheduler then maintains continuous control by cyclically activating all tasks to
-supervise sensors, actuators, and communication interfaces.  
-The \textbf{SystemTask} governs the overall behaviour of the hangar.  
-It monitors temperature readings and selects the appropriate operating mode.  
+The scheduler then maintains continuous control by cyclically
+activating all tasks to supervise sensors, actuators, and
+communication interfaces. The \textbf{SystemTask} governs the overall
+behaviour of the hangar. It monitors temperature readings and selects
+the appropriate operating mode.
 
 \section{Coordination of Operations}
-The \textbf{FlightTask} coordinates both take-off and landing operations, acting as
-the intermediate layer between the system logic and the actuator control.  
-It operates through three main states: \texttt{IDLE}, \texttt{WAITING}, and \texttt{CHECKING}.  
-At system startup, the task intentionally begins in the \texttt{CHECKING} state, where
-it reads sensor data to determine whether the drone is inside or outside the hangar
-and restores consistency between the software logic and the physical configuration.
+The \textbf{FlightTask} coordinates both take-off and landing
+operations, acting as the intermediate layer between the system logic
+and the actuator control. It operates through three main states:
+\texttt{IDLE}, \texttt{WAITING}, and \texttt{CHECKING}. At system
+startup, the task intentionally begins in the \texttt{CHECKING}
+state, where it reads sensor data to determine whether the drone is
+inside or outside the hangar and restores consistency between the
+software logic and the physical configuration.
 
-During normal operation, the \texttt{IDLE} state represents a standby condition in
-which the system waits for commands from the Drone Remote Unit (DRU).  
-When a take-off command is received and the measured distance is below the threshold
-\(D_1\), the task transitions directly to \texttt{CHECKING}. 
-If a landing command is received instead, the task moves to the \texttt{WAITING}
-state, where a timer is started to wait for the presence sensor (PIR) to detect the
-approaching drone.  
-If the drone is detected before the timeout period \(T_5\), the task transitions to
-\texttt{CHECKING}.
-If the timeout expires without detection, the system returns to \texttt{IDLE}.
+During normal operation, the \texttt{IDLE} state represents a standby
+condition in which the system waits for commands from the Drone
+Remote Unit (DRU). When a take-off command is received and the
+measured distance is below the threshold \(D_1\), the task
+transitions directly to \texttt{CHECKING}. If a landing command is
+received instead, the task moves to the \texttt{WAITING} state, where
+a timer is started to wait for the presence sensor (PIR) to detect
+the approaching drone. If the drone is detected before the timeout
+period \(T_5\), the task transitions to \texttt{CHECKING}. If the
+timeout expires without detection, the system returns to \texttt{IDLE}.
 
-In the \texttt{CHECKING} state, the FlightTask monitors distance measurements to verify
-the progress of the current operation.  
-A take-off is completed when the measured distance remains greater than \(D_1\) for
-longer than \(T_3\), while a landing is confirmed when the distance stays below \(D_2\)
-for at least \(T_4\).  
-Once the operation is complete, the gate closes automatically, LED~L2 stops blinking,
-and the task returns to the \texttt{IDLE} state.
+In the \texttt{CHECKING} state, the FlightTask monitors distance
+measurements to verify the progress of the current operation. A
+take-off is completed when the measured distance remains greater than
+\(D_1\) for longer than \(T_3\), while a landing is confirmed when
+the distance stays below \(D_2\) for at least \(T_4\). Once the
+operation is complete, the gate closes automatically, LED~L2 stops
+blinking, and the task returns to the \texttt{IDLE} state.
 
 \section{Supporting Tasks and Context Interaction}
-Several supporting tasks ensure system responsiveness and modularity.  
-The \textbf{GateTask} drives the servo motor that opens or closes the hangar gate,
-while the \textbf{BlinkTask} controls LEDs to indicate activity during flight
-operations.  
-The \textbf{ObserverTask} continuously reads sensor data and serial messages,
-updating the Context with temperature, distance, and command information.
+Several supporting tasks ensure system responsiveness and modularity.
+The \textbf{GateTask} drives the servo motor that opens or closes the
+hangar gate, while the \textbf{BlinkTask} controls LEDs to indicate
+activity during flight operations. The \textbf{ObserverTask}
+continuously reads sensor data and serial messages, updating the
+Context with temperature, distance, and command information.
 
-All tasks interact exclusively through the Context, which acts as shared memory and a
-coordination channel.  
-For example, the SystemTask may block new flights by setting a flag interpreted by the
-FlightTask, while the ObserverTask records flight commands that will be processed in
-the next scheduler cycle.
+All tasks interact exclusively through the Context, which acts as
+shared memory and a coordination channel. For example, the SystemTask
+may block new flights by setting a flag interpreted by the
+FlightTask, while the ObserverTask records flight commands that will
+be processed in the next scheduler cycle.
 
 \section{Global Workflow}
-The overall behaviour results from the cooperation of all tasks under the scheduler’s
-control.  
-The ObserverTask updates the Context with real-time sensor data, the SystemTask
-enforces safety conditions, and the FlightTask coordinates flight sequences by
-commanding the Gate and Blink tasks according to the current state.  
-When a sequence is completed, the system automatically returns to a safe standby mode,
-ready for the next command.  
-Through this cooperative and event-driven design, the Smart Drone Hangar achieves
-robust, modular, and deterministic behaviour, maintaining continuous operation even
-after temporary faults or power interruptions.
+The overall behaviour results from the cooperation of all tasks under
+the scheduler's control. The ObserverTask updates the Context with
+real-time sensor data, the SystemTask enforces safety conditions, and
+the FlightTask coordinates flight sequences by commanding the Gate
+and Blink tasks according to the current state. When a sequence is
+completed, the system automatically returns to a safe standby mode,
+ready for the next command. Through this cooperative and event-driven
+design, the Smart Drone Hangar achieves robust, modular, and
+deterministic behaviour, maintaining continuous operation even after
+temporary faults or power interruptions.
 
 \appendix
 \chapter{User Interface}
