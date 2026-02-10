@@ -22,23 +22,21 @@ ValveTask::ValveTask(Hardware &hw, Context &ctx, int period) : hardware(hw), con
 void ValveTask::tick(void) {
     int potRaw = this->hardware.getPotValue();
     uint8_t perc = this->lastPerc;
-    bool changed = false;
 
-    if (this->context.needSetPerc()) {
+    if (this->context.isAutomatic() || this->context.needSetPerc()) {
         perc = this->context.getMotorPerc();
-        changed = (perc != this->lastPerc);
     } else if (abs(potRaw - this->lastPotValue) > 10) {
         perc = map(potRaw, 0, 1023, 0, 100);
         this->lastPotValue = potRaw;
-        changed = (perc != this->lastPerc);
     }
 
-    if (changed) {
-        uint8_t targetPos = map(perc, 0, 100, MIN, MAX);
+    uint8_t targetPos = map(perc, 0, 100, MIN, MAX);
 
+    if (this->lastPerc != perc) {
         this->hardware.setMotorPosition(targetPos);
         this->hardware.printValveValue(perc);
         this->context.setResponse(String(perc));
+
         this->lastPerc = perc;
     }
 }
