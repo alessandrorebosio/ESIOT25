@@ -26,8 +26,8 @@ def mqtt_worker(broker, topic):
         global connected, last_message_time
         with config_lock:
             last_message_time = time.time()
-            connected = True
             config["waterLevel"] = msg.payload.decode(errors="ignore").strip()
+            connected = True
 
     while True:
         client = None
@@ -48,8 +48,7 @@ def mqtt_worker(broker, topic):
                 time.sleep(1)
         except (ConnectionRefusedError, OSError):
             print("MQTT disconnected. Reconnecting...")
-            with config_lock:
-                connected = False
+            connected = False
             time.sleep(1)
         finally:
             if client is not None:
@@ -73,7 +72,7 @@ def serial_worker(port, baudrate):
                         config["state"] = line
 
                     if line.isdigit():
-                        config["waterLevel"] = line 
+                        config["valveValue"] = line
 
                     ser.write(b"C\n" if connected else b"U\n")
 
@@ -133,10 +132,11 @@ def set_mode():
     with config_lock:
         if config["state"] != state:
             config["state"] = state
-            config["valveValue"] = valveValue
             serial_outbox.append(b"M\n")
 
-        serial_outbox.append(valveValue.encode() + b"\n")
+        if valveValue != "-1":
+            config["valveValue"] = valveValue
+            serial_outbox.append(valveValue.encode() + b"\n")
     return jsonify({"ok": True})
 
 

@@ -62,7 +62,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="bi bi-sliders"></i> Controls</h5>
-                        <form id="controllerForm" method="post" action="http://localhost:3030/api/room">
+                        <form id="controllerForm" method="post">
                             <div class="mb-3" id="modeSelector">
                                 <label for="controlTypeInput" class="form-label">
                                     <i class="bi bi-gear-wide-connected"></i> Mode
@@ -79,18 +79,12 @@
                                         <label for="valveLevelInput" class="form-label mb-0">
                                             <i class="bi bi-droplet-half"></i> Open Valve Level
                                         </label>
-                                        <span class="badge bg-primary rounded-pill fs-6" id="rangeValue">50%</span>
                                     </div>
 
-                                    <input type="range" id="valveLevelInput" name="valveLevel"
-                                        class="form-range custom-range" min="0" max="100" step="1" value="50">
-
-                                    <div class="d-flex justify-content-between text-muted small">
-                                        <span>0%</span>
-                                        <span>100%</span>
-                                    </div>
+                                    <input type="number" id="valveLevelInput" name="valveLevel" class="form-control"
+                                        min="0" max="100" step="1" value="50">
                                 </div>
-                                <input type="submit" class="btn btn-primary w-100" value="Update">
+                                <input type="submit" id="submitBtn" class="btn btn-primary w-100" value="Update">
                             </div>
                         </form>
                     </div>
@@ -104,6 +98,7 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script defer src="js/index.js"></script>
+    <script defer src="js/plot.js"></script>
 </body>
 
 </html>
